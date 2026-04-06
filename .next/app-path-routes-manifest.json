@@ -1,6 +1,6 @@
 {
   "/_not-found/page": "/_not-found",
   "/page": "/",
-  "/login/page": "/login",
-  "/reports/page": "/reports"
+  "/reports/page": "/reports",
+  "/login/page": "/login"
 }

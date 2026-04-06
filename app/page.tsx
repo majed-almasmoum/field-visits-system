@@ -1,18 +1,21 @@
-import { Header } from '@/components/header';
-import { VisitForm } from '@/components/visit-form';
 import { createClient } from '@/lib/supabase-server';
 
-export default async function HomePage() {
+export default async function Page() {
   const supabase = await createClient();
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // 🔥 أهم سطر: منع الكراش
+  if (!user) {
+    return <div>Not logged in</div>;
+  }
+
   return (
-    <main className="container">
-      <Header />
-      <VisitForm userId={user!.id} />
-      <div className="footer-note">نسخة MVP مجانية قابلة للرفع على GitHub والنشر على Vercel.</div>
-    </main>
+    <div>
+      <h1>Welcome</h1>
+      <p>User ID: {user.id}</p>
+    </div>
   );
 }
