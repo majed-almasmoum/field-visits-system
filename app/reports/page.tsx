@@ -1,11 +1,8 @@
-import { Header } from '@/components/header';
-import { ReportsClient } from '@/components/reports-client';
-
 export default function ReportsPage() {
   return (
-    <main className="container">
-      <Header />
-      <ReportsClient />
-    </main>
+    <div style={{ padding: '40px', direction: 'rtl', fontFamily: 'sans-serif' }}>
+      <h1>التقارير</h1>
+      <p>النظام شغال. الخطوة الجاية نربط نموذج الزيارة هنا.</p>
+    </div>
   );
 }
