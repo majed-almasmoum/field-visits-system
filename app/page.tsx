@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase-server';
+import { redirect } from 'next/navigation';
 
 export default async function Page() {
   const supabase = await createClient();
@@ -7,9 +8,9 @@ export default async function Page() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 🔥 أهم سطر: منع الكراش
+  // 🔥 تحويل تلقائي
   if (!user) {
-    return <div>Not logged in</div>;
+    redirect('/login');
   }
 
   return (
