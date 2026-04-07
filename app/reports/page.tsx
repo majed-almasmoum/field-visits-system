@@ -7,6 +7,8 @@ type VisitRow = {
   id?: string;
   date?: string | null;
   mashaer?: string | null;
+  marker?: string | null;
+  center?: string | null;
   status?: string | null;
   notes?: string | null;
   created_at?: string | null;
@@ -14,10 +16,14 @@ type VisitRow = {
 
 const supabase = createClient();
 
+const MASHAER_OPTIONS = ['منى', 'عرفات', 'مزدلفة'];
+
 export default function ReportsPage() {
   const [form, setForm] = useState({
     date: '',
-    mashaer: '',
+    mashaer: 'منى',
+    marker: '',
+    center: '',
     status: 'جيد',
     notes: '',
   });
@@ -63,6 +69,8 @@ export default function ReportsPage() {
     const payload = {
       date: form.date || null,
       mashaer: form.mashaer || null,
+      marker: form.marker || null,
+      center: form.center || null,
       status: form.status || null,
       notes: form.notes || null,
     };
@@ -75,7 +83,9 @@ export default function ReportsPage() {
       setMessage('✅ تم حفظ الزيارة بنجاح');
       setForm({
         date: '',
-        mashaer: '',
+        mashaer: 'منى',
+        marker: '',
+        center: '',
         status: 'جيد',
         notes: '',
       });
@@ -114,37 +124,64 @@ export default function ReportsPage() {
             </div>
 
             <form onSubmit={handleSubmit}>
-              <div style={fieldBlock}>
-                <label style={label}>التاريخ</label>
-                <input
-                  type="date"
-                  value={form.date}
-                  onChange={(e) => setForm({ ...form, date: e.target.value })}
-                  style={input}
-                />
-              </div>
+              <div style={fieldGrid}>
+                <div style={fieldBlock}>
+                  <label style={label}>التاريخ</label>
+                  <input
+                    type="date"
+                    value={form.date}
+                    onChange={(e) => setForm({ ...form, date: e.target.value })}
+                    style={input}
+                  />
+                </div>
 
-              <div style={fieldBlock}>
-                <label style={label}>المشعر</label>
-                <input
-                  value={form.mashaer}
-                  onChange={(e) => setForm({ ...form, mashaer: e.target.value })}
-                  placeholder="مثال: منى / عرفات / مزدلفة"
-                  style={input}
-                />
-              </div>
+                <div style={fieldBlock}>
+                  <label style={label}>المشعر</label>
+                  <select
+                    value={form.mashaer}
+                    onChange={(e) => setForm({ ...form, mashaer: e.target.value })}
+                    style={input}
+                  >
+                    {MASHAER_OPTIONS.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <div style={fieldBlock}>
-                <label style={label}>الحالة</label>
-                <select
-                  value={form.status}
-                  onChange={(e) => setForm({ ...form, status: e.target.value })}
-                  style={input}
-                >
-                  <option>ممتاز</option>
-                  <option>جيد</option>
-                  <option>سيئ</option>
-                </select>
+                <div style={fieldBlock}>
+                  <label style={label}>رقم الشاخص</label>
+                  <input
+                    value={form.marker}
+                    onChange={(e) => setForm({ ...form, marker: e.target.value })}
+                    placeholder="مثال: 12"
+                    style={input}
+                  />
+                </div>
+
+                <div style={fieldBlock}>
+                  <label style={label}>رقم مركز الضيافة</label>
+                  <input
+                    value={form.center}
+                    onChange={(e) => setForm({ ...form, center: e.target.value })}
+                    placeholder="مثال: 5"
+                    style={input}
+                  />
+                </div>
+
+                <div style={fieldBlock}>
+                  <label style={label}>الحالة</label>
+                  <select
+                    value={form.status}
+                    onChange={(e) => setForm({ ...form, status: e.target.value })}
+                    style={input}
+                  >
+                    <option>ممتاز</option>
+                    <option>جيد</option>
+                    <option>سيئ</option>
+                  </select>
+                </div>
               </div>
 
               <div style={fieldBlock}>
@@ -192,7 +229,7 @@ export default function ReportsPage() {
             <div style={tipBox}>
               <div style={tipTitle}>ملاحظة</div>
               <div style={tipText}>
-                يفضّل كتابة ملاحظات مختصرة وواضحة لتسهيل الرجوع للتقارير لاحقًا.
+                استخدم أرقام واضحة للشاخص والضيافة لتسهيل البحث والرجوع للسجلات لاحقًا.
               </div>
             </div>
           </div>
@@ -215,6 +252,8 @@ export default function ReportsPage() {
                   <tr>
                     <th style={th}>التاريخ</th>
                     <th style={th}>المشعر</th>
+                    <th style={th}>الشاخص</th>
+                    <th style={th}>الضيافة</th>
                     <th style={th}>الحالة</th>
                     <th style={th}>الملاحظات</th>
                   </tr>
@@ -224,6 +263,8 @@ export default function ReportsPage() {
                     <tr key={row.id || index} style={index % 2 === 0 ? rowEven : rowOdd}>
                       <td style={td}>{row.date || '-'}</td>
                       <td style={td}>{row.mashaer || '-'}</td>
+                      <td style={td}>{row.marker || '-'}</td>
+                      <td style={td}>{row.center || '-'}</td>
                       <td style={td}>
                         <span
                           style={{
@@ -412,6 +453,12 @@ const sectionText: React.CSSProperties = {
   color: '#6b7280',
   fontSize: '15px',
   lineHeight: 1.7,
+};
+
+const fieldGrid: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '14px',
 };
 
 const fieldBlock: React.CSSProperties = {
