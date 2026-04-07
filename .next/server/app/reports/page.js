@@ -39,7 +39,254 @@ ${r}`}({domain:s.host,address:u,statement:q,uri:s.href,version:"1",chainId:v,non
 
 Check your Supabase project's API settings to find these values
 
-https://supabase.com/dashboard/project/_/settings/api`);let{storage:f}=function(a,b){let c,d,e=a.cookies??null,f=a.cookieEncoding,g={},h={};if(e)if("get"in e){let a=async a=>{let b=a.flatMap(a=>[a,...Array.from({length:5}).map((b,c)=>`${a}.${c}`)]),c=[];for(let a=0;a<b.length;a+=1){let d=await e.get(b[a]);(d||"string"==typeof d)&&c.push({name:b[a],value:d})}return c};if(c=async b=>await a(b),"set"in e&&"remove"in e)d=async a=>{for(let b=0;b<a.length;b+=1){let{name:c,value:d,options:f}=a[b];d?await e.set(c,d,f):await e.remove(c,f)}};else if(b)d=async()=>{console.warn("@supabase/ssr: createServerClient was configured without set and remove cookie methods, but the client needs to set cookies. This can lead to issues such as random logouts, early session termination or increased token refresh requests. If in NextJS, check your middleware.ts file, route handlers and server actions for correctness. Consider switching to the getAll and setAll cookie methods instead of get, set and remove which are deprecated and can be difficult to use correctly.")};else throw Error("@supabase/ssr: createBrowserClient requires configuring a getAll and setAll cookie method (deprecated: alternatively both get, set and remove can be used)")}else if("getAll"in e)if(c=async()=>await e.getAll(),"setAll"in e)d=e.setAll;else if(b)d=async()=>{console.warn("@supabase/ssr: createServerClient was configured without the setAll cookie method, but the client needs to set cookies. This can lead to issues such as random logouts, early session termination or increased token refresh requests. If in NextJS, check your middleware.ts file, route handlers and server actions for correctness.")};else throw Error("@supabase/ssr: createBrowserClient requires configuring both getAll and setAll cookie methods (deprecated: alternatively both get, set and remove can be used)");else throw Error(`@supabase/ssr: ${b?"createServerClient":"createBrowserClient"} requires configuring getAll and setAll cookie methods (deprecated: alternatively use get, set and remove).${cB()?" As this is called in a browser runtime, consider removing the cookies option object to use the document.cookie API automatically.":""}`);else if(!b&&cB())c=()=>(()=>{let a=(0,cA.q)(document.cookie);return Object.keys(a).map(b=>({name:b,value:a[b]}))})(),d=a=>{a.forEach(({name:a,value:b,options:c})=>{document.cookie=(0,cA.l)(a,b,c)})};else if(b)throw Error("@supabase/ssr: createServerClient must be initialized with cookie options that specify getAll and setAll functions (deprecated, not recommended: alternatively use get, set and remove)");else c=()=>[],d=()=>{throw Error("@supabase/ssr: createBrowserClient in non-browser runtimes (including Next.js pre-rendering mode) was not initialized cookie options that specify getAll and setAll functions (deprecated: alternatively use get, set and remove), but they were needed")};return b?{getAll:c,setAll:d,setItems:g,removedItems:h,storage:{isServer:!0,getItem:async a=>{if("string"==typeof g[a])return g[a];if(h[a])return null;let b=await c([a]),d=await cG(a,async a=>{let c=b?.find(({name:b})=>b===a)||null;return c?c.value:null});if(!d)return null;let e=d;return"string"==typeof d&&d.startsWith(cM)&&(e=cL(d.substring(cM.length))),e},setItem:async(b,e)=>{b.endsWith("-code-verifier")&&await cN({getAll:c,setAll:d,setItems:{[b]:e},removedItems:{}},{cookieOptions:a?.cookieOptions??null,cookieEncoding:f}),g[b]=e,delete h[b]},removeItem:async a=>{delete g[a],h[a]=!0}}}:{getAll:c,setAll:d,setItems:g,removedItems:h,storage:{isServer:!1,getItem:async a=>{let b=await c([a]),d=await cG(a,async a=>{let c=b?.find(({name:b})=>b===a)||null;return c?c.value:null});if(!d)return null;let e=d;return d.startsWith(cM)&&(e=cL(d.substring(cM.length))),e},setItem:async(b,e)=>{let g=await c([b]),h=new Set((g?.map(({name:a})=>a)||[]).filter(a=>cE(a,b))),i=e;"base64url"===f&&(i=cM+cK(e));let j=cF(b,i);j.forEach(({name:a})=>{h.delete(a)});let k={...cC,...a?.cookieOptions,maxAge:0},l={...cC,...a?.cookieOptions,maxAge:cC.maxAge};delete k.name,delete l.name;let m=[...[...h].map(a=>({name:a,value:"",options:k})),...j.map(({name:a,value:b})=>({name:a,value:b,options:l}))];m.length>0&&await d(m)},removeItem:async b=>{let e=await c([b]),f=(e?.map(({name:a})=>a)||[]).filter(a=>cE(a,b)),g={...cC,...a?.cookieOptions,maxAge:0};delete g.name,f.length>0&&await d(f.map(a=>({name:a,value:"",options:g})))}}}}({...c,cookieEncoding:c?.cookieEncoding??"base64url"},!1),g=new cz(a,b,{...c,global:{...c?.global,headers:{...c?.global?.headers,"X-Client-Info":"supabase-ssr/0.5.2"}},auth:{...c?.auth,...c?.cookieOptions?.name?{storageKey:c.cookieOptions.name}:null,flowType:"pkce",autoRefreshToken:cB(),detectSessionInUrl:cB(),persistSession:!0,storage:f}});return d&&(e=g),g}("https://lkjzuuzwrsdocxaqzdrs.supabase.co","sb_publishable_GZvDhwuDcZVaVSneJBPAhw_BiIM-xw0"),cP=["منى","عرفات","مزدلفة"];function cQ(){let[a,b]=(0,m.useState)({date:"",mashaer:"منى",marker:"",center:"",observer:"",status:"جيد",notes:""}),[c,d]=(0,m.useState)([]),[e,f]=(0,m.useState)(!1),[g,h]=(0,m.useState)(!0),[i,j]=(0,m.useState)("");async function k(){h(!0);let{data:a,error:b}=await cO.from("visits").select("*").order("created_at",{ascending:!1});b?j("❌ "+b.message):d(a||[]),h(!1)}let n=new Date().toISOString().slice(0,10),o=(0,m.useMemo)(()=>{let a=c.length,b=c.filter(a=>a.date===n).length,d=c.filter(a=>"ممتاز"===a.status).length,e=c.filter(a=>"جيد"===a.status).length,f=c.filter(a=>"سيئ"===a.status).length,g={};return c.forEach(a=>{let b=a.mashaer||"غير محدد";g[b]=(g[b]||0)+1}),{total:a,todayVisits:b,excellent:d,good:e,bad:f,topMashaer:Object.entries(g).sort((a,b)=>b[1]-a[1])[0]?.[0]||"-",latestVisit:c[0]?`${c[0].date||"-"} ${c[0].visit_time||""}`.trim():"-"}},[c,n]);async function p(c){c.preventDefault(),f(!0),j("");let d=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",hour12:!1}),e={date:a.date||n,visit_time:d,mashaer:a.mashaer||null,marker:a.marker||null,center:a.center||null,observer:a.observer||null,status:a.status||null,notes:a.notes||null},{error:g}=await cO.from("visits").insert([e]);g?j("❌ "+g.message):(j(`✅ تم حفظ الزيارة بنجاح عند ${d}`),b({date:"",mashaer:"منى",marker:"",center:"",observer:"",status:"جيد",notes:""}),await k()),f(!1)}return(0,l.jsx)("div",{style:cX,children:(0,l.jsxs)("div",{style:cY,children:[(0,l.jsxs)("div",{style:cZ,children:[(0,l.jsxs)("div",{children:[(0,l.jsx)("div",{style:c$,children:"لوحة المتابعة"}),(0,l.jsx)("h1",{style:c_,children:"تقارير الزيارات الميدانية"}),(0,l.jsx)("p",{style:c0,children:"سجّل الزيارات، راقب الحالة العامة، وصدّر السجلات إلى Excel من نفس الصفحة."})]}),(0,l.jsx)("div",{style:c1,children:"\uD83D\uDCCB"})]}),(0,l.jsxs)("div",{style:c2,children:[(0,l.jsx)(cT,{title:"إجمالي الزيارات",value:String(o.total)}),(0,l.jsx)(cT,{title:"زيارات اليوم",value:String(o.todayVisits)}),(0,l.jsx)(cT,{title:"أفضل مشعر",value:o.topMashaer}),(0,l.jsx)(cT,{title:"آخر زيارة",value:o.latestVisit,small:!0})]}),(0,l.jsxs)("div",{style:c6,children:[(0,l.jsxs)("div",{style:c7,children:[(0,l.jsxs)("div",{style:da,children:[(0,l.jsx)("h2",{style:db,children:"إضافة زيارة جديدة"}),(0,l.jsx)("p",{style:dc,children:"الوقت يُسجل تلقائيًا وقت الحفظ."})]}),(0,l.jsxs)("form",{onSubmit:p,children:[(0,l.jsxs)("div",{style:dd,children:[(0,l.jsx)(cS,{label:"التاريخ",children:(0,l.jsx)("input",{type:"date",value:a.date,onChange:c=>b({...a,date:c.target.value}),style:df})}),(0,l.jsx)(cS,{label:"المشعر",children:(0,l.jsx)("select",{value:a.mashaer,onChange:c=>b({...a,mashaer:c.target.value}),style:df,children:cP.map(a=>(0,l.jsx)("option",{value:a,children:a},a))})}),(0,l.jsx)(cS,{label:"رقم الشاخص",children:(0,l.jsx)("input",{value:a.marker,onChange:c=>b({...a,marker:c.target.value}),placeholder:"مثال: 54-1\\\\533",style:df})}),(0,l.jsx)(cS,{label:"رقم مركز الضيافة",children:(0,l.jsx)("input",{value:a.center,onChange:c=>b({...a,center:c.target.value}),placeholder:"مثال: 151-152",style:df})}),(0,l.jsx)(cS,{label:"اسم المراقب",children:(0,l.jsx)("input",{value:a.observer,onChange:c=>b({...a,observer:c.target.value}),placeholder:"اسم المراقب",style:df})}),(0,l.jsx)(cS,{label:"الحالة",children:(0,l.jsxs)("select",{value:a.status,onChange:c=>b({...a,status:c.target.value}),style:df,children:[(0,l.jsx)("option",{children:"ممتاز"}),(0,l.jsx)("option",{children:"جيد"}),(0,l.jsx)("option",{children:"سيئ"})]})})]}),(0,l.jsx)(cS,{label:"الملاحظات",children:(0,l.jsx)("textarea",{value:a.notes,onChange:c=>b({...a,notes:c.target.value}),placeholder:"اكتب الملاحظات هنا",style:dg})}),(0,l.jsx)("button",{type:"submit",disabled:e,style:dh,children:e?"جاري الحفظ...":"حفظ الزيارة"}),i?(0,l.jsx)("div",{style:{...di,background:i.includes("❌")?"#fef2f2":"#eff6ff",color:i.includes("❌")?"#b91c1c":"#1d4ed8",borderColor:i.includes("❌")?"#fecaca":"#bfdbfe"},children:i}):null]})]}),(0,l.jsxs)("div",{style:c8,children:[(0,l.jsxs)("div",{style:da,children:[(0,l.jsx)("h2",{style:db,children:"ملخص سريع"}),(0,l.jsx)("p",{style:dc,children:"قراءة سريعة لوضع السجلات الحالية."})]}),(0,l.jsxs)("div",{style:dj,children:[(0,l.jsx)(cU,{label:"إجمالي السجلات",value:String(o.total)}),(0,l.jsx)(cU,{label:"زيارات اليوم",value:String(o.todayVisits)}),(0,l.jsx)(cU,{label:"ممتاز",value:String(o.excellent)}),(0,l.jsx)(cU,{label:"جيد",value:String(o.good)}),(0,l.jsx)(cU,{label:"سيئ",value:String(o.bad)})]}),(0,l.jsx)("button",{type:"button",onClick:function(){let a=c.map(a=>`
+https://supabase.com/dashboard/project/_/settings/api`);let{storage:f}=function(a,b){let c,d,e=a.cookies??null,f=a.cookieEncoding,g={},h={};if(e)if("get"in e){let a=async a=>{let b=a.flatMap(a=>[a,...Array.from({length:5}).map((b,c)=>`${a}.${c}`)]),c=[];for(let a=0;a<b.length;a+=1){let d=await e.get(b[a]);(d||"string"==typeof d)&&c.push({name:b[a],value:d})}return c};if(c=async b=>await a(b),"set"in e&&"remove"in e)d=async a=>{for(let b=0;b<a.length;b+=1){let{name:c,value:d,options:f}=a[b];d?await e.set(c,d,f):await e.remove(c,f)}};else if(b)d=async()=>{console.warn("@supabase/ssr: createServerClient was configured without set and remove cookie methods, but the client needs to set cookies. This can lead to issues such as random logouts, early session termination or increased token refresh requests. If in NextJS, check your middleware.ts file, route handlers and server actions for correctness. Consider switching to the getAll and setAll cookie methods instead of get, set and remove which are deprecated and can be difficult to use correctly.")};else throw Error("@supabase/ssr: createBrowserClient requires configuring a getAll and setAll cookie method (deprecated: alternatively both get, set and remove can be used)")}else if("getAll"in e)if(c=async()=>await e.getAll(),"setAll"in e)d=e.setAll;else if(b)d=async()=>{console.warn("@supabase/ssr: createServerClient was configured without the setAll cookie method, but the client needs to set cookies. This can lead to issues such as random logouts, early session termination or increased token refresh requests. If in NextJS, check your middleware.ts file, route handlers and server actions for correctness.")};else throw Error("@supabase/ssr: createBrowserClient requires configuring both getAll and setAll cookie methods (deprecated: alternatively both get, set and remove can be used)");else throw Error(`@supabase/ssr: ${b?"createServerClient":"createBrowserClient"} requires configuring getAll and setAll cookie methods (deprecated: alternatively use get, set and remove).${cB()?" As this is called in a browser runtime, consider removing the cookies option object to use the document.cookie API automatically.":""}`);else if(!b&&cB())c=()=>(()=>{let a=(0,cA.q)(document.cookie);return Object.keys(a).map(b=>({name:b,value:a[b]}))})(),d=a=>{a.forEach(({name:a,value:b,options:c})=>{document.cookie=(0,cA.l)(a,b,c)})};else if(b)throw Error("@supabase/ssr: createServerClient must be initialized with cookie options that specify getAll and setAll functions (deprecated, not recommended: alternatively use get, set and remove)");else c=()=>[],d=()=>{throw Error("@supabase/ssr: createBrowserClient in non-browser runtimes (including Next.js pre-rendering mode) was not initialized cookie options that specify getAll and setAll functions (deprecated: alternatively use get, set and remove), but they were needed")};return b?{getAll:c,setAll:d,setItems:g,removedItems:h,storage:{isServer:!0,getItem:async a=>{if("string"==typeof g[a])return g[a];if(h[a])return null;let b=await c([a]),d=await cG(a,async a=>{let c=b?.find(({name:b})=>b===a)||null;return c?c.value:null});if(!d)return null;let e=d;return"string"==typeof d&&d.startsWith(cM)&&(e=cL(d.substring(cM.length))),e},setItem:async(b,e)=>{b.endsWith("-code-verifier")&&await cN({getAll:c,setAll:d,setItems:{[b]:e},removedItems:{}},{cookieOptions:a?.cookieOptions??null,cookieEncoding:f}),g[b]=e,delete h[b]},removeItem:async a=>{delete g[a],h[a]=!0}}}:{getAll:c,setAll:d,setItems:g,removedItems:h,storage:{isServer:!1,getItem:async a=>{let b=await c([a]),d=await cG(a,async a=>{let c=b?.find(({name:b})=>b===a)||null;return c?c.value:null});if(!d)return null;let e=d;return d.startsWith(cM)&&(e=cL(d.substring(cM.length))),e},setItem:async(b,e)=>{let g=await c([b]),h=new Set((g?.map(({name:a})=>a)||[]).filter(a=>cE(a,b))),i=e;"base64url"===f&&(i=cM+cK(e));let j=cF(b,i);j.forEach(({name:a})=>{h.delete(a)});let k={...cC,...a?.cookieOptions,maxAge:0},l={...cC,...a?.cookieOptions,maxAge:cC.maxAge};delete k.name,delete l.name;let m=[...[...h].map(a=>({name:a,value:"",options:k})),...j.map(({name:a,value:b})=>({name:a,value:b,options:l}))];m.length>0&&await d(m)},removeItem:async b=>{let e=await c([b]),f=(e?.map(({name:a})=>a)||[]).filter(a=>cE(a,b)),g={...cC,...a?.cookieOptions,maxAge:0};delete g.name,f.length>0&&await d(f.map(a=>({name:a,value:"",options:g})))}}}}({...c,cookieEncoding:c?.cookieEncoding??"base64url"},!1),g=new cz(a,b,{...c,global:{...c?.global,headers:{...c?.global?.headers,"X-Client-Info":"supabase-ssr/0.5.2"}},auth:{...c?.auth,...c?.cookieOptions?.name?{storageKey:c.cookieOptions.name}:null,flowType:"pkce",autoRefreshToken:cB(),detectSessionInUrl:cB(),persistSession:!0,storage:f}});return d&&(e=g),g}("https://lkjzuuzwrsdocxaqzdrs.supabase.co","sb_publishable_GZvDhwuDcZVaVSneJBPAhw_BiIM-xw0"),cP=["منى","عرفات","مزدلفة"];function cQ(){let[a,b]=(0,m.useState)({date:"",mashaer:"منى",marker:"",center:"",observer:"",status:"جيد",notes:""}),[c,d]=(0,m.useState)([]),[e,f]=(0,m.useState)(!1),[g,h]=(0,m.useState)(!0),[i,j]=(0,m.useState)("");async function k(){h(!0);let{data:a,error:b}=await cO.from("visits").select("*").order("created_at",{ascending:!1});b?j("❌ "+b.message):d(a||[]),h(!1)}let n=new Date().toISOString().slice(0,10),o=(0,m.useMemo)(()=>{let a=c.length,b=c.filter(a=>a.date===n).length,d=c.filter(a=>"ممتاز"===a.status).length,e=c.filter(a=>"جيد"===a.status).length,f=c.filter(a=>"سيئ"===a.status).length,g={};return c.forEach(a=>{let b=a.mashaer||"غير محدد";g[b]=(g[b]||0)+1}),{total:a,todayVisits:b,excellent:d,good:e,bad:f,topMashaer:Object.entries(g).sort((a,b)=>b[1]-a[1])[0]?.[0]||"-",latestVisit:c[0]?`${c[0].date||"-"} ${c[0].visit_time||""}`.trim():"-"}},[c,n]);async function p(c){c.preventDefault(),f(!0),j("");let d=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",hour12:!1}),e={date:a.date||n,visit_time:d,mashaer:a.mashaer||null,marker:a.marker||null,center:a.center||null,observer:a.observer||null,status:a.status||null,notes:a.notes||null},{error:g}=await cO.from("visits").insert([e]);g?j("❌ "+g.message):(j(`✅ تم حفظ الزيارة بنجاح عند ${d}`),b({date:"",mashaer:"منى",marker:"",center:"",observer:"",status:"جيد",notes:""}),await k()),f(!1)}function q(a){let b=window.open("","_blank","width=900,height=700");if(!b)return;let c=`
+      <html lang="ar" dir="rtl">
+      <head>
+        <meta charset="UTF-8" />
+        <title>تقرير زيارة</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 32px; color: #111827; direction: rtl; }
+          .card { border: 1px solid #d1d5db; border-radius: 16px; padding: 24px; }
+          h1 { margin: 0 0 10px; font-size: 28px; }
+          p { color: #6b7280; margin: 0 0 24px; }
+          .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+          .item { border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; }
+          .label { font-size: 13px; color: #6b7280; margin-bottom: 6px; }
+          .value { font-size: 18px; font-weight: 700; color: #111827; word-break: break-word; }
+          .notes { margin-top: 10px; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; line-height: 1.9; white-space: pre-wrap; }
+          .footer { margin-top: 24px; font-size: 12px; color: #6b7280; }
+          @media print { .print-btn { display: none; } body { padding: 0; } }
+        </style>
+      </head>
+      <body>
+        <button class="print-btn" onclick="window.print()" style="margin-bottom:20px;padding:10px 16px;border:none;border-radius:10px;background:#1d4ed8;color:#fff;cursor:pointer;">تنزيل / طباعة PDF</button>
+        <div class="card">
+          <h1>تقرير زيارة ميدانية</h1>
+          <p>تقرير فردي قابل للطباعة أو الحفظ بصيغة PDF</p>
+          <div class="grid">
+            <div class="item"><div class="label">التاريخ</div><div class="value">${cR(a.date||"-")}</div></div>
+            <div class="item"><div class="label">الوقت</div><div class="value">${cR(a.visit_time||"-")}</div></div>
+            <div class="item"><div class="label">المشعر</div><div class="value">${cR(a.mashaer||"-")}</div></div>
+            <div class="item"><div class="label">رقم الشاخص</div><div class="value">${cR(a.marker||"-")}</div></div>
+            <div class="item"><div class="label">رقم مركز الضيافة</div><div class="value">${cR(a.center||"-")}</div></div>
+            <div class="item"><div class="label">اسم المراقب</div><div class="value">${cR(a.observer||"-")}</div></div>
+            <div class="item"><div class="label">الحالة</div><div class="value">${cR(a.status||"-")}</div></div>
+            <div class="item"><div class="label">وقت الإدخال</div><div class="value">${cR(a.created_at||"-")}</div></div>
+          </div>
+          <div class="item">
+            <div class="label">الملاحظات</div>
+            <div class="notes">${cR(a.notes||"-")}</div>
+          </div>
+          <div class="footer">تم إنشاء هذا التقرير من نظام تقارير الزيارات الميدانية.</div>
+        </div>
+      </body>
+      </html>
+    `;b.document.open(),b.document.write(c),b.document.close()}return(0,l.jsxs)("div",{className:"page",children:[(0,l.jsx)("style",{children:`
+        * { box-sizing: border-box; }
+        .page {
+          min-height: 100vh;
+          background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+          padding: 20px;
+          direction: rtl;
+          font-family: Arial, sans-serif;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .hero {
+          background: linear-gradient(135deg, #0f3d74 0%, #1d4f91 65%, #2563eb 100%);
+          color: #fff;
+          border-radius: 24px;
+          padding: 28px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 20px;
+          box-shadow: 0 16px 40px rgba(37,99,235,0.20);
+          margin-bottom: 18px;
+        }
+        .badge {
+          display: inline-block;
+          padding: 6px 12px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.15);
+          border: 1px solid rgba(255,255,255,0.2);
+          font-size: 13px;
+          margin-bottom: 12px;
+        }
+        .hero h1 { margin: 0; font-size: 38px; font-weight: 800; }
+        .hero p { margin: 10px 0 0; font-size: 17px; line-height: 1.8; opacity: 0.95; }
+        .hero-icon {
+          width: 84px; height: 84px; border-radius: 20px; background: rgba(255,255,255,0.14);
+          display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0;
+        }
+        .stats {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 14px;
+          margin-bottom: 18px;
+        }
+        .stat-card, .card {
+          background: #fff;
+          border-radius: 22px;
+          padding: 20px;
+          border: 1px solid #e5e7eb;
+          box-shadow: 0 10px 24px rgba(15,23,42,0.06);
+        }
+        .stat-title { color: #64748b; font-size: 14px; margin-bottom: 8px; }
+        .stat-value { color: #111827; font-size: 34px; font-weight: 800; }
+        .stat-value.small { font-size: 20px; line-height: 1.5; }
+        .content {
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 18px;
+          align-items: start;
+          margin-bottom: 18px;
+        }
+        .section-title { margin: 0; font-size: 26px; font-weight: 800; color: #0f172a; }
+        .section-text { margin: 8px 0 0; font-size: 15px; color: #64748b; line-height: 1.7; }
+        .field-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+        }
+        .field { margin-bottom: 14px; }
+        .field label {
+          display: block;
+          margin-bottom: 8px;
+          color: #334155;
+          font-weight: 700;
+          font-size: 14px;
+        }
+        .input, .textarea {
+          width: 100%;
+          border-radius: 12px;
+          border: 1px solid #d1d5db;
+          font-size: 14px;
+          background: #fff;
+        }
+        .input { height: 48px; padding: 0 12px; }
+        .textarea { min-height: 130px; padding: 12px; resize: vertical; }
+        .primary-btn, .excel-btn, .pdf-btn, .pdf-mobile-btn {
+          border: none;
+          border-radius: 12px;
+          color: #fff;
+          cursor: pointer;
+          font-weight: 800;
+        }
+        .primary-btn {
+          width: 100%;
+          background: #1d4ed8;
+          padding: 14px;
+          font-size: 16px;
+          margin-top: 8px;
+        }
+        .excel-btn {
+          width: 100%;
+          margin-top: 16px;
+          background: #059669;
+          padding: 14px;
+          font-size: 16px;
+        }
+        .pdf-btn, .pdf-mobile-btn {
+          background: #7c3aed;
+          padding: 8px 12px;
+          font-size: 13px;
+          white-space: nowrap;
+        }
+        .pdf-mobile-btn {
+          display: none;
+          width: 100%;
+          margin-top: 10px;
+          padding: 12px;
+        }
+        .message {
+          margin-top: 14px;
+          padding: 12px;
+          border-radius: 12px;
+          border: 1px solid;
+          text-align: center;
+        }
+        .summary-list { display: grid; gap: 10px; }
+        .summary-row {
+          background: #f8fafc;
+          border: 1px solid #e5e7eb;
+          border-radius: 14px;
+          padding: 14px 16px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .summary-label { color: #475569; font-size: 15px; }
+        .summary-value { color: #111827; font-weight: 800; font-size: 18px; }
+        .note-box {
+          margin-top: 16px;
+          background: #eff6ff;
+          border: 1px solid #bfdbfe;
+          border-radius: 14px;
+          padding: 14px;
+          color: #1e3a8a;
+          line-height: 1.8;
+          font-size: 14px;
+        }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+          text-align: right;
+          padding: 14px;
+          border-bottom: 1px solid #e5e7eb;
+          background: #f8fafc;
+          color: #475569;
+          font-size: 14px;
+          white-space: nowrap;
+        }
+        td {
+          text-align: right;
+          padding: 14px;
+          border-bottom: 1px solid #eef2f7;
+          color: #111827;
+          font-size: 14px;
+          white-space: nowrap;
+          vertical-align: top;
+        }
+        td.notes {
+          white-space: normal;
+          min-width: 280px;
+          line-height: 1.7;
+        }
+        .status-pill {
+          display: inline-block;
+          padding: 6px 12px;
+          border-radius: 999px;
+          font-size: 13px;
+          font-weight: 700;
+        }
+        .empty { text-align: center; padding: 36px; color: #64748b; font-size: 16px; }
+        .actions-cell { min-width: 110px; }
+
+        @media (max-width: 900px) {
+          .stats { grid-template-columns: 1fr 1fr; }
+          .content { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+          .page { padding: 14px; }
+          .hero { padding: 20px; border-radius: 18px; }
+          .hero h1 { font-size: 28px; }
+          .hero p { font-size: 14px; }
+          .hero-icon {
+            width: 60px; height: 60px; font-size: 28px; border-radius: 16px;
+          }
+          .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+          .stat-card, .card { padding: 16px; border-radius: 18px; }
+          .stat-value { font-size: 28px; }
+          .stat-value.small { font-size: 16px; }
+          .section-title { font-size: 22px; }
+          .field-grid { grid-template-columns: 1fr; }
+          th, td { padding: 10px; font-size: 13px; }
+          .desktop-pdf { display: none; }
+          .pdf-mobile-btn { display: block; }
+          .notes .mobile-inline-pdf { display: block; }
+        }
+      `}),(0,l.jsxs)("div",{className:"container",children:[(0,l.jsxs)("div",{className:"hero",children:[(0,l.jsxs)("div",{children:[(0,l.jsx)("div",{className:"badge",children:"لوحة المتابعة"}),(0,l.jsx)("h1",{children:"تقارير الزيارات الميدانية"}),(0,l.jsx)("p",{children:"سجّل الزيارات، راقب الحالة العامة، وصدّر السجلات إلى Excel من نفس الصفحة."})]}),(0,l.jsx)("div",{className:"hero-icon",children:"\uD83D\uDCCB"})]}),(0,l.jsxs)("div",{className:"stats",children:[(0,l.jsx)(cT,{title:"إجمالي الزيارات",value:String(o.total)}),(0,l.jsx)(cT,{title:"زيارات اليوم",value:String(o.todayVisits)}),(0,l.jsx)(cT,{title:"أفضل مشعر",value:o.topMashaer}),(0,l.jsx)(cT,{title:"آخر زيارة",value:o.latestVisit,small:!0})]}),(0,l.jsxs)("div",{className:"content",children:[(0,l.jsxs)("div",{className:"card",children:[(0,l.jsxs)("div",{style:{marginBottom:18},children:[(0,l.jsx)("h2",{className:"section-title",children:"إضافة زيارة جديدة"}),(0,l.jsx)("p",{className:"section-text",children:"الوقت يُسجل تلقائيًا وقت الحفظ."})]}),(0,l.jsxs)("form",{onSubmit:p,children:[(0,l.jsxs)("div",{className:"field-grid",children:[(0,l.jsx)(cS,{label:"التاريخ",children:(0,l.jsx)("input",{className:"input",type:"date",value:a.date,onChange:c=>b({...a,date:c.target.value})})}),(0,l.jsx)(cS,{label:"المشعر",children:(0,l.jsx)("select",{className:"input",value:a.mashaer,onChange:c=>b({...a,mashaer:c.target.value}),children:cP.map(a=>(0,l.jsx)("option",{value:a,children:a},a))})}),(0,l.jsx)(cS,{label:"رقم الشاخص",children:(0,l.jsx)("input",{className:"input",value:a.marker,onChange:c=>b({...a,marker:c.target.value}),placeholder:"مثال: 54-1\\\\533"})}),(0,l.jsx)(cS,{label:"رقم مركز الضيافة",children:(0,l.jsx)("input",{className:"input",value:a.center,onChange:c=>b({...a,center:c.target.value}),placeholder:"مثال: 151-152"})}),(0,l.jsx)(cS,{label:"اسم المراقب",children:(0,l.jsx)("input",{className:"input",value:a.observer,onChange:c=>b({...a,observer:c.target.value}),placeholder:"اسم المراقب"})}),(0,l.jsx)(cS,{label:"الحالة",children:(0,l.jsxs)("select",{className:"input",value:a.status,onChange:c=>b({...a,status:c.target.value}),children:[(0,l.jsx)("option",{children:"ممتاز"}),(0,l.jsx)("option",{children:"جيد"}),(0,l.jsx)("option",{children:"سيئ"})]})})]}),(0,l.jsx)(cS,{label:"الملاحظات",children:(0,l.jsx)("textarea",{className:"textarea",value:a.notes,onChange:c=>b({...a,notes:c.target.value}),placeholder:"اكتب الملاحظات هنا"})}),(0,l.jsx)("button",{className:"primary-btn",type:"submit",disabled:e,children:e?"جاري الحفظ...":"حفظ الزيارة"}),i?(0,l.jsx)("div",{className:"message",style:{background:i.includes("❌")?"#fef2f2":"#eff6ff",color:i.includes("❌")?"#b91c1c":"#1d4ed8",borderColor:i.includes("❌")?"#fecaca":"#bfdbfe"},children:i}):null]})]}),(0,l.jsxs)("div",{className:"card",children:[(0,l.jsxs)("div",{style:{marginBottom:18},children:[(0,l.jsx)("h2",{className:"section-title",children:"ملخص سريع"}),(0,l.jsx)("p",{className:"section-text",children:"قراءة سريعة لوضع السجلات الحالية."})]}),(0,l.jsxs)("div",{className:"summary-list",children:[(0,l.jsx)(cU,{label:"إجمالي السجلات",value:String(o.total)}),(0,l.jsx)(cU,{label:"زيارات اليوم",value:String(o.todayVisits)}),(0,l.jsx)(cU,{label:"ممتاز",value:String(o.excellent)}),(0,l.jsx)(cU,{label:"جيد",value:String(o.good)}),(0,l.jsx)(cU,{label:"سيئ",value:String(o.bad)})]}),(0,l.jsx)("button",{className:"excel-btn",type:"button",onClick:function(){let a=c.map(a=>`
           <tr>
             <td>${cR(a.date||"")}</td>
             <td>${cR(a.visit_time||"")}</td>
@@ -69,4 +316,4 @@ https://supabase.com/dashboard/project/_/settings/api`);let{storage:f}=function(
         </table>
       </body>
       </html>
-    `],{type:"application/vnd.ms-excel;charset=utf-8;"}),d=URL.createObjectURL(b),e=document.createElement("a");e.href=d,e.download="visits-report.xls",e.click(),URL.revokeObjectURL(d)},style:dn,children:"تصدير Excel"}),(0,l.jsx)("div",{style:dp,children:"الوقت يُحفظ تلقائيًا عند كل زيارة، ويمكنك استخدامه لاحقًا في التقارير اليومية."})]})]}),(0,l.jsxs)("div",{style:c9,children:[(0,l.jsxs)("div",{style:da,children:[(0,l.jsx)("h2",{style:db,children:"آخر الزيارات"}),(0,l.jsx)("p",{style:dc,children:"عرض مباشر لآخر البيانات المحفوظة."})]}),g?(0,l.jsx)("div",{style:dw,children:"جاري تحميل البيانات..."}):0===c.length?(0,l.jsx)("div",{style:dw,children:"لا توجد بيانات حتى الآن."}):(0,l.jsx)("div",{style:dq,children:(0,l.jsxs)("table",{style:dr,children:[(0,l.jsx)("thead",{children:(0,l.jsxs)("tr",{children:[(0,l.jsx)(cV,{children:"التاريخ"}),(0,l.jsx)(cV,{children:"الوقت"}),(0,l.jsx)(cV,{children:"المشعر"}),(0,l.jsx)(cV,{children:"الشاخص"}),(0,l.jsx)(cV,{children:"الضيافة"}),(0,l.jsx)(cV,{children:"المراقب"}),(0,l.jsx)(cV,{children:"الحالة"}),(0,l.jsx)(cV,{children:"الملاحظات"})]})}),(0,l.jsx)("tbody",{children:c.map((a,b)=>(0,l.jsxs)("tr",{style:{background:b%2==0?"#fff":"#f8fafc"},children:[(0,l.jsx)(cW,{children:a.date||"-"}),(0,l.jsx)(cW,{children:a.visit_time||"-"}),(0,l.jsx)(cW,{children:a.mashaer||"-"}),(0,l.jsx)(cW,{children:a.marker||"-"}),(0,l.jsx)(cW,{children:a.center||"-"}),(0,l.jsx)(cW,{children:a.observer||"-"}),(0,l.jsx)(cW,{children:(0,l.jsx)("span",{style:{...dv,background:"ممتاز"===a.status?"#dcfce7":"سيئ"===a.status?"#fee2e2":"#dbeafe",color:"ممتاز"===a.status?"#166534":"سيئ"===a.status?"#991b1b":"#1d4ed8"},children:a.status||"-"})}),(0,l.jsx)(cW,{notes:!0,children:a.notes||"-"})]},a.id||b))})]})})]})]})})}function cR(a){return a.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function cS({label:a,children:b}){return(0,l.jsxs)("div",{style:{marginBottom:"14px"},children:[(0,l.jsx)("label",{style:de,children:a}),b]})}function cT({title:a,value:b,small:c=!1}){return(0,l.jsxs)("div",{style:c3,children:[(0,l.jsx)("div",{style:c4,children:a}),(0,l.jsx)("div",{style:{...c5,fontSize:c?"20px":"34px"},children:b})]})}function cU({label:a,value:b}){return(0,l.jsxs)("div",{style:dk,children:[(0,l.jsx)("span",{style:dl,children:a}),(0,l.jsx)("span",{style:dm,children:b})]})}function cV({children:a}){return(0,l.jsx)("th",{style:ds,children:a})}function cW({children:a,notes:b=!1}){return(0,l.jsx)("td",{style:b?du:dt,children:a})}let cX={minHeight:"100vh",background:"linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%)",padding:"32px 20px",direction:"rtl",fontFamily:"Arial, sans-serif"},cY={maxWidth:"1200px",margin:"0 auto"},cZ={background:"linear-gradient(135deg, #0f3d74 0%, #1d4f91 65%, #2563eb 100%)",color:"#fff",borderRadius:"24px",padding:"28px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:"20px",boxShadow:"0 16px 40px rgba(37,99,235,0.20)",marginBottom:"18px"},c$={display:"inline-block",padding:"6px 12px",borderRadius:"999px",background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.2)",fontSize:"13px",marginBottom:"12px"},c_={margin:0,fontSize:"38px",fontWeight:800},c0={margin:"10px 0 0",fontSize:"17px",lineHeight:1.8,opacity:.95},c1={width:"84px",height:"84px",borderRadius:"20px",background:"rgba(255,255,255,0.14)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"36px",flexShrink:0},c2={display:"grid",gridTemplateColumns:"repeat(4, minmax(0, 1fr))",gap:"14px",marginBottom:"18px"},c3={background:"#fff",borderRadius:"20px",padding:"20px",border:"1px solid #e5e7eb",boxShadow:"0 10px 24px rgba(15,23,42,0.06)"},c4={color:"#64748b",fontSize:"14px",marginBottom:"8px"},c5={color:"#111827",fontSize:"34px",fontWeight:800},c6={display:"grid",gridTemplateColumns:"1.2fr 0.8fr",gap:"18px",alignItems:"start",marginBottom:"18px"},c7={background:"#fff",borderRadius:"22px",padding:"24px",border:"1px solid #e5e7eb",boxShadow:"0 10px 24px rgba(15,23,42,0.06)"},c8={background:"#fff",borderRadius:"22px",padding:"24px",border:"1px solid #e5e7eb",boxShadow:"0 10px 24px rgba(15,23,42,0.06)"},c9={background:"#fff",borderRadius:"22px",padding:"24px",border:"1px solid #e5e7eb",boxShadow:"0 10px 24px rgba(15,23,42,0.06)"},da={marginBottom:"18px"},db={margin:0,fontSize:"26px",fontWeight:800,color:"#0f172a"},dc={margin:"8px 0 0",fontSize:"15px",color:"#64748b",lineHeight:1.7},dd={display:"grid",gridTemplateColumns:"1fr 1fr",gap:"14px"},de={display:"block",marginBottom:"8px",color:"#334155",fontWeight:700,fontSize:"14px"},df={width:"100%",height:"48px",borderRadius:"12px",border:"1px solid #d1d5db",padding:"0 12px",fontSize:"14px",boxSizing:"border-box",background:"#fff"},dg={width:"100%",minHeight:"130px",borderRadius:"12px",border:"1px solid #d1d5db",padding:"12px",fontSize:"14px",boxSizing:"border-box",resize:"vertical",background:"#fff"},dh={width:"100%",border:"none",borderRadius:"12px",background:"#1d4ed8",color:"#fff",padding:"14px",fontSize:"16px",fontWeight:800,cursor:"pointer",marginTop:"8px"},di={marginTop:"14px",padding:"12px",borderRadius:"12px",border:"1px solid",textAlign:"center"},dj={display:"grid",gap:"10px"},dk={background:"#f8fafc",border:"1px solid #e5e7eb",borderRadius:"14px",padding:"14px 16px",display:"flex",justifyContent:"space-between",alignItems:"center"},dl={color:"#475569",fontSize:"15px"},dm={color:"#111827",fontWeight:800,fontSize:"18px"},dn={width:"100%",marginTop:"16px",border:"none",borderRadius:"12px",background:"#059669",color:"#fff",padding:"14px",fontSize:"16px",fontWeight:800,cursor:"pointer"},dp={marginTop:"16px",background:"#eff6ff",border:"1px solid #bfdbfe",borderRadius:"14px",padding:"14px",color:"#1e3a8a",lineHeight:1.8,fontSize:"14px"},dq={overflowX:"auto"},dr={width:"100%",borderCollapse:"collapse"},ds={textAlign:"right",padding:"14px",borderBottom:"1px solid #e5e7eb",background:"#f8fafc",color:"#475569",fontSize:"14px",whiteSpace:"nowrap"},dt={textAlign:"right",padding:"14px",borderBottom:"1px solid #eef2f7",color:"#111827",fontSize:"14px",whiteSpace:"nowrap"},du={...dt,whiteSpace:"normal",minWidth:"280px",lineHeight:1.7},dv={display:"inline-block",padding:"6px 12px",borderRadius:"999px",fontSize:"13px",fontWeight:700},dw={textAlign:"center",padding:"36px",color:"#64748b",fontSize:"16px"}},3033:a=>{"use strict";a.exports=require("next/dist/server/app-render/work-unit-async-storage.external.js")},3295:a=>{"use strict";a.exports=require("next/dist/server/app-render/after-task-async-storage.external.js")},3354:(a,b,c)=>{Promise.resolve().then(c.t.bind(c,4160,23)),Promise.resolve().then(c.t.bind(c,1603,23)),Promise.resolve().then(c.t.bind(c,8495,23)),Promise.resolve().then(c.t.bind(c,5170,23)),Promise.resolve().then(c.t.bind(c,7526,23)),Promise.resolve().then(c.t.bind(c,8922,23)),Promise.resolve().then(c.t.bind(c,9234,23)),Promise.resolve().then(c.t.bind(c,2263,23)),Promise.resolve().then(c.bind(c,2146))},3402:(a,b,c)=>{"use strict";c.r(b),c.d(b,{default:()=>d});let d=(0,c(7954).registerClientReference)(function(){throw Error("Attempted to call the default export of \"/Users/majedalmasoum/Downloads/field-visits-system/app/reports/page.tsx\" from the server, but it's on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.")},"/Users/majedalmasoum/Downloads/field-visits-system/app/reports/page.tsx","default")},3484:()=>{},5159:(a,b)=>{"use strict";b.q=function(a,b){if("string"!=typeof a)throw TypeError("argument str must be a string");var c={},e=a.length;if(e<2)return c;var f=b&&b.decode||k,g=0,h=0,l=0;do{if(-1===(h=a.indexOf("=",g)))break;if(-1===(l=a.indexOf(";",g)))l=e;else if(h>l){g=a.lastIndexOf(";",h-1)+1;continue}var m=i(a,g,h),n=j(a,h,m),o=a.slice(m,n);if(!d.call(c,o)){var p=i(a,h+1,l),q=j(a,l,p);34===a.charCodeAt(p)&&34===a.charCodeAt(q-1)&&(p++,q--);var r=a.slice(p,q);c[o]=function(a,b){try{return b(a)}catch(b){return a}}(r,f)}g=l+1}while(g<e);return c},b.l=function(a,b,d){var i=d&&d.encode||encodeURIComponent;if("function"!=typeof i)throw TypeError("option encode is invalid");if(!e.test(a))throw TypeError("argument name is invalid");var j=i(b);if(!f.test(j))throw TypeError("argument val is invalid");var k=a+"="+j;if(!d)return k;if(null!=d.maxAge){var l=Math.floor(d.maxAge);if(!isFinite(l))throw TypeError("option maxAge is invalid");k+="; Max-Age="+l}if(d.domain){if(!g.test(d.domain))throw TypeError("option domain is invalid");k+="; Domain="+d.domain}if(d.path){if(!h.test(d.path))throw TypeError("option path is invalid");k+="; Path="+d.path}if(d.expires){var m,n=d.expires;if(m=n,"[object Date]"!==c.call(m)||isNaN(n.valueOf()))throw TypeError("option expires is invalid");k+="; Expires="+n.toUTCString()}if(d.httpOnly&&(k+="; HttpOnly"),d.secure&&(k+="; Secure"),d.partitioned&&(k+="; Partitioned"),d.priority)switch("string"==typeof d.priority?d.priority.toLowerCase():d.priority){case"low":k+="; Priority=Low";break;case"medium":k+="; Priority=Medium";break;case"high":k+="; Priority=High";break;default:throw TypeError("option priority is invalid")}if(d.sameSite)switch("string"==typeof d.sameSite?d.sameSite.toLowerCase():d.sameSite){case!0:case"strict":k+="; SameSite=Strict";break;case"lax":k+="; SameSite=Lax";break;case"none":k+="; SameSite=None";break;default:throw TypeError("option sameSite is invalid")}return k};var c=Object.prototype.toString,d=Object.prototype.hasOwnProperty,e=/^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/,f=/^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u005D-\u007E]*\1$/,g=/^([.]?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i,h=/^[\u0020-\u003A\u003D-\u007E]*$/;function i(a,b,c){do{var d=a.charCodeAt(b);if(32!==d&&9!==d)return b}while(++b<c);return c}function j(a,b,c){for(;b>c;){var d=a.charCodeAt(--b);if(32!==d&&9!==d)return b+1}return c}function k(a){return -1!==a.indexOf("%")?decodeURIComponent(a):a}},5202:(a,b,c)=>{Promise.resolve().then(c.t.bind(c,1170,23)),Promise.resolve().then(c.t.bind(c,3597,23)),Promise.resolve().then(c.t.bind(c,6893,23)),Promise.resolve().then(c.t.bind(c,9748,23)),Promise.resolve().then(c.t.bind(c,6060,23)),Promise.resolve().then(c.t.bind(c,7184,23)),Promise.resolve().then(c.t.bind(c,9576,23)),Promise.resolve().then(c.t.bind(c,3041,23)),Promise.resolve().then(c.t.bind(c,1384,23))},6439:a=>{"use strict";a.exports=require("next/dist/shared/lib/no-fallback-error.external")},6713:a=>{"use strict";a.exports=require("next/dist/shared/lib/router/utils/is-bot")},6953:(a,b,c)=>{"use strict";c.r(b),c.d(b,{default:()=>f,metadata:()=>e});var d=c(5338);c(2704);let e={title:"نظام تقارير الزيارات الميدانية",description:"نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel"};function f({children:a}){return(0,d.jsx)("html",{lang:"ar",dir:"rtl",children:(0,d.jsx)("body",{children:a})})}},8354:a=>{"use strict";a.exports=require("util")},9121:a=>{"use strict";a.exports=require("next/dist/server/app-render/action-async-storage.external.js")},9294:a=>{"use strict";a.exports=require("next/dist/server/app-render/work-async-storage.external.js")},9902:a=>{"use strict";a.exports=require("path")},9932:()=>{}};var b=require("../../webpack-runtime.js");b.C(a);var c=b.X(0,[778],()=>b(b.s=2443));module.exports=c})();
+    `],{type:"application/vnd.ms-excel;charset=utf-8;"}),d=URL.createObjectURL(b),e=document.createElement("a");e.href=d,e.download="visits-report.xls",e.click(),URL.revokeObjectURL(d)},children:"تصدير Excel"}),(0,l.jsx)("div",{className:"note-box",children:"الوقت يُحفظ تلقائيًا عند كل زيارة، ولكل سجل زر PDF مستقل."})]})]}),(0,l.jsxs)("div",{className:"card",children:[(0,l.jsxs)("div",{style:{marginBottom:18},children:[(0,l.jsx)("h2",{className:"section-title",children:"آخر الزيارات"}),(0,l.jsx)("p",{className:"section-text",children:"عرض مباشر لآخر البيانات المحفوظة."})]}),g?(0,l.jsx)("div",{className:"empty",children:"جاري تحميل البيانات..."}):0===c.length?(0,l.jsx)("div",{className:"empty",children:"لا توجد بيانات حتى الآن."}):(0,l.jsx)("div",{className:"table-wrap",children:(0,l.jsxs)("table",{children:[(0,l.jsx)("thead",{children:(0,l.jsxs)("tr",{children:[(0,l.jsx)(cV,{children:"التاريخ"}),(0,l.jsx)(cV,{children:"الوقت"}),(0,l.jsx)(cV,{children:"المشعر"}),(0,l.jsx)(cV,{children:"الشاخص"}),(0,l.jsx)(cV,{children:"الضيافة"}),(0,l.jsx)(cV,{children:"المراقب"}),(0,l.jsx)(cV,{children:"الحالة"}),(0,l.jsx)(cV,{children:"الملاحظات"}),(0,l.jsx)(cV,{className:"desktop-pdf",children:"PDF"})]})}),(0,l.jsx)("tbody",{children:c.map((a,b)=>(0,l.jsxs)("tr",{style:{background:b%2==0?"#fff":"#f8fafc"},children:[(0,l.jsx)(cW,{children:a.date||"-"}),(0,l.jsx)(cW,{children:a.visit_time||"-"}),(0,l.jsx)(cW,{children:a.mashaer||"-"}),(0,l.jsx)(cW,{children:a.marker||"-"}),(0,l.jsx)(cW,{children:a.center||"-"}),(0,l.jsx)(cW,{children:a.observer||"-"}),(0,l.jsx)(cW,{children:(0,l.jsx)("span",{className:"status-pill",style:{background:"ممتاز"===a.status?"#dcfce7":"سيئ"===a.status?"#fee2e2":"#dbeafe",color:"ممتاز"===a.status?"#166534":"سيئ"===a.status?"#991b1b":"#1d4ed8"},children:a.status||"-"})}),(0,l.jsxs)(cW,{notes:!0,children:[(0,l.jsx)("div",{children:a.notes||"-"}),(0,l.jsx)("button",{className:"pdf-mobile-btn mobile-inline-pdf",type:"button",onClick:()=>q(a),children:"تنزيل PDF"})]}),(0,l.jsx)(cW,{className:"actions-cell desktop-pdf",children:(0,l.jsx)("button",{className:"pdf-btn",type:"button",onClick:()=>q(a),children:"تنزيل PDF"})})]},a.id||b))})]})})]})]})]})}function cR(a){return a.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function cS({label:a,children:b}){return(0,l.jsxs)("div",{className:"field",children:[(0,l.jsx)("label",{children:a}),b]})}function cT({title:a,value:b,small:c=!1}){return(0,l.jsxs)("div",{className:"stat-card",children:[(0,l.jsx)("div",{className:"stat-title",children:a}),(0,l.jsx)("div",{className:`stat-value${c?" small":""}`,children:b})]})}function cU({label:a,value:b}){return(0,l.jsxs)("div",{className:"summary-row",children:[(0,l.jsx)("span",{className:"summary-label",children:a}),(0,l.jsx)("span",{className:"summary-value",children:b})]})}function cV({children:a,className:b=""}){return(0,l.jsx)("th",{className:b,children:a})}function cW({children:a,notes:b=!1,className:c=""}){return(0,l.jsx)("td",{className:`${b?"notes":""} ${c}`.trim(),children:a})}},3033:a=>{"use strict";a.exports=require("next/dist/server/app-render/work-unit-async-storage.external.js")},3295:a=>{"use strict";a.exports=require("next/dist/server/app-render/after-task-async-storage.external.js")},3354:(a,b,c)=>{Promise.resolve().then(c.t.bind(c,4160,23)),Promise.resolve().then(c.t.bind(c,1603,23)),Promise.resolve().then(c.t.bind(c,8495,23)),Promise.resolve().then(c.t.bind(c,5170,23)),Promise.resolve().then(c.t.bind(c,7526,23)),Promise.resolve().then(c.t.bind(c,8922,23)),Promise.resolve().then(c.t.bind(c,9234,23)),Promise.resolve().then(c.t.bind(c,2263,23)),Promise.resolve().then(c.bind(c,2146))},3402:(a,b,c)=>{"use strict";c.r(b),c.d(b,{default:()=>d});let d=(0,c(7954).registerClientReference)(function(){throw Error("Attempted to call the default export of \"/Users/majedalmasoum/Downloads/field-visits-system/app/reports/page.tsx\" from the server, but it's on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.")},"/Users/majedalmasoum/Downloads/field-visits-system/app/reports/page.tsx","default")},3484:()=>{},5159:(a,b)=>{"use strict";b.q=function(a,b){if("string"!=typeof a)throw TypeError("argument str must be a string");var c={},e=a.length;if(e<2)return c;var f=b&&b.decode||k,g=0,h=0,l=0;do{if(-1===(h=a.indexOf("=",g)))break;if(-1===(l=a.indexOf(";",g)))l=e;else if(h>l){g=a.lastIndexOf(";",h-1)+1;continue}var m=i(a,g,h),n=j(a,h,m),o=a.slice(m,n);if(!d.call(c,o)){var p=i(a,h+1,l),q=j(a,l,p);34===a.charCodeAt(p)&&34===a.charCodeAt(q-1)&&(p++,q--);var r=a.slice(p,q);c[o]=function(a,b){try{return b(a)}catch(b){return a}}(r,f)}g=l+1}while(g<e);return c},b.l=function(a,b,d){var i=d&&d.encode||encodeURIComponent;if("function"!=typeof i)throw TypeError("option encode is invalid");if(!e.test(a))throw TypeError("argument name is invalid");var j=i(b);if(!f.test(j))throw TypeError("argument val is invalid");var k=a+"="+j;if(!d)return k;if(null!=d.maxAge){var l=Math.floor(d.maxAge);if(!isFinite(l))throw TypeError("option maxAge is invalid");k+="; Max-Age="+l}if(d.domain){if(!g.test(d.domain))throw TypeError("option domain is invalid");k+="; Domain="+d.domain}if(d.path){if(!h.test(d.path))throw TypeError("option path is invalid");k+="; Path="+d.path}if(d.expires){var m,n=d.expires;if(m=n,"[object Date]"!==c.call(m)||isNaN(n.valueOf()))throw TypeError("option expires is invalid");k+="; Expires="+n.toUTCString()}if(d.httpOnly&&(k+="; HttpOnly"),d.secure&&(k+="; Secure"),d.partitioned&&(k+="; Partitioned"),d.priority)switch("string"==typeof d.priority?d.priority.toLowerCase():d.priority){case"low":k+="; Priority=Low";break;case"medium":k+="; Priority=Medium";break;case"high":k+="; Priority=High";break;default:throw TypeError("option priority is invalid")}if(d.sameSite)switch("string"==typeof d.sameSite?d.sameSite.toLowerCase():d.sameSite){case!0:case"strict":k+="; SameSite=Strict";break;case"lax":k+="; SameSite=Lax";break;case"none":k+="; SameSite=None";break;default:throw TypeError("option sameSite is invalid")}return k};var c=Object.prototype.toString,d=Object.prototype.hasOwnProperty,e=/^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/,f=/^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u005D-\u007E]*\1$/,g=/^([.]?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i,h=/^[\u0020-\u003A\u003D-\u007E]*$/;function i(a,b,c){do{var d=a.charCodeAt(b);if(32!==d&&9!==d)return b}while(++b<c);return c}function j(a,b,c){for(;b>c;){var d=a.charCodeAt(--b);if(32!==d&&9!==d)return b+1}return c}function k(a){return -1!==a.indexOf("%")?decodeURIComponent(a):a}},5202:(a,b,c)=>{Promise.resolve().then(c.t.bind(c,1170,23)),Promise.resolve().then(c.t.bind(c,3597,23)),Promise.resolve().then(c.t.bind(c,6893,23)),Promise.resolve().then(c.t.bind(c,9748,23)),Promise.resolve().then(c.t.bind(c,6060,23)),Promise.resolve().then(c.t.bind(c,7184,23)),Promise.resolve().then(c.t.bind(c,9576,23)),Promise.resolve().then(c.t.bind(c,3041,23)),Promise.resolve().then(c.t.bind(c,1384,23))},6439:a=>{"use strict";a.exports=require("next/dist/shared/lib/no-fallback-error.external")},6713:a=>{"use strict";a.exports=require("next/dist/shared/lib/router/utils/is-bot")},6953:(a,b,c)=>{"use strict";c.r(b),c.d(b,{default:()=>f,metadata:()=>e});var d=c(5338);c(2704);let e={title:"نظام تقارير الزيارات الميدانية",description:"نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel"};function f({children:a}){return(0,d.jsx)("html",{lang:"ar",dir:"rtl",children:(0,d.jsx)("body",{children:a})})}},8354:a=>{"use strict";a.exports=require("util")},9121:a=>{"use strict";a.exports=require("next/dist/server/app-render/action-async-storage.external.js")},9294:a=>{"use strict";a.exports=require("next/dist/server/app-render/work-async-storage.external.js")},9902:a=>{"use strict";a.exports=require("path")},9932:()=>{}};var b=require("../../webpack-runtime.js");b.C(a);var c=b.X(0,[778],()=>b(b.s=2443));module.exports=c})();

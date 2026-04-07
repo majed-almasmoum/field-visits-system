@@ -173,50 +173,308 @@ export default function ReportsPage() {
     URL.revokeObjectURL(url);
   }
 
-  return (
-    <div style={page}>
-      <div style={container}>
-        <div style={heroCard}>
-          <div>
-            <div style={badge}>لوحة المتابعة</div>
-            <h1 style={heroTitle}>تقارير الزيارات الميدانية</h1>
-            <p style={heroText}>
-              سجّل الزيارات، راقب الحالة العامة، وصدّر السجلات إلى Excel من نفس الصفحة.
-            </p>
+  function downloadVisitPdf(row: VisitRow) {
+    const win = window.open('', '_blank', 'width=900,height=700');
+    if (!win) return;
+
+    const html = `
+      <html lang="ar" dir="rtl">
+      <head>
+        <meta charset="UTF-8" />
+        <title>تقرير زيارة</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 32px; color: #111827; direction: rtl; }
+          .card { border: 1px solid #d1d5db; border-radius: 16px; padding: 24px; }
+          h1 { margin: 0 0 10px; font-size: 28px; }
+          p { color: #6b7280; margin: 0 0 24px; }
+          .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+          .item { border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; }
+          .label { font-size: 13px; color: #6b7280; margin-bottom: 6px; }
+          .value { font-size: 18px; font-weight: 700; color: #111827; word-break: break-word; }
+          .notes { margin-top: 10px; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; line-height: 1.9; white-space: pre-wrap; }
+          .footer { margin-top: 24px; font-size: 12px; color: #6b7280; }
+          @media print { .print-btn { display: none; } body { padding: 0; } }
+        </style>
+      </head>
+      <body>
+        <button class="print-btn" onclick="window.print()" style="margin-bottom:20px;padding:10px 16px;border:none;border-radius:10px;background:#1d4ed8;color:#fff;cursor:pointer;">تنزيل / طباعة PDF</button>
+        <div class="card">
+          <h1>تقرير زيارة ميدانية</h1>
+          <p>تقرير فردي قابل للطباعة أو الحفظ بصيغة PDF</p>
+          <div class="grid">
+            <div class="item"><div class="label">التاريخ</div><div class="value">${escapeHtml(row.date || '-')}</div></div>
+            <div class="item"><div class="label">الوقت</div><div class="value">${escapeHtml(row.visit_time || '-')}</div></div>
+            <div class="item"><div class="label">المشعر</div><div class="value">${escapeHtml(row.mashaer || '-')}</div></div>
+            <div class="item"><div class="label">رقم الشاخص</div><div class="value">${escapeHtml(row.marker || '-')}</div></div>
+            <div class="item"><div class="label">رقم مركز الضيافة</div><div class="value">${escapeHtml(row.center || '-')}</div></div>
+            <div class="item"><div class="label">اسم المراقب</div><div class="value">${escapeHtml(row.observer || '-')}</div></div>
+            <div class="item"><div class="label">الحالة</div><div class="value">${escapeHtml(row.status || '-')}</div></div>
+            <div class="item"><div class="label">وقت الإدخال</div><div class="value">${escapeHtml(row.created_at || '-')}</div></div>
           </div>
-          <div style={heroIcon}>📋</div>
+          <div class="item">
+            <div class="label">الملاحظات</div>
+            <div class="notes">${escapeHtml(row.notes || '-')}</div>
+          </div>
+          <div class="footer">تم إنشاء هذا التقرير من نظام تقارير الزيارات الميدانية.</div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+  }
+
+  return (
+    <div className="page">
+      <style>{`
+        * { box-sizing: border-box; }
+        .page {
+          min-height: 100vh;
+          background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+          padding: 20px;
+          direction: rtl;
+          font-family: Arial, sans-serif;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .hero {
+          background: linear-gradient(135deg, #0f3d74 0%, #1d4f91 65%, #2563eb 100%);
+          color: #fff;
+          border-radius: 24px;
+          padding: 28px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 20px;
+          box-shadow: 0 16px 40px rgba(37,99,235,0.20);
+          margin-bottom: 18px;
+        }
+        .badge {
+          display: inline-block;
+          padding: 6px 12px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.15);
+          border: 1px solid rgba(255,255,255,0.2);
+          font-size: 13px;
+          margin-bottom: 12px;
+        }
+        .hero h1 { margin: 0; font-size: 38px; font-weight: 800; }
+        .hero p { margin: 10px 0 0; font-size: 17px; line-height: 1.8; opacity: 0.95; }
+        .hero-icon {
+          width: 84px; height: 84px; border-radius: 20px; background: rgba(255,255,255,0.14);
+          display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0;
+        }
+        .stats {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 14px;
+          margin-bottom: 18px;
+        }
+        .stat-card, .card {
+          background: #fff;
+          border-radius: 22px;
+          padding: 20px;
+          border: 1px solid #e5e7eb;
+          box-shadow: 0 10px 24px rgba(15,23,42,0.06);
+        }
+        .stat-title { color: #64748b; font-size: 14px; margin-bottom: 8px; }
+        .stat-value { color: #111827; font-size: 34px; font-weight: 800; }
+        .stat-value.small { font-size: 20px; line-height: 1.5; }
+        .content {
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 18px;
+          align-items: start;
+          margin-bottom: 18px;
+        }
+        .section-title { margin: 0; font-size: 26px; font-weight: 800; color: #0f172a; }
+        .section-text { margin: 8px 0 0; font-size: 15px; color: #64748b; line-height: 1.7; }
+        .field-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+        }
+        .field { margin-bottom: 14px; }
+        .field label {
+          display: block;
+          margin-bottom: 8px;
+          color: #334155;
+          font-weight: 700;
+          font-size: 14px;
+        }
+        .input, .textarea {
+          width: 100%;
+          border-radius: 12px;
+          border: 1px solid #d1d5db;
+          font-size: 14px;
+          background: #fff;
+        }
+        .input { height: 48px; padding: 0 12px; }
+        .textarea { min-height: 130px; padding: 12px; resize: vertical; }
+        .primary-btn, .excel-btn, .pdf-btn, .pdf-mobile-btn {
+          border: none;
+          border-radius: 12px;
+          color: #fff;
+          cursor: pointer;
+          font-weight: 800;
+        }
+        .primary-btn {
+          width: 100%;
+          background: #1d4ed8;
+          padding: 14px;
+          font-size: 16px;
+          margin-top: 8px;
+        }
+        .excel-btn {
+          width: 100%;
+          margin-top: 16px;
+          background: #059669;
+          padding: 14px;
+          font-size: 16px;
+        }
+        .pdf-btn, .pdf-mobile-btn {
+          background: #7c3aed;
+          padding: 8px 12px;
+          font-size: 13px;
+          white-space: nowrap;
+        }
+        .pdf-mobile-btn {
+          display: none;
+          width: 100%;
+          margin-top: 10px;
+          padding: 12px;
+        }
+        .message {
+          margin-top: 14px;
+          padding: 12px;
+          border-radius: 12px;
+          border: 1px solid;
+          text-align: center;
+        }
+        .summary-list { display: grid; gap: 10px; }
+        .summary-row {
+          background: #f8fafc;
+          border: 1px solid #e5e7eb;
+          border-radius: 14px;
+          padding: 14px 16px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .summary-label { color: #475569; font-size: 15px; }
+        .summary-value { color: #111827; font-weight: 800; font-size: 18px; }
+        .note-box {
+          margin-top: 16px;
+          background: #eff6ff;
+          border: 1px solid #bfdbfe;
+          border-radius: 14px;
+          padding: 14px;
+          color: #1e3a8a;
+          line-height: 1.8;
+          font-size: 14px;
+        }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+          text-align: right;
+          padding: 14px;
+          border-bottom: 1px solid #e5e7eb;
+          background: #f8fafc;
+          color: #475569;
+          font-size: 14px;
+          white-space: nowrap;
+        }
+        td {
+          text-align: right;
+          padding: 14px;
+          border-bottom: 1px solid #eef2f7;
+          color: #111827;
+          font-size: 14px;
+          white-space: nowrap;
+          vertical-align: top;
+        }
+        td.notes {
+          white-space: normal;
+          min-width: 280px;
+          line-height: 1.7;
+        }
+        .status-pill {
+          display: inline-block;
+          padding: 6px 12px;
+          border-radius: 999px;
+          font-size: 13px;
+          font-weight: 700;
+        }
+        .empty { text-align: center; padding: 36px; color: #64748b; font-size: 16px; }
+        .actions-cell { min-width: 110px; }
+
+        @media (max-width: 900px) {
+          .stats { grid-template-columns: 1fr 1fr; }
+          .content { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+          .page { padding: 14px; }
+          .hero { padding: 20px; border-radius: 18px; }
+          .hero h1 { font-size: 28px; }
+          .hero p { font-size: 14px; }
+          .hero-icon {
+            width: 60px; height: 60px; font-size: 28px; border-radius: 16px;
+          }
+          .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+          .stat-card, .card { padding: 16px; border-radius: 18px; }
+          .stat-value { font-size: 28px; }
+          .stat-value.small { font-size: 16px; }
+          .section-title { font-size: 22px; }
+          .field-grid { grid-template-columns: 1fr; }
+          th, td { padding: 10px; font-size: 13px; }
+          .desktop-pdf { display: none; }
+          .pdf-mobile-btn { display: block; }
+          .notes .mobile-inline-pdf { display: block; }
+        }
+      `}</style>
+
+      <div className="container">
+        <div className="hero">
+          <div>
+            <div className="badge">لوحة المتابعة</div>
+            <h1>تقارير الزيارات الميدانية</h1>
+            <p>سجّل الزيارات، راقب الحالة العامة، وصدّر السجلات إلى Excel من نفس الصفحة.</p>
+          </div>
+          <div className="hero-icon">📋</div>
         </div>
 
-        <div style={statsGrid}>
+        <div className="stats">
           <StatCard title="إجمالي الزيارات" value={String(stats.total)} />
           <StatCard title="زيارات اليوم" value={String(stats.todayVisits)} />
           <StatCard title="أفضل مشعر" value={stats.topMashaer} />
           <StatCard title="آخر زيارة" value={stats.latestVisit} small />
         </div>
 
-        <div style={contentGrid}>
-          <div style={formCard}>
-            <div style={sectionHeader}>
-              <h2 style={sectionTitle}>إضافة زيارة جديدة</h2>
-              <p style={sectionText}>الوقت يُسجل تلقائيًا وقت الحفظ.</p>
+        <div className="content">
+          <div className="card">
+            <div style={{ marginBottom: 18 }}>
+              <h2 className="section-title">إضافة زيارة جديدة</h2>
+              <p className="section-text">الوقت يُسجل تلقائيًا وقت الحفظ.</p>
             </div>
 
             <form onSubmit={handleSubmit}>
-              <div style={fieldGrid}>
+              <div className="field-grid">
                 <Field label="التاريخ">
                   <input
+                    className="input"
                     type="date"
                     value={form.date}
                     onChange={(e) => setForm({ ...form, date: e.target.value })}
-                    style={input}
                   />
                 </Field>
 
                 <Field label="المشعر">
                   <select
+                    className="input"
                     value={form.mashaer}
                     onChange={(e) => setForm({ ...form, mashaer: e.target.value })}
-                    style={input}
                   >
                     {MASHAER_OPTIONS.map((m) => (
                       <option key={m} value={m}>{m}</option>
@@ -226,36 +484,36 @@ export default function ReportsPage() {
 
                 <Field label="رقم الشاخص">
                   <input
+                    className="input"
                     value={form.marker}
                     onChange={(e) => setForm({ ...form, marker: e.target.value })}
                     placeholder="مثال: 54-1\\533"
-                    style={input}
                   />
                 </Field>
 
                 <Field label="رقم مركز الضيافة">
                   <input
+                    className="input"
                     value={form.center}
                     onChange={(e) => setForm({ ...form, center: e.target.value })}
                     placeholder="مثال: 151-152"
-                    style={input}
                   />
                 </Field>
 
                 <Field label="اسم المراقب">
                   <input
+                    className="input"
                     value={form.observer}
                     onChange={(e) => setForm({ ...form, observer: e.target.value })}
                     placeholder="اسم المراقب"
-                    style={input}
                   />
                 </Field>
 
                 <Field label="الحالة">
                   <select
+                    className="input"
                     value={form.status}
                     onChange={(e) => setForm({ ...form, status: e.target.value })}
-                    style={input}
                   >
                     <option>ممتاز</option>
                     <option>جيد</option>
@@ -266,21 +524,21 @@ export default function ReportsPage() {
 
               <Field label="الملاحظات">
                 <textarea
+                  className="textarea"
                   value={form.notes}
                   onChange={(e) => setForm({ ...form, notes: e.target.value })}
                   placeholder="اكتب الملاحظات هنا"
-                  style={textarea}
                 />
               </Field>
 
-              <button type="submit" disabled={loading} style={primaryButton}>
+              <button className="primary-btn" type="submit" disabled={loading}>
                 {loading ? 'جاري الحفظ...' : 'حفظ الزيارة'}
               </button>
 
               {message ? (
                 <div
+                  className="message"
                   style={{
-                    ...messageBox,
                     background: message.includes('❌') ? '#fef2f2' : '#eff6ff',
                     color: message.includes('❌') ? '#b91c1c' : '#1d4ed8',
                     borderColor: message.includes('❌') ? '#fecaca' : '#bfdbfe',
@@ -292,13 +550,13 @@ export default function ReportsPage() {
             </form>
           </div>
 
-          <div style={sideCard}>
-            <div style={sectionHeader}>
-              <h2 style={sectionTitle}>ملخص سريع</h2>
-              <p style={sectionText}>قراءة سريعة لوضع السجلات الحالية.</p>
+          <div className="card">
+            <div style={{ marginBottom: 18 }}>
+              <h2 className="section-title">ملخص سريع</h2>
+              <p className="section-text">قراءة سريعة لوضع السجلات الحالية.</p>
             </div>
 
-            <div style={summaryList}>
+            <div className="summary-list">
               <SummaryRow label="إجمالي السجلات" value={String(stats.total)} />
               <SummaryRow label="زيارات اليوم" value={String(stats.todayVisits)} />
               <SummaryRow label="ممتاز" value={String(stats.excellent)} />
@@ -306,29 +564,29 @@ export default function ReportsPage() {
               <SummaryRow label="سيئ" value={String(stats.bad)} />
             </div>
 
-            <button type="button" onClick={exportExcel} style={excelButton}>
+            <button className="excel-btn" type="button" onClick={exportExcel}>
               تصدير Excel
             </button>
 
-            <div style={noteBox}>
-              الوقت يُحفظ تلقائيًا عند كل زيارة، ويمكنك استخدامه لاحقًا في التقارير اليومية.
+            <div className="note-box">
+              الوقت يُحفظ تلقائيًا عند كل زيارة، ولكل سجل زر PDF مستقل.
             </div>
           </div>
         </div>
 
-        <div style={tableCard}>
-          <div style={sectionHeader}>
-            <h2 style={sectionTitle}>آخر الزيارات</h2>
-            <p style={sectionText}>عرض مباشر لآخر البيانات المحفوظة.</p>
+        <div className="card">
+          <div style={{ marginBottom: 18 }}>
+            <h2 className="section-title">آخر الزيارات</h2>
+            <p className="section-text">عرض مباشر لآخر البيانات المحفوظة.</p>
           </div>
 
           {loadingRows ? (
-            <div style={emptyState}>جاري تحميل البيانات...</div>
+            <div className="empty">جاري تحميل البيانات...</div>
           ) : rows.length === 0 ? (
-            <div style={emptyState}>لا توجد بيانات حتى الآن.</div>
+            <div className="empty">لا توجد بيانات حتى الآن.</div>
           ) : (
-            <div style={tableWrap}>
-              <table style={table}>
+            <div className="table-wrap">
+              <table>
                 <thead>
                   <tr>
                     <Th>التاريخ</Th>
@@ -339,6 +597,7 @@ export default function ReportsPage() {
                     <Th>المراقب</Th>
                     <Th>الحالة</Th>
                     <Th>الملاحظات</Th>
+                    <Th className="desktop-pdf">PDF</Th>
                   </tr>
                 </thead>
                 <tbody>
@@ -352,8 +611,8 @@ export default function ReportsPage() {
                       <Td>{r.observer || '-'}</Td>
                       <Td>
                         <span
+                          className="status-pill"
                           style={{
-                            ...statusPill,
                             background:
                               r.status === 'ممتاز'
                                 ? '#dcfce7'
@@ -371,7 +630,21 @@ export default function ReportsPage() {
                           {r.status || '-'}
                         </span>
                       </Td>
-                      <Td notes>{r.notes || '-'}</Td>
+                      <Td notes>
+                        <div>{r.notes || '-'}</div>
+                        <button
+                          className="pdf-mobile-btn mobile-inline-pdf"
+                          type="button"
+                          onClick={() => downloadVisitPdf(r)}
+                        >
+                          تنزيل PDF
+                        </button>
+                      </Td>
+                      <Td className="actions-cell desktop-pdf">
+                        <button className="pdf-btn" type="button" onClick={() => downloadVisitPdf(r)}>
+                          تنزيل PDF
+                        </button>
+                      </Td>
                     </tr>
                   ))}
                 </tbody>
@@ -395,8 +668,8 @@ function escapeHtml(value: string) {
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{ marginBottom: '14px' }}>
-      <label style={labelStyle}>{label}</label>
+    <div className="field">
+      <label>{label}</label>
       {children}
     </div>
   );
@@ -404,322 +677,34 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function StatCard({ title, value, small = false }: { title: string; value: string; small?: boolean }) {
   return (
-    <div style={statCard}>
-      <div style={statTitle}>{title}</div>
-      <div style={{ ...statValue, fontSize: small ? '20px' : '34px' }}>{value}</div>
+    <div className="stat-card">
+      <div className="stat-title">{title}</div>
+      <div className={`stat-value${small ? ' small' : ''}`}>{value}</div>
     </div>
   );
 }
 
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
-    <div style={summaryRow}>
-      <span style={summaryLabel}>{label}</span>
-      <span style={summaryValue}>{value}</span>
+    <div className="summary-row">
+      <span className="summary-label">{label}</span>
+      <span className="summary-value">{value}</span>
     </div>
   );
 }
 
-function Th({ children }: { children: React.ReactNode }) {
-  return <th style={th}>{children}</th>;
+function Th({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  return <th className={className}>{children}</th>;
 }
 
-function Td({ children, notes = false }: { children: React.ReactNode; notes?: boolean }) {
-  return <td style={notes ? tdNotes : td}>{children}</td>;
+function Td({
+  children,
+  notes = false,
+  className = '',
+}: {
+  children: React.ReactNode;
+  notes?: boolean;
+  className?: string;
+}) {
+  return <td className={`${notes ? 'notes' : ''} ${className}`.trim()}>{children}</td>;
 }
-
-const page: React.CSSProperties = {
-  minHeight: '100vh',
-  background: 'linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%)',
-  padding: '32px 20px',
-  direction: 'rtl',
-  fontFamily: 'Arial, sans-serif',
-};
-
-const container: React.CSSProperties = {
-  maxWidth: '1200px',
-  margin: '0 auto',
-};
-
-const heroCard: React.CSSProperties = {
-  background: 'linear-gradient(135deg, #0f3d74 0%, #1d4f91 65%, #2563eb 100%)',
-  color: '#fff',
-  borderRadius: '24px',
-  padding: '28px',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  gap: '20px',
-  boxShadow: '0 16px 40px rgba(37,99,235,0.20)',
-  marginBottom: '18px',
-};
-
-const badge: React.CSSProperties = {
-  display: 'inline-block',
-  padding: '6px 12px',
-  borderRadius: '999px',
-  background: 'rgba(255,255,255,0.15)',
-  border: '1px solid rgba(255,255,255,0.2)',
-  fontSize: '13px',
-  marginBottom: '12px',
-};
-
-const heroTitle: React.CSSProperties = {
-  margin: 0,
-  fontSize: '38px',
-  fontWeight: 800,
-};
-
-const heroText: React.CSSProperties = {
-  margin: '10px 0 0',
-  fontSize: '17px',
-  lineHeight: 1.8,
-  opacity: 0.95,
-};
-
-const heroIcon: React.CSSProperties = {
-  width: '84px',
-  height: '84px',
-  borderRadius: '20px',
-  background: 'rgba(255,255,255,0.14)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: '36px',
-  flexShrink: 0,
-};
-
-const statsGrid: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-  gap: '14px',
-  marginBottom: '18px',
-};
-
-const statCard: React.CSSProperties = {
-  background: '#fff',
-  borderRadius: '20px',
-  padding: '20px',
-  border: '1px solid #e5e7eb',
-  boxShadow: '0 10px 24px rgba(15,23,42,0.06)',
-};
-
-const statTitle: React.CSSProperties = {
-  color: '#64748b',
-  fontSize: '14px',
-  marginBottom: '8px',
-};
-
-const statValue: React.CSSProperties = {
-  color: '#111827',
-  fontSize: '34px',
-  fontWeight: 800,
-};
-
-const contentGrid: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: '1.2fr 0.8fr',
-  gap: '18px',
-  alignItems: 'start',
-  marginBottom: '18px',
-};
-
-const formCard: React.CSSProperties = {
-  background: '#fff',
-  borderRadius: '22px',
-  padding: '24px',
-  border: '1px solid #e5e7eb',
-  boxShadow: '0 10px 24px rgba(15,23,42,0.06)',
-};
-
-const sideCard: React.CSSProperties = {
-  background: '#fff',
-  borderRadius: '22px',
-  padding: '24px',
-  border: '1px solid #e5e7eb',
-  boxShadow: '0 10px 24px rgba(15,23,42,0.06)',
-};
-
-const tableCard: React.CSSProperties = {
-  background: '#fff',
-  borderRadius: '22px',
-  padding: '24px',
-  border: '1px solid #e5e7eb',
-  boxShadow: '0 10px 24px rgba(15,23,42,0.06)',
-};
-
-const sectionHeader: React.CSSProperties = {
-  marginBottom: '18px',
-};
-
-const sectionTitle: React.CSSProperties = {
-  margin: 0,
-  fontSize: '26px',
-  fontWeight: 800,
-  color: '#0f172a',
-};
-
-const sectionText: React.CSSProperties = {
-  margin: '8px 0 0',
-  fontSize: '15px',
-  color: '#64748b',
-  lineHeight: 1.7,
-};
-
-const fieldGrid: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
-  gap: '14px',
-};
-
-const labelStyle: React.CSSProperties = {
-  display: 'block',
-  marginBottom: '8px',
-  color: '#334155',
-  fontWeight: 700,
-  fontSize: '14px',
-};
-
-const input: React.CSSProperties = {
-  width: '100%',
-  height: '48px',
-  borderRadius: '12px',
-  border: '1px solid #d1d5db',
-  padding: '0 12px',
-  fontSize: '14px',
-  boxSizing: 'border-box',
-  background: '#fff',
-};
-
-const textarea: React.CSSProperties = {
-  width: '100%',
-  minHeight: '130px',
-  borderRadius: '12px',
-  border: '1px solid #d1d5db',
-  padding: '12px',
-  fontSize: '14px',
-  boxSizing: 'border-box',
-  resize: 'vertical',
-  background: '#fff',
-};
-
-const primaryButton: React.CSSProperties = {
-  width: '100%',
-  border: 'none',
-  borderRadius: '12px',
-  background: '#1d4ed8',
-  color: '#fff',
-  padding: '14px',
-  fontSize: '16px',
-  fontWeight: 800,
-  cursor: 'pointer',
-  marginTop: '8px',
-};
-
-const messageBox: React.CSSProperties = {
-  marginTop: '14px',
-  padding: '12px',
-  borderRadius: '12px',
-  border: '1px solid',
-  textAlign: 'center',
-};
-
-const summaryList: React.CSSProperties = {
-  display: 'grid',
-  gap: '10px',
-};
-
-const summaryRow: React.CSSProperties = {
-  background: '#f8fafc',
-  border: '1px solid #e5e7eb',
-  borderRadius: '14px',
-  padding: '14px 16px',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-};
-
-const summaryLabel: React.CSSProperties = {
-  color: '#475569',
-  fontSize: '15px',
-};
-
-const summaryValue: React.CSSProperties = {
-  color: '#111827',
-  fontWeight: 800,
-  fontSize: '18px',
-};
-
-const excelButton: React.CSSProperties = {
-  width: '100%',
-  marginTop: '16px',
-  border: 'none',
-  borderRadius: '12px',
-  background: '#059669',
-  color: '#fff',
-  padding: '14px',
-  fontSize: '16px',
-  fontWeight: 800,
-  cursor: 'pointer',
-};
-
-const noteBox: React.CSSProperties = {
-  marginTop: '16px',
-  background: '#eff6ff',
-  border: '1px solid #bfdbfe',
-  borderRadius: '14px',
-  padding: '14px',
-  color: '#1e3a8a',
-  lineHeight: 1.8,
-  fontSize: '14px',
-};
-
-const tableWrap: React.CSSProperties = {
-  overflowX: 'auto',
-};
-
-const table: React.CSSProperties = {
-  width: '100%',
-  borderCollapse: 'collapse',
-};
-
-const th: React.CSSProperties = {
-  textAlign: 'right',
-  padding: '14px',
-  borderBottom: '1px solid #e5e7eb',
-  background: '#f8fafc',
-  color: '#475569',
-  fontSize: '14px',
-  whiteSpace: 'nowrap',
-};
-
-const td: React.CSSProperties = {
-  textAlign: 'right',
-  padding: '14px',
-  borderBottom: '1px solid #eef2f7',
-  color: '#111827',
-  fontSize: '14px',
-  whiteSpace: 'nowrap',
-};
-
-const tdNotes: React.CSSProperties = {
-  ...td,
-  whiteSpace: 'normal',
-  minWidth: '280px',
-  lineHeight: 1.7,
-};
-
-const statusPill: React.CSSProperties = {
-  display: 'inline-block',
-  padding: '6px 12px',
-  borderRadius: '999px',
-  fontSize: '13px',
-  fontWeight: 700,
-};
-
-const emptyState: React.CSSProperties = {
-  textAlign: 'center',
-  padding: '36px',
-  color: '#64748b',
-  fontSize: '16px',
-};
