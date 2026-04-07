@@ -1,5 +1,5 @@
 {
   "/_not-found/page": "/_not-found",
-  "/reports/page": "/reports",
-  "/page": "/"
+  "/page": "/",
+  "/reports/page": "/reports"
 }
