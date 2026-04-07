@@ -28,8 +28,8 @@ export default function ReportsPage() {
     center: '',
     observer: '',
     status: 'جيد',
-    actions: '',
     notes: '',
+    actions: '',
   });
 
   const [rows, setRows] = useState<VisitRow[]>([]);
@@ -37,6 +37,7 @@ export default function ReportsPage() {
   const [loadingRows, setLoadingRows] = useState(true);
   const [message, setMessage] = useState('');
   const [filterDate, setFilterDate] = useState(new Date().toISOString().slice(0, 10));
+  const [logoFailed, setLogoFailed] = useState(false);
 
   async function loadRows() {
     setLoadingRows(true);
@@ -93,8 +94,8 @@ export default function ReportsPage() {
     !!form.center.trim() &&
     !!form.observer.trim() &&
     !!form.status &&
-    !!form.actions.trim() &&
-    !!form.notes.trim();
+    !!form.notes.trim() &&
+    !!form.actions.trim();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -122,8 +123,8 @@ export default function ReportsPage() {
       center: form.center.trim(),
       observer: form.observer.trim(),
       status: form.status,
-      actions: form.actions.trim(),
       notes: form.notes.trim(),
+      actions: form.actions.trim(),
     };
 
     const { error } = await supabase.from('visits').insert([payload]);
@@ -139,8 +140,8 @@ export default function ReportsPage() {
         center: '',
         observer: '',
         status: 'جيد',
-        actions: '',
         notes: '',
+        actions: '',
       });
       setFilterDate(payload.date);
       await loadRows();
@@ -149,54 +150,45 @@ export default function ReportsPage() {
     setLoading(false);
   }
 
-  function exportExcel() {
-    const rowsHtml = filteredRows
-      .map(
-        (r) => `
-          <tr>
-            <td>${escapeHtml(r.date || '')}</td>
-            <td>${escapeHtml(r.visit_time || '')}</td>
-            <td>${escapeHtml(r.mashaer || '')}</td>
-            <td>${escapeHtml(r.marker || '')}</td>
-            <td>${escapeHtml(r.center || '')}</td>
-            <td>${escapeHtml(r.observer || '')}</td>
-            <td>${escapeHtml(r.status || '')}</td>
-            <td>${escapeHtml(r.actions || '')}</td>
-            <td>${escapeHtml(r.notes || '')}</td>
-          </tr>
-        `
+  function exportExcelFriendlyCsv() {
+    const headers = [
+      'التاريخ',
+      'الوقت',
+      'المشعر',
+      'رقم الشاخص',
+      'رقم مركز الضيافة',
+      'اسم المراقب',
+      'الحالة',
+      'الملاحظات',
+      'الإجراءات',
+    ];
+
+    const lines = filteredRows.map((r) => [
+      r.date || '',
+      r.visit_time || '',
+      r.mashaer || '',
+      r.marker || '',
+      r.center || '',
+      r.observer || '',
+      r.status || '',
+      r.notes || '',
+      r.actions || '',
+    ]);
+
+    const csv = [headers, ...lines]
+      .map((row) =>
+        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')
       )
-      .join('');
+      .join('\n');
 
-    const html = `
-      <html>
-      <head><meta charset="UTF-8" /></head>
-      <body>
-        <table border="1">
-          <tr>
-            <th>التاريخ</th>
-            <th>الوقت</th>
-            <th>المشعر</th>
-            <th>رقم الشاخص</th>
-            <th>رقم مركز الضيافة</th>
-            <th>اسم المراقب</th>
-            <th>الحالة</th>
-            <th>الإجراءات</th>
-            <th>الملاحظات</th>
-          </tr>
-          ${rowsHtml}
-        </table>
-      </body>
-      </html>
-    `;
-
-    const blob = new Blob(['\uFEFF' + html], {
-      type: 'application/vnd.ms-excel;charset=utf-8;',
+    const blob = new Blob(['\uFEFF' + csv], {
+      type: 'text/csv;charset=utf-8;',
     });
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `visits-${filterDate}.xls`;
+    a.download = `visits-${filterDate}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -231,6 +223,18 @@ export default function ReportsPage() {
             width: 70px;
             height: auto;
             object-fit: contain;
+          }
+          .logo-fallback {
+            width: 70px;
+            height: 70px;
+            border-radius: 14px;
+            background: #e5f0ff;
+            color: #1d4ed8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
           }
           .title-wrap h1 {
             margin: 0;
@@ -290,7 +294,8 @@ export default function ReportsPage() {
         <button class="print-btn" onclick="window.print()" style="margin-bottom:20px;padding:10px 16px;border:none;border-radius:10px;background:#1d4ed8;color:#fff;cursor:pointer;">تنزيل / طباعة PDF</button>
 
         <div class="header">
-          <img src="${logoUrl}" class="logo" onerror="this.style.display='none'" />
+          <img src="${logoUrl}" class="logo" onerror="this.style.display='none';document.getElementById('fallbackLogo').style.display='flex';" />
+          <div id="fallbackLogo" class="logo-fallback" style="display:none;">الراجحي</div>
           <div class="title-wrap">
             <h1>تقرير زيارة ميدانية</h1>
             <p>تقرير فردي قابل للطباعة أو الحفظ بصيغة PDF</p>
@@ -310,13 +315,13 @@ export default function ReportsPage() {
           </div>
 
           <div class="item">
-            <div class="label">الإجراءات</div>
-            <div class="notes">${escapeHtml(row.actions || '-')}</div>
+            <div class="label">الملاحظات</div>
+            <div class="notes">${escapeHtml(row.notes || '-')}</div>
           </div>
 
           <div class="item" style="margin-top:10px;">
-            <div class="label">الملاحظات</div>
-            <div class="notes">${escapeHtml(row.notes || '-')}</div>
+            <div class="label">الإجراءات</div>
+            <div class="notes">${escapeHtml(row.actions || '-')}</div>
           </div>
 
           <div class="footer">تم إنشاء هذا التقرير من نظام تقارير الزيارات الميدانية.</div>
@@ -365,6 +370,19 @@ export default function ReportsPage() {
           object-fit: contain;
           background: rgba(255,255,255,0.12);
           border-radius: 16px;
+          padding: 8px;
+        }
+        .hero-logo-fallback {
+          width: 70px;
+          height: 70px;
+          background: rgba(255,255,255,0.14);
+          border-radius: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 800;
+          font-size: 15px;
+          color: #fff;
           padding: 8px;
         }
         .badge {
@@ -520,7 +538,7 @@ export default function ReportsPage() {
         }
         td.notes {
           white-space: normal;
-          min-width: 280px;
+          min-width: 260px;
           line-height: 1.7;
         }
         .status-pill {
@@ -548,7 +566,7 @@ export default function ReportsPage() {
           .hero-left { align-items: flex-start; }
           .hero h1 { font-size: 28px; }
           .hero p { font-size: 14px; }
-          .hero-logo {
+          .hero-logo, .hero-logo-fallback {
             width: 52px;
             height: 52px;
             border-radius: 12px;
@@ -571,14 +589,16 @@ export default function ReportsPage() {
       <div className="container">
         <div className="hero">
           <div className="hero-left">
-            <img
-              src="/alrajhi.png"
-              alt="شعار الراجحي"
-              className="hero-logo"
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).style.display = 'none';
-              }}
-            />
+            {!logoFailed ? (
+              <img
+                src="/alrajhi.png"
+                alt="شعار الراجحي"
+                className="hero-logo"
+                onError={() => setLogoFailed(true)}
+              />
+            ) : (
+              <div className="hero-logo-fallback">الراجحي</div>
+            )}
             <div>
               <div className="badge">لوحة المتابعة</div>
               <h1>تقارير الزيارات الميدانية</h1>
@@ -671,22 +691,22 @@ export default function ReportsPage() {
                 </Field>
               </div>
 
-              <Field label="الإجراءات">
-                <textarea
-                  className="textarea"
-                  value={form.actions}
-                  onChange={(e) => setForm({ ...form, actions: e.target.value })}
-                  placeholder="اكتب الإجراءات المتخذة"
-                  required
-                />
-              </Field>
-
               <Field label="الملاحظات">
                 <textarea
                   className="textarea"
                   value={form.notes}
                   onChange={(e) => setForm({ ...form, notes: e.target.value })}
                   placeholder="اكتب الملاحظات هنا"
+                  required
+                />
+              </Field>
+
+              <Field label="الإجراءات">
+                <textarea
+                  className="textarea"
+                  value={form.actions}
+                  onChange={(e) => setForm({ ...form, actions: e.target.value })}
+                  placeholder="اكتب الإجراءات المتخذة"
                   required
                 />
               </Field>
@@ -735,12 +755,12 @@ export default function ReportsPage() {
               <SummaryRow label="أفضل مشعر" value={stats.topMashaer} />
             </div>
 
-            <button className="excel-btn" type="button" onClick={exportExcel}>
+            <button className="excel-btn" type="button" onClick={exportExcelFriendlyCsv}>
               تصدير Excel
             </button>
 
             <div className="note-box">
-              يعرض النظام اليوم افتراضيًا، ويمكنك الرجوع لأي يوم سابق من خانة التاريخ.
+              التصدير الآن بصيغة CSV متوافقة مع Excel وتفتح بدون رسالة التحذير.
             </div>
           </div>
         </div>
@@ -767,8 +787,8 @@ export default function ReportsPage() {
                     <Th>الضيافة</Th>
                     <Th>المراقب</Th>
                     <Th>الحالة</Th>
-                    <Th>الإجراءات</Th>
                     <Th>الملاحظات</Th>
+                    <Th>الإجراءات</Th>
                     <Th className="desktop-pdf">PDF</Th>
                   </tr>
                 </thead>
@@ -802,9 +822,9 @@ export default function ReportsPage() {
                           {r.status || '-'}
                         </span>
                       </Td>
-                      <Td notes>{r.actions || '-'}</Td>
+                      <Td notes>{r.notes || '-'}</Td>
                       <Td notes>
-                        <div>{r.notes || '-'}</div>
+                        <div>{r.actions || '-'}</div>
                         <button
                           className="pdf-mobile-btn"
                           type="button"
