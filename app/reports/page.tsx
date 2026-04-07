@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase-browser';
 type VisitRow = {
   id?: string;
   date?: string | null;
+  visit_time?: string | null;
   mashaer?: string | null;
   marker?: string | null;
   center?: string | null;
@@ -53,22 +54,46 @@ export default function ReportsPage() {
     loadRows();
   }, []);
 
+  const today = new Date().toISOString().slice(0, 10);
+
   const stats = useMemo(() => {
-    return {
-      total: rows.length,
-      excellent: rows.filter((r) => r.status === 'ممتاز').length,
-      good: rows.filter((r) => r.status === 'جيد').length,
-      bad: rows.filter((r) => r.status === 'سيئ').length,
-    };
-  }, [rows]);
+    const total = rows.length;
+    const todayVisits = rows.filter((r) => r.date === today).length;
+    const excellent = rows.filter((r) => r.status === 'ممتاز').length;
+    const good = rows.filter((r) => r.status === 'جيد').length;
+    const bad = rows.filter((r) => r.status === 'سيئ').length;
+
+    const mashaerCounts: Record<string, number> = {};
+    rows.forEach((r) => {
+      const key = r.mashaer || 'غير محدد';
+      mashaerCounts[key] = (mashaerCounts[key] || 0) + 1;
+    });
+
+    const topMashaer =
+      Object.entries(mashaerCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '-';
+
+    const latestVisit = rows[0]
+      ? `${rows[0].date || '-'} ${rows[0].visit_time || ''}`.trim()
+      : '-';
+
+    return { total, todayVisits, excellent, good, bad, topMashaer, latestVisit };
+  }, [rows, today]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setMessage('');
 
+    const now = new Date();
+    const autoTime = now.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+
     const payload = {
-      date: form.date || null,
+      date: form.date || today,
+      visit_time: autoTime,
       mashaer: form.mashaer || null,
       marker: form.marker || null,
       center: form.center || null,
@@ -82,7 +107,7 @@ export default function ReportsPage() {
     if (error) {
       setMessage('❌ ' + error.message);
     } else {
-      setMessage('✅ تم حفظ الزيارة بنجاح');
+      setMessage(`✅ تم حفظ الزيارة بنجاح عند ${autoTime}`);
       setForm({
         date: '',
         mashaer: 'منى',
@@ -104,6 +129,7 @@ export default function ReportsPage() {
         (r) => `
           <tr>
             <td>${escapeHtml(r.date || '')}</td>
+            <td>${escapeHtml(r.visit_time || '')}</td>
             <td>${escapeHtml(r.mashaer || '')}</td>
             <td>${escapeHtml(r.marker || '')}</td>
             <td>${escapeHtml(r.center || '')}</td>
@@ -117,13 +143,12 @@ export default function ReportsPage() {
 
     const html = `
       <html>
-      <head>
-        <meta charset="UTF-8" />
-      </head>
+      <head><meta charset="UTF-8" /></head>
       <body>
         <table border="1">
           <tr>
             <th>التاريخ</th>
+            <th>الوقت</th>
             <th>المشعر</th>
             <th>رقم الشاخص</th>
             <th>رقم مركز الضيافة</th>
@@ -164,16 +189,16 @@ export default function ReportsPage() {
 
         <div style={statsGrid}>
           <StatCard title="إجمالي الزيارات" value={String(stats.total)} />
-          <StatCard title="ممتاز" value={String(stats.excellent)} />
-          <StatCard title="جيد" value={String(stats.good)} />
-          <StatCard title="سيئ" value={String(stats.bad)} />
+          <StatCard title="زيارات اليوم" value={String(stats.todayVisits)} />
+          <StatCard title="أفضل مشعر" value={stats.topMashaer} />
+          <StatCard title="آخر زيارة" value={stats.latestVisit} small />
         </div>
 
         <div style={contentGrid}>
           <div style={formCard}>
             <div style={sectionHeader}>
               <h2 style={sectionTitle}>إضافة زيارة جديدة</h2>
-              <p style={sectionText}>املأ الحقول التالية ثم اضغط حفظ.</p>
+              <p style={sectionText}>الوقت يُسجل تلقائيًا وقت الحفظ.</p>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -194,9 +219,7 @@ export default function ReportsPage() {
                     style={input}
                   >
                     {MASHAER_OPTIONS.map((m) => (
-                      <option key={m} value={m}>
-                        {m}
-                      </option>
+                      <option key={m} value={m}>{m}</option>
                     ))}
                   </select>
                 </Field>
@@ -277,6 +300,7 @@ export default function ReportsPage() {
 
             <div style={summaryList}>
               <SummaryRow label="إجمالي السجلات" value={String(stats.total)} />
+              <SummaryRow label="زيارات اليوم" value={String(stats.todayVisits)} />
               <SummaryRow label="ممتاز" value={String(stats.excellent)} />
               <SummaryRow label="جيد" value={String(stats.good)} />
               <SummaryRow label="سيئ" value={String(stats.bad)} />
@@ -287,7 +311,7 @@ export default function ReportsPage() {
             </button>
 
             <div style={noteBox}>
-              يفضل إدخال رقم الشاخص والضيافة بشكل ثابت لتسهيل التصفية والمراجعة لاحقًا.
+              الوقت يُحفظ تلقائيًا عند كل زيارة، ويمكنك استخدامه لاحقًا في التقارير اليومية.
             </div>
           </div>
         </div>
@@ -308,6 +332,7 @@ export default function ReportsPage() {
                 <thead>
                   <tr>
                     <Th>التاريخ</Th>
+                    <Th>الوقت</Th>
                     <Th>المشعر</Th>
                     <Th>الشاخص</Th>
                     <Th>الضيافة</Th>
@@ -320,6 +345,7 @@ export default function ReportsPage() {
                   {rows.map((r, i) => (
                     <tr key={r.id || i} style={{ background: i % 2 === 0 ? '#fff' : '#f8fafc' }}>
                       <Td>{r.date || '-'}</Td>
+                      <Td>{r.visit_time || '-'}</Td>
                       <Td>{r.mashaer || '-'}</Td>
                       <Td>{r.marker || '-'}</Td>
                       <Td>{r.center || '-'}</Td>
@@ -376,11 +402,11 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-function StatCard({ title, value }: { title: string; value: string }) {
+function StatCard({ title, value, small = false }: { title: string; value: string; small?: boolean }) {
   return (
     <div style={statCard}>
       <div style={statTitle}>{title}</div>
-      <div style={statValue}>{value}</div>
+      <div style={{ ...statValue, fontSize: small ? '20px' : '34px' }}>{value}</div>
     </div>
   );
 }
