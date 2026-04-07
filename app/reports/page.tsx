@@ -18,7 +18,7 @@ type VisitRow = {
 };
 
 const supabase = createClient();
-const MASHAER_OPTIONS = ['منى', 'عرفات', 'مزدلفة'];
+const MASHAER_OPTIONS = ['عرفة', 'منى', 'مزدلفة'];
 
 export default function ReportsPage() {
   const [form, setForm] = useState({
@@ -148,44 +148,54 @@ export default function ReportsPage() {
   }
 
   function exportExcelFriendlyCsv() {
-    const headers = [
-      'التاريخ',
-      'الوقت',
-      'المشعر',
-      'رقم الشاخص',
-      'رقم مركز الضيافة',
-      'اسم المراقب',
-      'الحالة',
-      'الملاحظات',
-      'الإجراءات',
-    ];
-
-    const lines = filteredRows.map((r) => [
-      r.date || '',
-      r.visit_time || '',
-      r.mashaer || '',
-      r.marker || '',
-      r.center || '',
-      r.observer || '',
-      r.status || '',
-      r.notes || '',
-      r.actions || '',
-    ]);
-
-    const csv = [headers, ...lines]
-      .map((row) =>
-        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+    const rowsHtml = filteredRows
+      .map(
+        (r) => `
+          <tr>
+            <td>${escapeHtml(r.date || '')}</td>
+            <td>${escapeHtml(r.visit_time || '')}</td>
+            <td>${escapeHtml(r.mashaer || '')}</td>
+            <td>${escapeHtml(r.marker || '')}</td>
+            <td>${escapeHtml(r.center || '')}</td>
+            <td>${escapeHtml(r.observer || '')}</td>
+            <td>${escapeHtml(r.status || '')}</td>
+            <td>${escapeHtml(r.notes || '')}</td>
+            <td>${escapeHtml(r.actions || '')}</td>
+          </tr>
+        `
       )
-      .join('\n');
+      .join('');
 
-    const blob = new Blob(['\uFEFF' + csv], {
-      type: 'text/csv;charset=utf-8;',
+    const html = `
+      <html>
+      <head><meta charset="UTF-8" /></head>
+      <body>
+        <table border="1">
+          <tr>
+            <th>التاريخ</th>
+            <th>الوقت</th>
+            <th>المشعر</th>
+            <th>رقم الشاخص</th>
+            <th>رقم مركز الضيافة</th>
+            <th>اسم المراقب</th>
+            <th>الحالة</th>
+            <th>الملاحظات</th>
+            <th>الإجراءات</th>
+          </tr>
+          ${rowsHtml}
+        </table>
+      </body>
+      </html>
+    `;
+
+    const blob = new Blob(['\uFEFF' + html], {
+      type: 'application/vnd.ms-excel;charset=utf-8;',
     });
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `visits-${filterDate}.csv`;
+    a.download = `visits-${filterDate}.xls`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -449,6 +459,28 @@ export default function ReportsPage() {
           font-size: 14px;
           background: #fff;
         }
+        .mashaer-buttons {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 10px;
+        }
+        .mashaer-btn {
+          height: 48px;
+          border-radius: 12px;
+          border: 1px solid #d1d5db;
+          background: #fff;
+          color: #0f172a;
+          font-size: 14px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: 0.2s ease;
+        }
+        .mashaer-btn.active {
+          background: #1d4ed8;
+          color: #fff;
+          border-color: #1d4ed8;
+          box-shadow: 0 8px 20px rgba(29,78,216,0.18);
+        }
         .input { height: 48px; padding: 0 12px; }
         .textarea { min-height: 130px; padding: 12px; resize: vertical; }
         .primary-btn, .excel-btn, .pdf-btn, .pdf-mobile-btn {
@@ -577,6 +609,7 @@ export default function ReportsPage() {
           .stat-value.small { font-size: 16px; }
           .section-title { font-size: 22px; }
           .field-grid { grid-template-columns: 1fr; }
+          .mashaer-buttons { grid-template-columns: 1fr; }
           th, td { padding: 10px; font-size: 13px; }
           .desktop-pdf { display: none; }
           .pdf-mobile-btn { display: block; }
@@ -632,16 +665,18 @@ export default function ReportsPage() {
                 </Field>
 
                 <Field label="المشعر">
-                  <select
-                    className="input"
-                    value={form.mashaer}
-                    onChange={(e) => setForm({ ...form, mashaer: e.target.value })}
-                    required
-                  >
+                  <div className="mashaer-buttons">
                     {MASHAER_OPTIONS.map((m) => (
-                      <option key={m} value={m}>{m}</option>
+                      <button
+                        key={m}
+                        type="button"
+                        className={`mashaer-btn ${form.mashaer === m ? 'active' : ''}`}
+                        onClick={() => setForm({ ...form, mashaer: m })}
+                      >
+                        {m}
+                      </button>
                     ))}
-                  </select>
+                  </div>
                 </Field>
 
                 <Field label="رقم الشاخص">
@@ -757,7 +792,7 @@ export default function ReportsPage() {
             </button>
 
             <div className="note-box">
-              التصدير الآن بصيغة TSV متوافقة مع Excel وتظهر الأعمدة بشكل صحيح.
+              التصدير الآن بصيغة Excel مثل السابق.
             </div>
           </div>
         </div>
@@ -906,6 +941,7 @@ function MashaerCountCard({ counts }: { counts: Record<string, number> }) {
   );
 }
 
+
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="summary-row">
@@ -950,6 +986,7 @@ function MashaerSummary({ counts }: { counts: Record<string, number> }) {
     </div>
   );
 }
+
 
 function Th({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return <th className={className}>{children}</th>;
