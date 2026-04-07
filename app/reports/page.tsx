@@ -77,14 +77,11 @@ export default function ReportsPage() {
       mashaerCounts[key] = (mashaerCounts[key] || 0) + 1;
     });
 
-    const topMashaer =
-      Object.entries(mashaerCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '-';
-
     const latestVisit = source[0]
       ? `${source[0].date || '-'} ${source[0].visit_time || ''}`.trim()
       : '-';
 
-    return { total, excellent, good, bad, topMashaer, latestVisit };
+    return { total, excellent, good, bad, mashaerCounts, latestVisit };
   }, [filteredRows]);
 
   const isFormValid =
@@ -611,7 +608,7 @@ export default function ReportsPage() {
         <div className="stats">
           <StatCard title="زيارات التاريخ المختار" value={String(stats.total)} />
           <StatCard title="ممتاز" value={String(stats.excellent)} />
-          <StatCard title="أفضل مشعر" value={stats.topMashaer} />
+          <MashaerCountCard counts={stats.mashaerCounts} />
           <StatCard title="آخر زيارة" value={stats.latestVisit} small />
         </div>
 
@@ -752,7 +749,7 @@ export default function ReportsPage() {
               <SummaryRow label="ممتاز" value={String(stats.excellent)} />
               <SummaryRow label="جيد" value={String(stats.good)} />
               <SummaryRow label="سيئ" value={String(stats.bad)} />
-              <SummaryRow label="أفضل مشعر" value={stats.topMashaer} />
+              <MashaerSummary counts={stats.mashaerCounts} />
             </div>
 
             <button className="excel-btn" type="button" onClick={exportExcelFriendlyCsv}>
@@ -877,11 +874,79 @@ function StatCard({ title, value, small = false }: { title: string; value: strin
   );
 }
 
+function MashaerCountCard({ counts }: { counts: Record<string, number> }) {
+  const entries = Object.entries(counts);
+
+  return (
+    <div className="stat-card">
+      <div className="stat-title">الزيارات حسب المشاعر</div>
+      <div style={{ display: 'grid', gap: '8px', marginTop: '10px' }}>
+        {entries.length === 0 ? (
+          <div className="stat-value small">-</div>
+        ) : (
+          entries.map(([name, count]) => (
+            <div
+              key={name}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '15px',
+                color: '#111827',
+              }}
+            >
+              <span>{name}</span>
+              <strong>{count}</strong>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="summary-row">
       <span className="summary-label">{label}</span>
       <span className="summary-value">{value}</span>
+    </div>
+  );
+}
+
+function MashaerSummary({ counts }: { counts: Record<string, number> }) {
+  const entries = Object.entries(counts);
+
+  return (
+    <div
+      className="summary-row"
+      style={{ display: 'block' }}
+    >
+      <div className="summary-label" style={{ marginBottom: '8px', fontWeight: 800 }}>
+        الزيارات حسب المشاعر
+      </div>
+
+      {entries.length === 0 ? (
+        <div className="summary-value">-</div>
+      ) : (
+        <div style={{ display: 'grid', gap: '8px' }}>
+          {entries.map(([name, count]) => (
+            <div
+              key={name}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <span className="summary-label">{name}</span>
+              <span className="summary-value">{count}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
