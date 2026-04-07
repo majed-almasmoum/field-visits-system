@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase-browser';
 
 type VisitRow = {
   id?: string;
+  report_id?: number | null;
   date?: string | null;
   visit_time?: string | null;
   mashaer?: string | null;
@@ -23,7 +24,7 @@ const MASHAER_OPTIONS = ['عرفة', 'منى', 'مزدلفة'];
 export default function ReportsPage() {
   const [form, setForm] = useState({
     date: '',
-    mashaer: 'منى',
+    mashaer: 'عرفة',
     marker: '',
     center: '',
     observer: '',
@@ -57,8 +58,6 @@ export default function ReportsPage() {
   useEffect(() => {
     loadRows();
   }, []);
-
-  const today = new Date().toISOString().slice(0, 10);
 
   const filteredRows = useMemo(() => {
     return rows.filter((r) => (r.date || '') === filterDate);
@@ -94,6 +93,22 @@ export default function ReportsPage() {
     !!form.notes.trim() &&
     !!form.actions.trim();
 
+  async function getNextReportId() {
+    const { data, error } = await supabase
+      .from('visits')
+      .select('report_id')
+      .order('report_id', { ascending: false })
+      .limit(1);
+
+    if (error) return 1000;
+
+    const lastId = data?.[0]?.report_id;
+    if (typeof lastId === 'number' && !Number.isNaN(lastId)) {
+      return lastId + 1;
+    }
+    return 1000;
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setMessage('');
@@ -112,8 +127,11 @@ export default function ReportsPage() {
       hour12: false,
     });
 
+    const nextReportId = await getNextReportId();
+
     const payload = {
-      date: form.date || today,
+      report_id: nextReportId,
+      date: form.date,
       visit_time: autoTime,
       mashaer: form.mashaer,
       marker: form.marker.trim(),
@@ -129,10 +147,10 @@ export default function ReportsPage() {
     if (error) {
       setMessage('❌ ' + error.message);
     } else {
-      setMessage(`✅ تم حفظ الزيارة بنجاح عند ${autoTime}`);
+      setMessage(`✅ تم حفظ التقرير رقم ${nextReportId} بنجاح عند ${autoTime}`);
       setForm({
         date: '',
-        mashaer: 'منى',
+        mashaer: 'عرفة',
         marker: '',
         center: '',
         observer: '',
@@ -147,11 +165,12 @@ export default function ReportsPage() {
     setLoading(false);
   }
 
-  function exportExcelFriendlyCsv() {
+  function exportExcelFriendly() {
     const rowsHtml = filteredRows
       .map(
         (r) => `
           <tr>
+            <td>${escapeHtml(String(r.report_id ?? ''))}</td>
             <td>${escapeHtml(r.date || '')}</td>
             <td>${escapeHtml(r.visit_time || '')}</td>
             <td>${escapeHtml(r.mashaer || '')}</td>
@@ -172,6 +191,7 @@ export default function ReportsPage() {
       <body>
         <table border="1">
           <tr>
+            <th>رقم التقرير</th>
             <th>التاريخ</th>
             <th>الوقت</th>
             <th>المشعر</th>
@@ -251,6 +271,17 @@ export default function ReportsPage() {
             color: #6b7280;
             margin: 6px 0 0;
           }
+          .report-box {
+            margin-bottom: 18px;
+            border: 2px solid #1d4ed8;
+            border-radius: 14px;
+            padding: 14px 18px;
+            display: inline-block;
+            font-weight: 800;
+            font-size: 22px;
+            color: #1d4ed8;
+            background: #eff6ff;
+          }
           .card {
             border: 1px solid #d1d5db;
             border-radius: 16px;
@@ -309,8 +340,11 @@ export default function ReportsPage() {
           </div>
         </div>
 
+        <div class="report-box">رقم التقرير: ${escapeHtml(String(row.report_id ?? '-'))}</div>
+
         <div class="card">
           <div class="grid">
+            <div class="item"><div class="label">رقم التقرير</div><div class="value">${escapeHtml(String(row.report_id ?? '-'))}</div></div>
             <div class="item"><div class="label">التاريخ</div><div class="value">${escapeHtml(row.date || '-')}</div></div>
             <div class="item"><div class="label">الوقت</div><div class="value">${escapeHtml(row.visit_time || '-')}</div></div>
             <div class="item"><div class="label">المشعر</div><div class="value">${escapeHtml(row.mashaer || '-')}</div></div>
@@ -318,7 +352,6 @@ export default function ReportsPage() {
             <div class="item"><div class="label">رقم مركز الضيافة</div><div class="value">${escapeHtml(row.center || '-')}</div></div>
             <div class="item"><div class="label">اسم المراقب</div><div class="value">${escapeHtml(row.observer || '-')}</div></div>
             <div class="item"><div class="label">الحالة</div><div class="value">${escapeHtml(row.status || '-')}</div></div>
-            <div class="item"><div class="label">وقت الإدخال</div><div class="value">${escapeHtml(row.created_at || '-')}</div></div>
           </div>
 
           <div class="item">
@@ -654,16 +687,6 @@ export default function ReportsPage() {
 
             <form onSubmit={handleSubmit}>
               <div className="field-grid">
-                <Field label="التاريخ">
-                  <input
-                    className="input"
-                    type="date"
-                    value={form.date}
-                    onChange={(e) => setForm({ ...form, date: e.target.value })}
-                    required
-                  />
-                </Field>
-
                 <Field label="المشعر">
                   <div className="mashaer-buttons">
                     {MASHAER_OPTIONS.map((m) => (
@@ -677,6 +700,16 @@ export default function ReportsPage() {
                       </button>
                     ))}
                   </div>
+                </Field>
+
+                <Field label="التاريخ">
+                  <input
+                    className="input"
+                    type="date"
+                    value={form.date}
+                    onChange={(e) => setForm({ ...form, date: e.target.value })}
+                    required
+                  />
                 </Field>
 
                 <Field label="رقم الشاخص">
@@ -787,12 +820,12 @@ export default function ReportsPage() {
               <MashaerSummary counts={stats.mashaerCounts} />
             </div>
 
-            <button className="excel-btn" type="button" onClick={exportExcelFriendlyCsv}>
+            <button className="excel-btn" type="button" onClick={exportExcelFriendly}>
               تصدير Excel
             </button>
 
             <div className="note-box">
-              التصدير الآن بصيغة Excel مثل السابق.
+              التصدير يعرض أيضًا رقم التقرير داخل الملف.
             </div>
           </div>
         </div>
@@ -812,6 +845,7 @@ export default function ReportsPage() {
               <table>
                 <thead>
                   <tr>
+                    <Th>رقم التقرير</Th>
                     <Th>التاريخ</Th>
                     <Th>الوقت</Th>
                     <Th>المشعر</Th>
@@ -827,6 +861,7 @@ export default function ReportsPage() {
                 <tbody>
                   {filteredRows.map((r, i) => (
                     <tr key={r.id || i} style={{ background: i % 2 === 0 ? '#fff' : '#f8fafc' }}>
+                      <Td>{String(r.report_id ?? '-')}</Td>
                       <Td>{r.date || '-'}</Td>
                       <Td>{r.visit_time || '-'}</Td>
                       <Td>{r.mashaer || '-'}</Td>
@@ -941,7 +976,6 @@ function MashaerCountCard({ counts }: { counts: Record<string, number> }) {
   );
 }
 
-
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="summary-row">
@@ -986,7 +1020,6 @@ function MashaerSummary({ counts }: { counts: Record<string, number> }) {
     </div>
   );
 }
-
 
 function Th({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return <th className={className}>{children}</th>;
