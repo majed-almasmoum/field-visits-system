@@ -760,7 +760,7 @@ export default function ReportsPage() {
             </button>
 
             <div className="note-box">
-              التصدير الآن بصيغة CSV متوافقة مع Excel وتفتح بدون رسالة التحذير.
+              التصدير الآن بصيغة TSV متوافقة مع Excel وتظهر الأعمدة بشكل صحيح.
             </div>
           </div>
         </div>
