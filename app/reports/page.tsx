@@ -12,6 +12,7 @@ type VisitRow = {
   center?: string | null;
   observer?: string | null;
   status?: string | null;
+  actions?: string | null;
   notes?: string | null;
   created_at?: string | null;
 };
@@ -27,6 +28,7 @@ export default function ReportsPage() {
     center: '',
     observer: '',
     status: 'جيد',
+    actions: '',
     notes: '',
   });
 
@@ -34,6 +36,7 @@ export default function ReportsPage() {
   const [loading, setLoading] = useState(false);
   const [loadingRows, setLoadingRows] = useState(true);
   const [message, setMessage] = useState('');
+  const [filterDate, setFilterDate] = useState(new Date().toISOString().slice(0, 10));
 
   async function loadRows() {
     setLoadingRows(true);
@@ -56,15 +59,19 @@ export default function ReportsPage() {
 
   const today = new Date().toISOString().slice(0, 10);
 
+  const filteredRows = useMemo(() => {
+    return rows.filter((r) => (r.date || '') === filterDate);
+  }, [rows, filterDate]);
+
   const stats = useMemo(() => {
-    const total = rows.length;
-    const todayVisits = rows.filter((r) => r.date === today).length;
-    const excellent = rows.filter((r) => r.status === 'ممتاز').length;
-    const good = rows.filter((r) => r.status === 'جيد').length;
-    const bad = rows.filter((r) => r.status === 'سيئ').length;
+    const source = filteredRows;
+    const total = source.length;
+    const excellent = source.filter((r) => r.status === 'ممتاز').length;
+    const good = source.filter((r) => r.status === 'جيد').length;
+    const bad = source.filter((r) => r.status === 'سيئ').length;
 
     const mashaerCounts: Record<string, number> = {};
-    rows.forEach((r) => {
+    source.forEach((r) => {
       const key = r.mashaer || 'غير محدد';
       mashaerCounts[key] = (mashaerCounts[key] || 0) + 1;
     });
@@ -72,17 +79,33 @@ export default function ReportsPage() {
     const topMashaer =
       Object.entries(mashaerCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '-';
 
-    const latestVisit = rows[0]
-      ? `${rows[0].date || '-'} ${rows[0].visit_time || ''}`.trim()
+    const latestVisit = source[0]
+      ? `${source[0].date || '-'} ${source[0].visit_time || ''}`.trim()
       : '-';
 
-    return { total, todayVisits, excellent, good, bad, topMashaer, latestVisit };
-  }, [rows, today]);
+    return { total, excellent, good, bad, topMashaer, latestVisit };
+  }, [filteredRows]);
+
+  const isFormValid =
+    !!form.date &&
+    !!form.mashaer &&
+    !!form.marker.trim() &&
+    !!form.center.trim() &&
+    !!form.observer.trim() &&
+    !!form.status &&
+    !!form.actions.trim() &&
+    !!form.notes.trim();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setMessage('');
+
+    if (!isFormValid) {
+      setMessage('❌ جميع الحقول مطلوبة');
+      return;
+    }
+
+    setLoading(true);
 
     const now = new Date();
     const autoTime = now.toLocaleTimeString('en-GB', {
@@ -94,12 +117,13 @@ export default function ReportsPage() {
     const payload = {
       date: form.date || today,
       visit_time: autoTime,
-      mashaer: form.mashaer || null,
-      marker: form.marker || null,
-      center: form.center || null,
-      observer: form.observer || null,
-      status: form.status || null,
-      notes: form.notes || null,
+      mashaer: form.mashaer,
+      marker: form.marker.trim(),
+      center: form.center.trim(),
+      observer: form.observer.trim(),
+      status: form.status,
+      actions: form.actions.trim(),
+      notes: form.notes.trim(),
     };
 
     const { error } = await supabase.from('visits').insert([payload]);
@@ -115,8 +139,10 @@ export default function ReportsPage() {
         center: '',
         observer: '',
         status: 'جيد',
+        actions: '',
         notes: '',
       });
+      setFilterDate(payload.date);
       await loadRows();
     }
 
@@ -124,7 +150,7 @@ export default function ReportsPage() {
   }
 
   function exportExcel() {
-    const rowsHtml = rows
+    const rowsHtml = filteredRows
       .map(
         (r) => `
           <tr>
@@ -135,6 +161,7 @@ export default function ReportsPage() {
             <td>${escapeHtml(r.center || '')}</td>
             <td>${escapeHtml(r.observer || '')}</td>
             <td>${escapeHtml(r.status || '')}</td>
+            <td>${escapeHtml(r.actions || '')}</td>
             <td>${escapeHtml(r.notes || '')}</td>
           </tr>
         `
@@ -154,6 +181,7 @@ export default function ReportsPage() {
             <th>رقم مركز الضيافة</th>
             <th>اسم المراقب</th>
             <th>الحالة</th>
+            <th>الإجراءات</th>
             <th>الملاحظات</th>
           </tr>
           ${rowsHtml}
@@ -168,7 +196,7 @@ export default function ReportsPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'visits-report.xls';
+    a.download = `visits-${filterDate}.xls`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -177,30 +205,99 @@ export default function ReportsPage() {
     const win = window.open('', '_blank', 'width=900,height=700');
     if (!win) return;
 
+    const logoUrl = `${window.location.origin}/alrajhi.png`;
+
     const html = `
       <html lang="ar" dir="rtl">
       <head>
         <meta charset="UTF-8" />
         <title>تقرير زيارة</title>
         <style>
-          body { font-family: Arial, sans-serif; padding: 32px; color: #111827; direction: rtl; }
-          .card { border: 1px solid #d1d5db; border-radius: 16px; padding: 24px; }
-          h1 { margin: 0 0 10px; font-size: 28px; }
-          p { color: #6b7280; margin: 0 0 24px; }
-          .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
-          .item { border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; }
-          .label { font-size: 13px; color: #6b7280; margin-bottom: 6px; }
-          .value { font-size: 18px; font-weight: 700; color: #111827; word-break: break-word; }
-          .notes { margin-top: 10px; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; line-height: 1.9; white-space: pre-wrap; }
-          .footer { margin-top: 24px; font-size: 12px; color: #6b7280; }
-          @media print { .print-btn { display: none; } body { padding: 0; } }
+          body {
+            font-family: Arial, sans-serif;
+            padding: 32px;
+            color: #111827;
+            direction: rtl;
+          }
+          .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 16px;
+          }
+          .logo {
+            width: 70px;
+            height: auto;
+            object-fit: contain;
+          }
+          .title-wrap h1 {
+            margin: 0;
+            font-size: 28px;
+          }
+          .title-wrap p {
+            color: #6b7280;
+            margin: 6px 0 0;
+          }
+          .card {
+            border: 1px solid #d1d5db;
+            border-radius: 16px;
+            padding: 24px;
+          }
+          .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 18px;
+          }
+          .item {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px;
+          }
+          .label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 6px;
+          }
+          .value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            word-break: break-word;
+          }
+          .notes {
+            margin-top: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px;
+            line-height: 1.9;
+            white-space: pre-wrap;
+          }
+          .footer {
+            margin-top: 24px;
+            font-size: 12px;
+            color: #6b7280;
+          }
+          @media print {
+            .print-btn { display: none; }
+            body { padding: 0; }
+          }
         </style>
       </head>
       <body>
         <button class="print-btn" onclick="window.print()" style="margin-bottom:20px;padding:10px 16px;border:none;border-radius:10px;background:#1d4ed8;color:#fff;cursor:pointer;">تنزيل / طباعة PDF</button>
+
+        <div class="header">
+          <img src="${logoUrl}" class="logo" onerror="this.style.display='none'" />
+          <div class="title-wrap">
+            <h1>تقرير زيارة ميدانية</h1>
+            <p>تقرير فردي قابل للطباعة أو الحفظ بصيغة PDF</p>
+          </div>
+        </div>
+
         <div class="card">
-          <h1>تقرير زيارة ميدانية</h1>
-          <p>تقرير فردي قابل للطباعة أو الحفظ بصيغة PDF</p>
           <div class="grid">
             <div class="item"><div class="label">التاريخ</div><div class="value">${escapeHtml(row.date || '-')}</div></div>
             <div class="item"><div class="label">الوقت</div><div class="value">${escapeHtml(row.visit_time || '-')}</div></div>
@@ -211,10 +308,17 @@ export default function ReportsPage() {
             <div class="item"><div class="label">الحالة</div><div class="value">${escapeHtml(row.status || '-')}</div></div>
             <div class="item"><div class="label">وقت الإدخال</div><div class="value">${escapeHtml(row.created_at || '-')}</div></div>
           </div>
+
           <div class="item">
+            <div class="label">الإجراءات</div>
+            <div class="notes">${escapeHtml(row.actions || '-')}</div>
+          </div>
+
+          <div class="item" style="margin-top:10px;">
             <div class="label">الملاحظات</div>
             <div class="notes">${escapeHtml(row.notes || '-')}</div>
           </div>
+
           <div class="footer">تم إنشاء هذا التقرير من نظام تقارير الزيارات الميدانية.</div>
         </div>
       </body>
@@ -249,6 +353,19 @@ export default function ReportsPage() {
           gap: 20px;
           box-shadow: 0 16px 40px rgba(37,99,235,0.20);
           margin-bottom: 18px;
+        }
+        .hero-left {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+        .hero-logo {
+          width: 70px;
+          height: 70px;
+          object-fit: contain;
+          background: rgba(255,255,255,0.12);
+          border-radius: 16px;
+          padding: 8px;
         }
         .badge {
           display: inline-block;
@@ -290,6 +407,13 @@ export default function ReportsPage() {
         }
         .section-title { margin: 0; font-size: 26px; font-weight: 800; color: #0f172a; }
         .section-text { margin: 8px 0 0; font-size: 15px; color: #64748b; line-height: 1.7; }
+        .filter-box {
+          margin-top: 16px;
+          border: 1px solid #e5e7eb;
+          border-radius: 14px;
+          padding: 14px;
+          background: #f8fafc;
+        }
         .field-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -416,9 +540,19 @@ export default function ReportsPage() {
 
         @media (max-width: 640px) {
           .page { padding: 14px; }
-          .hero { padding: 20px; border-radius: 18px; }
+          .hero {
+            padding: 20px;
+            border-radius: 18px;
+            align-items: flex-start;
+          }
+          .hero-left { align-items: flex-start; }
           .hero h1 { font-size: 28px; }
           .hero p { font-size: 14px; }
+          .hero-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+          }
           .hero-icon {
             width: 60px; height: 60px; font-size: 28px; border-radius: 16px;
           }
@@ -431,23 +565,32 @@ export default function ReportsPage() {
           th, td { padding: 10px; font-size: 13px; }
           .desktop-pdf { display: none; }
           .pdf-mobile-btn { display: block; }
-          .notes .mobile-inline-pdf { display: block; }
         }
       `}</style>
 
       <div className="container">
         <div className="hero">
-          <div>
-            <div className="badge">لوحة المتابعة</div>
-            <h1>تقارير الزيارات الميدانية</h1>
-            <p>سجّل الزيارات، راقب الحالة العامة، وصدّر السجلات إلى Excel من نفس الصفحة.</p>
+          <div className="hero-left">
+            <img
+              src="/alrajhi.png"
+              alt="شعار الراجحي"
+              className="hero-logo"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = 'none';
+              }}
+            />
+            <div>
+              <div className="badge">لوحة المتابعة</div>
+              <h1>تقارير الزيارات الميدانية</h1>
+              <p>سجّل الزيارات، راقب الحالة العامة، وصدّر السجلات إلى Excel من نفس الصفحة.</p>
+            </div>
           </div>
           <div className="hero-icon">📋</div>
         </div>
 
         <div className="stats">
-          <StatCard title="إجمالي الزيارات" value={String(stats.total)} />
-          <StatCard title="زيارات اليوم" value={String(stats.todayVisits)} />
+          <StatCard title="زيارات التاريخ المختار" value={String(stats.total)} />
+          <StatCard title="ممتاز" value={String(stats.excellent)} />
           <StatCard title="أفضل مشعر" value={stats.topMashaer} />
           <StatCard title="آخر زيارة" value={stats.latestVisit} small />
         </div>
@@ -456,7 +599,7 @@ export default function ReportsPage() {
           <div className="card">
             <div style={{ marginBottom: 18 }}>
               <h2 className="section-title">إضافة زيارة جديدة</h2>
-              <p className="section-text">الوقت يُسجل تلقائيًا وقت الحفظ.</p>
+              <p className="section-text">الوقت يُسجل تلقائيًا وقت الحفظ، وكل الحقول مطلوبة.</p>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -467,6 +610,7 @@ export default function ReportsPage() {
                     type="date"
                     value={form.date}
                     onChange={(e) => setForm({ ...form, date: e.target.value })}
+                    required
                   />
                 </Field>
 
@@ -475,6 +619,7 @@ export default function ReportsPage() {
                     className="input"
                     value={form.mashaer}
                     onChange={(e) => setForm({ ...form, mashaer: e.target.value })}
+                    required
                   >
                     {MASHAER_OPTIONS.map((m) => (
                       <option key={m} value={m}>{m}</option>
@@ -488,6 +633,7 @@ export default function ReportsPage() {
                     value={form.marker}
                     onChange={(e) => setForm({ ...form, marker: e.target.value })}
                     placeholder="مثال: 54-1\\533"
+                    required
                   />
                 </Field>
 
@@ -497,6 +643,7 @@ export default function ReportsPage() {
                     value={form.center}
                     onChange={(e) => setForm({ ...form, center: e.target.value })}
                     placeholder="مثال: 151-152"
+                    required
                   />
                 </Field>
 
@@ -506,6 +653,7 @@ export default function ReportsPage() {
                     value={form.observer}
                     onChange={(e) => setForm({ ...form, observer: e.target.value })}
                     placeholder="اسم المراقب"
+                    required
                   />
                 </Field>
 
@@ -514,6 +662,7 @@ export default function ReportsPage() {
                     className="input"
                     value={form.status}
                     onChange={(e) => setForm({ ...form, status: e.target.value })}
+                    required
                   >
                     <option>ممتاز</option>
                     <option>جيد</option>
@@ -522,16 +671,27 @@ export default function ReportsPage() {
                 </Field>
               </div>
 
+              <Field label="الإجراءات">
+                <textarea
+                  className="textarea"
+                  value={form.actions}
+                  onChange={(e) => setForm({ ...form, actions: e.target.value })}
+                  placeholder="اكتب الإجراءات المتخذة"
+                  required
+                />
+              </Field>
+
               <Field label="الملاحظات">
                 <textarea
                   className="textarea"
                   value={form.notes}
                   onChange={(e) => setForm({ ...form, notes: e.target.value })}
                   placeholder="اكتب الملاحظات هنا"
+                  required
                 />
               </Field>
 
-              <button className="primary-btn" type="submit" disabled={loading}>
+              <button className="primary-btn" type="submit" disabled={loading || !isFormValid}>
                 {loading ? 'جاري الحفظ...' : 'حفظ الزيارة'}
               </button>
 
@@ -553,15 +713,26 @@ export default function ReportsPage() {
           <div className="card">
             <div style={{ marginBottom: 18 }}>
               <h2 className="section-title">ملخص سريع</h2>
-              <p className="section-text">قراءة سريعة لوضع السجلات الحالية.</p>
+              <p className="section-text">الملخص والجدول يعرضان بيانات التاريخ المختار فقط.</p>
+            </div>
+
+            <div className="filter-box">
+              <Field label="اختر التاريخ">
+                <input
+                  className="input"
+                  type="date"
+                  value={filterDate}
+                  onChange={(e) => setFilterDate(e.target.value)}
+                />
+              </Field>
             </div>
 
             <div className="summary-list">
               <SummaryRow label="إجمالي السجلات" value={String(stats.total)} />
-              <SummaryRow label="زيارات اليوم" value={String(stats.todayVisits)} />
               <SummaryRow label="ممتاز" value={String(stats.excellent)} />
               <SummaryRow label="جيد" value={String(stats.good)} />
               <SummaryRow label="سيئ" value={String(stats.bad)} />
+              <SummaryRow label="أفضل مشعر" value={stats.topMashaer} />
             </div>
 
             <button className="excel-btn" type="button" onClick={exportExcel}>
@@ -569,21 +740,21 @@ export default function ReportsPage() {
             </button>
 
             <div className="note-box">
-              الوقت يُحفظ تلقائيًا عند كل زيارة، ولكل سجل زر PDF مستقل.
+              يعرض النظام اليوم افتراضيًا، ويمكنك الرجوع لأي يوم سابق من خانة التاريخ.
             </div>
           </div>
         </div>
 
         <div className="card">
           <div style={{ marginBottom: 18 }}>
-            <h2 className="section-title">آخر الزيارات</h2>
-            <p className="section-text">عرض مباشر لآخر البيانات المحفوظة.</p>
+            <h2 className="section-title">زيارات التاريخ المختار</h2>
+            <p className="section-text">عرض مباشر لبيانات: {filterDate}</p>
           </div>
 
           {loadingRows ? (
             <div className="empty">جاري تحميل البيانات...</div>
-          ) : rows.length === 0 ? (
-            <div className="empty">لا توجد بيانات حتى الآن.</div>
+          ) : filteredRows.length === 0 ? (
+            <div className="empty">لا توجد بيانات لهذا التاريخ.</div>
           ) : (
             <div className="table-wrap">
               <table>
@@ -596,12 +767,13 @@ export default function ReportsPage() {
                     <Th>الضيافة</Th>
                     <Th>المراقب</Th>
                     <Th>الحالة</Th>
+                    <Th>الإجراءات</Th>
                     <Th>الملاحظات</Th>
                     <Th className="desktop-pdf">PDF</Th>
                   </tr>
                 </thead>
                 <tbody>
-                  {rows.map((r, i) => (
+                  {filteredRows.map((r, i) => (
                     <tr key={r.id || i} style={{ background: i % 2 === 0 ? '#fff' : '#f8fafc' }}>
                       <Td>{r.date || '-'}</Td>
                       <Td>{r.visit_time || '-'}</Td>
@@ -630,10 +802,11 @@ export default function ReportsPage() {
                           {r.status || '-'}
                         </span>
                       </Td>
+                      <Td notes>{r.actions || '-'}</Td>
                       <Td notes>
                         <div>{r.notes || '-'}</div>
                         <button
-                          className="pdf-mobile-btn mobile-inline-pdf"
+                          className="pdf-mobile-btn"
                           type="button"
                           onClick={() => downloadVisitPdf(r)}
                         >
