@@ -22,7 +22,7 @@ const SUPERVISORS_BY_LOCATION: Record<string, { name: string; period: string }[]
   'مزدلفة': [{ name: 'رامي الغامدي', period: 'المشاعر' }],
 };
 
-const ALL_CENTERS = [
+const MECCA_CENTERS = [
   'مركز ضيافة مصر رقم 101',
   'مركز ضيافة مصر رقم 102',
   'مركز ضيافة مصر رقم 103',
@@ -72,47 +72,77 @@ const ALL_CENTERS = [
   'مركز ضيافة النيجر رقم 151',
   'مركز ضيافة النيجر رقم 152',
   'مركز ضيافة النيجر رقم 153',
-  'مركز ضيافة باكستان 1',
-  'مركز ضيافة باكستان 2',
-  'مركز ضيافة مصر',
-  'مركز ضياقة النيجر',
 ];
+
+const MADINAH_CENTERS = [
+  'باكستان 1',
+  'باكستان 2',
+  'مركز مصر',
+  'مركز النيجر',
+];
+
+const MASHAER_CENTERS = [...MECCA_CENTERS];
 
 const SECTION_OPTIONS = [
   'الجولات الميدانية',
   'الجولات الميدانية للمشاعر',
   'الاستقبال',
   'المغادرة',
+  'المحاضر أو الملاحظات',
 ];
+
+type SectionAnswer = '' | 'نعم' | 'لا';
+type ModarStatus = '' | 'نعم' | 'لا';
 
 type SectionRow = {
   center: string;
-  answer: '' | 'نعم' | 'لا';
+  answer: SectionAnswer;
   notes: string;
   actions: string;
   result: string;
-  modarStatus: '' | 'نعم' | 'لا';
+  modarStatus: ModarStatus;
 };
 
 type SectionBlock = {
   id: string;
   sectionName: string;
+  selectedCenters: string[];
+  selectAll: boolean;
   rows: SectionRow[];
+  dropdownOpen: boolean;
 };
 
 function uid() {
   return Math.random().toString(36).slice(2, 10);
 }
 
-function makeRows(centers: string[]): SectionRow[] {
-  return centers.map((center) => ({
-    center,
-    answer: '',
-    notes: '',
-    actions: '',
-    result: '',
-    modarStatus: '',
-  }));
+function getCentersByLocation(location: string) {
+  if (location === 'المدينة المنورة') return MADINAH_CENTERS;
+  if (location === 'عرفات' || location === 'منى' || location === 'مزدلفة') return MASHAER_CENTERS;
+  if (location === 'مكة المكرمة') return MECCA_CENTERS;
+  return [];
+}
+
+function syncRowsWithCenters(existingRows: SectionRow[], selectedCenters: string[]): SectionRow[] {
+  const map = new Map(existingRows.map((row) => [row.center, row] as const));
+
+  return selectedCenters.map((center): SectionRow => {
+    const existing = map.get(center);
+    if (existing) return existing;
+
+    return {
+      center,
+      answer: '' as SectionAnswer,
+      notes: '',
+      actions: '',
+      result: '',
+      modarStatus: '' as ModarStatus,
+    };
+  });
+}
+
+function isMemosSection(name: string) {
+  return name === 'المحاضر أو الملاحظات';
 }
 
 export default function ReportsPage() {
@@ -122,8 +152,6 @@ export default function ReportsPage() {
   const [location, setLocation] = useState('');
   const [supervisor, setSupervisor] = useState('');
   const [period, setPeriod] = useState('');
-  const [selectedCenters, setSelectedCenters] = useState<string[]>([]);
-  const [selectAllCenters, setSelectAllCenters] = useState(false);
   const [sections, setSections] = useState<SectionBlock[]>([]);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -134,15 +162,13 @@ export default function ReportsPage() {
   }, [location]);
 
   const centerOptions = useMemo(() => {
-    return ALL_CENTERS;
+    return getCentersByLocation(location);
   }, [location]);
 
   function onChangeLocation(value: string) {
     setLocation(value);
     setSupervisor('');
     setPeriod('');
-    setSelectedCenters([]);
-    setSelectAllCenters(false);
     setSections([]);
   }
 
@@ -152,57 +178,21 @@ export default function ReportsPage() {
     setPeriod(found?.period || '');
   }
 
-  function toggleCenter(center: string) {
-    const exists = selectedCenters.includes(center);
-    const next = exists
-      ? selectedCenters.filter((c) => c !== center)
-      : [...selectedCenters, center];
-
-    setSelectedCenters(next);
-    setSelectAllCenters(next.length === centerOptions.length && centerOptions.length > 0);
-    syncSectionsWithCenters(next);
-  }
-
-  function toggleAllCenters() {
-    const next = selectAllCenters ? [] : [...centerOptions];
-    setSelectedCenters(next);
-    setSelectAllCenters(!selectAllCenters);
-    syncSectionsWithCenters(next);
-  }
-
-  function syncSectionsWithCenters(nextCenters: string[]) {
-    setSections((prev) =>
-      prev.map((section) => {
-        const map = new Map(section.rows.map((r) => [r.center, r]));
-        return {
-          ...section,
-          rows: nextCenters.map(
-            (center) =>
-              map.get(center) || {
-                center,
-                answer: '',
-                notes: '',
-                actions: '',
-                result: '',
-                modarStatus: '',
-              }
-          ),
-        };
-      })
-    );
-  }
-
   function addSection() {
-    if (selectedCenters.length === 0) {
-      setMessage('❌ اختر مركز ضيافة واحد على الأقل قبل إضافة قسم');
+    if (!location) {
+      setMessage('❌ اختر موقع التقييم أولًا');
       return;
     }
+
     setSections((prev) => [
       ...prev,
       {
         id: uid(),
         sectionName: '',
-        rows: makeRows(selectedCenters),
+        selectedCenters: [],
+        selectAll: false,
+        rows: [],
+        dropdownOpen: false,
       },
     ]);
     setMessage('');
@@ -212,9 +202,56 @@ export default function ReportsPage() {
     setSections((prev) => prev.filter((s) => s.id !== id));
   }
 
+  function updateSection(id: string, patch: Partial<SectionBlock>) {
+    setSections((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
+  }
+
   function updateSectionName(id: string, value: string) {
+    updateSection(id, { sectionName: value });
+  }
+
+  function toggleDropdown(id: string) {
     setSections((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, sectionName: value } : s))
+      prev.map((s) =>
+        s.id === id ? { ...s, dropdownOpen: !s.dropdownOpen } : { ...s, dropdownOpen: false }
+      )
+    );
+  }
+
+  function toggleCenter(sectionId: string, center: string) {
+    setSections((prev) =>
+      prev.map((section) => {
+        if (section.id !== sectionId) return section;
+
+        const exists = section.selectedCenters.includes(center);
+        const nextCenters = exists
+          ? section.selectedCenters.filter((c) => c !== center)
+          : [...section.selectedCenters, center];
+
+        return {
+          ...section,
+          selectedCenters: nextCenters,
+          selectAll: nextCenters.length === centerOptions.length && centerOptions.length > 0,
+          rows: syncRowsWithCenters(section.rows, nextCenters),
+        };
+      })
+    );
+  }
+
+  function toggleAllCenters(sectionId: string) {
+    setSections((prev) =>
+      prev.map((section) => {
+        if (section.id !== sectionId) return section;
+
+        const nextCenters = section.selectAll ? [] : [...centerOptions];
+
+        return {
+          ...section,
+          selectAll: !section.selectAll,
+          selectedCenters: nextCenters,
+          rows: syncRowsWithCenters(section.rows, nextCenters),
+        };
+      })
     );
   }
 
@@ -260,27 +297,31 @@ export default function ReportsPage() {
     if (!location || !supervisor || !period || !reportDate) {
       return 'أكمل البيانات الأساسية';
     }
-    if (selectedCenters.length === 0) {
-      return 'اختر مركز ضيافة واحد على الأقل';
-    }
+
     if (sections.length === 0) {
       return 'أضف قسمًا واحدًا على الأقل';
     }
 
     for (const section of sections) {
       if (!section.sectionName) {
-        return 'اختر اسم القسم لكل قسم مضاف';
+        return 'اختر اسم القسم لكل قسم';
+      }
+
+      if (section.selectedCenters.length === 0) {
+        return `اختر مركزًا واحدًا على الأقل في القسم: ${section.sectionName || 'بدون اسم'}`;
       }
 
       for (const row of section.rows) {
         if (!row.answer) {
           return `حدد نعم أو لا للمركز: ${row.center}`;
         }
+
         if (row.answer === 'نعم') {
           if (!row.notes.trim() || !row.actions.trim() || !row.result.trim()) {
             return `أكمل الملاحظات والإجراءات والنتيجة للمركز: ${row.center}`;
           }
-          if (!row.modarStatus) {
+
+          if (isMemosSection(section.sectionName) && !row.modarStatus) {
             return `حدد حالة المحضر في منصة مدار للمركز: ${row.center}`;
           }
         }
@@ -315,7 +356,10 @@ export default function ReportsPage() {
           notes: row.answer === 'نعم' ? row.notes.trim() : null,
           actions: row.answer === 'نعم' ? row.actions.trim() : null,
           result: row.answer === 'نعم' ? row.result.trim() : null,
-          modar_status: row.answer === 'نعم' ? row.modarStatus : null,
+          modar_status:
+            row.answer === 'نعم' && isMemosSection(section.sectionName)
+              ? row.modarStatus
+              : null,
         }))
       );
 
@@ -323,8 +367,6 @@ export default function ReportsPage() {
       if (error) throw error;
 
       setMessage(`✅ تم حفظ التقرير اليومي رقم ${reportId}`);
-      setSelectedCenters([]);
-      setSelectAllCenters(false);
       setSections([]);
     } catch (e: any) {
       setMessage(`❌ ${e.message || 'حدث خطأ أثناء الحفظ'}`);
@@ -419,6 +461,29 @@ export default function ReportsPage() {
           grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 14px;
         }
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 14px;
+          margin-bottom: 18px;
+        }
+        .stat {
+          background: #fff;
+          border-radius: 18px;
+          border: 1px solid #e5e7eb;
+          padding: 18px;
+          box-shadow: 0 10px 24px rgba(15,23,42,0.06);
+        }
+        .stat-title {
+          color: #64748b;
+          font-size: 14px;
+          margin-bottom: 8px;
+        }
+        .stat-value {
+          color: #111827;
+          font-size: 28px;
+          font-weight: 800;
+        }
         .field label {
           display: block;
           margin-bottom: 8px;
@@ -442,29 +507,6 @@ export default function ReportsPage() {
           min-height: 90px;
           padding: 12px;
           resize: vertical;
-        }
-        .centers-box {
-          border: 1px solid #e5e7eb;
-          border-radius: 16px;
-          padding: 14px;
-          background: #f8fafc;
-          margin-top: 14px;
-        }
-        .centers-grid {
-          display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 10px;
-          margin-top: 12px;
-        }
-        .center-item {
-          background: #fff;
-          border: 1px solid #dbe3ee;
-          border-radius: 12px;
-          padding: 10px 12px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 13px;
         }
         .add-btn, .save-btn {
           border: none;
@@ -498,6 +540,7 @@ export default function ReportsPage() {
           align-items: center;
           gap: 10px;
           margin-bottom: 14px;
+          flex-wrap: wrap;
         }
         .remove-btn {
           border: none;
@@ -559,7 +602,7 @@ export default function ReportsPage() {
         .subfields {
           display: grid;
           gap: 10px;
-          min-width: 260px;
+          min-width: 240px;
         }
         .mini-label {
           font-size: 12px;
@@ -568,33 +611,66 @@ export default function ReportsPage() {
           display: block;
           font-weight: 700;
         }
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 14px;
+        .multi-box {
+          position: relative;
         }
-        .stat {
+        .multi-trigger {
+          width: 100%;
+          min-height: 48px;
+          border-radius: 12px;
+          border: 1px solid #d1d5db;
           background: #fff;
-          border-radius: 18px;
-          border: 1px solid #e5e7eb;
-          padding: 18px;
-          box-shadow: 0 10px 24px rgba(15,23,42,0.06);
-        }
-        .stat-title {
-          color: #64748b;
+          padding: 10px 12px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          cursor: pointer;
           font-size: 14px;
-          margin-bottom: 8px;
         }
-        .stat-value {
-          color: #111827;
-          font-size: 28px;
-          font-weight: 800;
+        .multi-placeholder {
+          color: #64748b;
+        }
+        .multi-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+        }
+        .tag {
+          background: #eff6ff;
+          color: #1d4ed8;
+          border-radius: 999px;
+          padding: 4px 10px;
+          font-size: 12px;
+          font-weight: 700;
+        }
+        .dropdown {
+          position: absolute;
+          top: calc(100% + 8px);
+          right: 0;
+          left: 0;
+          background: #fff;
+          border: 1px solid #d1d5db;
+          border-radius: 14px;
+          box-shadow: 0 14px 24px rgba(15,23,42,0.08);
+          padding: 10px;
+          z-index: 20;
+          max-height: 280px;
+          overflow: auto;
+        }
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px;
+          border-radius: 10px;
+          font-size: 14px;
+        }
+        .dropdown-item:hover {
+          background: #f8fafc;
         }
         @media (max-width: 1000px) {
           .grid-4, .stats-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-          .centers-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
@@ -609,10 +685,13 @@ export default function ReportsPage() {
           .hero-left { align-items: flex-start; }
           .hero-icon { width: 60px; height: 60px; font-size: 28px; }
           .hero-logo, .hero-logo-fallback { width: 52px; height: 52px; }
-          .grid-4, .stats-grid, .centers-grid {
+          .grid-4, .stats-grid {
             grid-template-columns: 1fr;
           }
           th, td { font-size: 13px; }
+          .section-head {
+            align-items: stretch;
+          }
         }
       `}</style>
 
@@ -632,7 +711,7 @@ export default function ReportsPage() {
             <div>
               <div className="badge">تقرير يومي</div>
               <h1>نظام التقرير اليومي</h1>
-              <p>اختر الموقع ثم المشرف والمراكز، وبعدها أضف الأقسام وسجّل التقييم اليومي.</p>
+              <p>اختر الموقع ثم المشرف، وبعدها أضف الأقسام وحدد مراكز كل قسم بشكل مستقل.</p>
             </div>
           </div>
           <div className="hero-icon">🗂️</div>
@@ -640,20 +719,20 @@ export default function ReportsPage() {
 
         <div className="stats-grid">
           <div className="stat">
-            <div className="stat-title">عدد المراكز المختارة</div>
-            <div className="stat-value">{selectedCenters.length}</div>
-          </div>
-          <div className="stat">
-            <div className="stat-title">عدد الأقسام المضافة</div>
-            <div className="stat-value">{sections.length}</div>
-          </div>
-          <div className="stat">
             <div className="stat-title">الموقع</div>
-            <div className="stat-value" style={{ fontSize: '18px' }}>{location || '-'}</div>
+            <div className="stat-value" style={{ fontSize: '20px' }}>{location || '-'}</div>
           </div>
           <div className="stat">
             <div className="stat-title">المشرف</div>
-            <div className="stat-value" style={{ fontSize: '18px' }}>{supervisor || '-'}</div>
+            <div className="stat-value" style={{ fontSize: '20px' }}>{supervisor || '-'}</div>
+          </div>
+          <div className="stat">
+            <div className="stat-title">عدد الأقسام</div>
+            <div className="stat-value">{sections.length}</div>
+          </div>
+          <div className="stat">
+            <div className="stat-title">تاريخ التقرير</div>
+            <div className="stat-value" style={{ fontSize: '20px' }}>{reportDate}</div>
           </div>
         </div>
 
@@ -701,35 +780,6 @@ export default function ReportsPage() {
             </div>
           </div>
 
-          <div className="centers-box">
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-              <strong>مراكز الضيافة</strong>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14 }}>
-                <input
-                  type="checkbox"
-                  checked={selectAllCenters}
-                  onChange={toggleAllCenters}
-                  disabled={!location}
-                />
-                اختيار الكل
-              </label>
-            </div>
-
-            <div className="centers-grid">
-              {centerOptions.map((center) => (
-                <label key={center} className="center-item">
-                  <input
-                    type="checkbox"
-                    checked={selectedCenters.includes(center)}
-                    onChange={() => toggleCenter(center)}
-                    disabled={!location}
-                  />
-                  <span>{center}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
           <div style={{ marginTop: 16 }}>
             <button className="add-btn" type="button" onClick={addSection}>
               إضافة قسم
@@ -753,10 +803,11 @@ export default function ReportsPage() {
         {sections.map((section, idx) => (
           <div className="card" key={section.id}>
             <div className="section-head">
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: '1 1 220px' }}>
                 <h3 style={{ margin: 0 }}>القسم {idx + 1}</h3>
               </div>
-              <div style={{ flex: 1, minWidth: 240 }}>
+
+              <div style={{ flex: '1 1 260px' }}>
                 <select
                   className="select"
                   value={section.sectionName}
@@ -768,6 +819,49 @@ export default function ReportsPage() {
                   ))}
                 </select>
               </div>
+
+              <div style={{ flex: '1 1 320px' }} className="multi-box">
+                <div className="multi-trigger" onClick={() => toggleDropdown(section.id)}>
+                  <div className="multi-tags">
+                    {section.selectedCenters.length === 0 ? (
+                      <span className="multi-placeholder">اختر مراكز هذا القسم</span>
+                    ) : (
+                      section.selectedCenters.slice(0, 2).map((c) => (
+                        <span key={c} className="tag">{c}</span>
+                      ))
+                    )}
+                    {section.selectedCenters.length > 2 ? (
+                      <span className="tag">+{section.selectedCenters.length - 2}</span>
+                    ) : null}
+                  </div>
+                  <span>▾</span>
+                </div>
+
+                {section.dropdownOpen ? (
+                  <div className="dropdown">
+                    <label className="dropdown-item">
+                      <input
+                        type="checkbox"
+                        checked={section.selectAll}
+                        onChange={() => toggleAllCenters(section.id)}
+                      />
+                      <strong>اختيار الكل</strong>
+                    </label>
+
+                    {centerOptions.map((center) => (
+                      <label key={center} className="dropdown-item">
+                        <input
+                          type="checkbox"
+                          checked={section.selectedCenters.includes(center)}
+                          onChange={() => toggleCenter(section.id, center)}
+                        />
+                        <span>{center}</span>
+                      </label>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+
               <button className="remove-btn" type="button" onClick={() => removeSection(section.id)}>
                 حذف القسم
               </button>
@@ -778,115 +872,123 @@ export default function ReportsPage() {
                 <thead>
                   <tr>
                     <th>مركز الضيافة</th>
-                    <th>التقييم</th>
+                    <th>نعم / لا</th>
                     <th>الملاحظات</th>
                     <th>الإجراءات</th>
                     <th>النتيجة</th>
-                    <th>محضر داخل منصة مدار</th>
+                    <th>حالة المحضر في مدار</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {section.rows.map((row) => (
-                    <tr key={row.center}>
-                      <td>{row.center}</td>
-
-                      <td>
-                        <div className="answer-box">
-                          <button
-                            type="button"
-                            className={`pill-btn ${row.answer === 'نعم' ? 'active-yes' : ''}`}
-                            onClick={() => updateRow(section.id, row.center, { answer: 'نعم' })}
-                          >
-                            نعم
-                          </button>
-                          <button
-                            type="button"
-                            className={`pill-btn ${row.answer === 'لا' ? 'active-no' : ''}`}
-                            onClick={() => updateRow(section.id, row.center, { answer: 'لا' })}
-                          >
-                            لا
-                          </button>
-                        </div>
-                      </td>
-
-                      <td>
-                        {row.answer === 'نعم' ? (
-                          <div className="subfields">
-                            <div>
-                              <span className="mini-label">الملاحظات</span>
-                              <textarea
-                                className="textarea"
-                                value={row.notes}
-                                onChange={(e) =>
-                                  updateRow(section.id, row.center, { notes: e.target.value })
-                                }
-                              />
-                            </div>
-                          </div>
-                        ) : (
-                          '-'
-                        )}
-                      </td>
-
-                      <td>
-                        {row.answer === 'نعم' ? (
-                          <div className="subfields">
-                            <div>
-                              <span className="mini-label">الإجراءات</span>
-                              <textarea
-                                className="textarea"
-                                value={row.actions}
-                                onChange={(e) =>
-                                  updateRow(section.id, row.center, { actions: e.target.value })
-                                }
-                              />
-                            </div>
-                          </div>
-                        ) : (
-                          '-'
-                        )}
-                      </td>
-
-                      <td>
-                        {row.answer === 'نعم' ? (
-                          <div className="subfields">
-                            <div>
-                              <span className="mini-label">النتيجة</span>
-                              <textarea
-                                className="textarea"
-                                value={row.result}
-                                onChange={(e) =>
-                                  updateRow(section.id, row.center, { result: e.target.value })
-                                }
-                              />
-                            </div>
-                          </div>
-                        ) : (
-                          '-'
-                        )}
-                      </td>
-
-                      <td>
-                        {row.answer === 'نعم' ? (
-                          <select
-                            className="select"
-                            value={row.modarStatus}
-                            onChange={(e) =>
-                              updateRow(section.id, row.center, {
-                                modarStatus: e.target.value as 'نعم' | 'لا',
-                              })
-                            }
-                          >
-                            <option value="">اختر</option>
-                            <option value="نعم">نعم، تم إعداد محضر داخل منصة مدار</option>
-                            <option value="لا">لا، لم يتم إدخال محضر داخل منصة مدار</option>
-                          </select>
-                        ) : (
-                          '-'
-                        )}
+                  {section.rows.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} style={{ textAlign: 'center', color: '#64748b' }}>
+                        اختر مراكز هذا القسم من القائمة المنسدلة
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    section.rows.map((row) => (
+                      <tr key={row.center}>
+                        <td>{row.center}</td>
+
+                        <td>
+                          <div className="answer-box">
+                            <button
+                              type="button"
+                              className={`pill-btn ${row.answer === 'نعم' ? 'active-yes' : ''}`}
+                              onClick={() => updateRow(section.id, row.center, { answer: 'نعم' })}
+                            >
+                              نعم
+                            </button>
+                            <button
+                              type="button"
+                              className={`pill-btn ${row.answer === 'لا' ? 'active-no' : ''}`}
+                              onClick={() => updateRow(section.id, row.center, { answer: 'لا' })}
+                            >
+                              لا
+                            </button>
+                          </div>
+                        </td>
+
+                        <td>
+                          {row.answer === 'نعم' ? (
+                            <div className="subfields">
+                              <div>
+                                <span className="mini-label">الملاحظات</span>
+                                <textarea
+                                  className="textarea"
+                                  value={row.notes}
+                                  onChange={(e) =>
+                                    updateRow(section.id, row.center, { notes: e.target.value })
+                                  }
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            '-'
+                          )}
+                        </td>
+
+                        <td>
+                          {row.answer === 'نعم' ? (
+                            <div className="subfields">
+                              <div>
+                                <span className="mini-label">الإجراءات</span>
+                                <textarea
+                                  className="textarea"
+                                  value={row.actions}
+                                  onChange={(e) =>
+                                    updateRow(section.id, row.center, { actions: e.target.value })
+                                  }
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            '-'
+                          )}
+                        </td>
+
+                        <td>
+                          {row.answer === 'نعم' ? (
+                            <div className="subfields">
+                              <div>
+                                <span className="mini-label">النتيجة</span>
+                                <textarea
+                                  className="textarea"
+                                  value={row.result}
+                                  onChange={(e) =>
+                                    updateRow(section.id, row.center, { result: e.target.value })
+                                  }
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            '-'
+                          )}
+                        </td>
+
+                        <td>
+                          {row.answer === 'نعم' && isMemosSection(section.sectionName) ? (
+                            <select
+                              className="select"
+                              value={row.modarStatus}
+                              onChange={(e) =>
+                                updateRow(section.id, row.center, {
+                                  modarStatus: e.target.value as ModarStatus,
+                                })
+                              }
+                            >
+                              <option value="">اختر</option>
+                              <option value="نعم">نعم، تم إعداد محضر داخل منصة مدار</option>
+                              <option value="لا">لا، لم يتم إدخال محضر داخل منصة مدار</option>
+                            </select>
+                          ) : (
+                            '-'
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

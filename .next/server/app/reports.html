@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--cMboK_zs0WXyB8FyU8upj--><html lang="ar" dir="rtl"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="image" href="/alrajhi.png"/><link rel="stylesheet" href="/_next/static/css/0030e12f56c3664b.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-4a462cecab786e93.js"/><script src="/_next/static/chunks/4bd1b696-c023c6e3521b1417.js" async=""></script><script src="/_next/static/chunks/255-38b49df12a94ee57.js" async=""></script><script src="/_next/static/chunks/main-app-38e4d3b5349960b8.js" async=""></script><script src="/_next/static/chunks/44530001-06db68a5a9898251.js" async=""></script><script src="/_next/static/chunks/297-c8838cd3824be299.js" async=""></script><script src="/_next/static/chunks/app/reports/page-43bddea5a5e4716f.js" async=""></script><title>نظام تقارير الزيارات الميدانية</title><meta name="description" content="نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel"/><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body><div hidden=""><!--$--><!--/$--></div><div class="page"><style>
+<!DOCTYPE html><!--Nb6OjENIYj9ai1ZeVFbXh--><html lang="ar" dir="rtl"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="image" href="/alrajhi.png"/><link rel="stylesheet" href="/_next/static/css/0030e12f56c3664b.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-4a462cecab786e93.js"/><script src="/_next/static/chunks/4bd1b696-c023c6e3521b1417.js" async=""></script><script src="/_next/static/chunks/255-38b49df12a94ee57.js" async=""></script><script src="/_next/static/chunks/main-app-38e4d3b5349960b8.js" async=""></script><script src="/_next/static/chunks/44530001-06db68a5a9898251.js" async=""></script><script src="/_next/static/chunks/297-c8838cd3824be299.js" async=""></script><script src="/_next/static/chunks/app/reports/page-57226ad8d5123f65.js" async=""></script><title>نظام تقارير الزيارات الميدانية</title><meta name="description" content="نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel"/><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body><div hidden=""><!--$--><!--/$--></div><div class="page"><style>
         * { box-sizing: border-box; }
         .page {
           min-height: 100vh;
@@ -82,6 +82,29 @@
           grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 14px;
         }
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 14px;
+          margin-bottom: 18px;
+        }
+        .stat {
+          background: #fff;
+          border-radius: 18px;
+          border: 1px solid #e5e7eb;
+          padding: 18px;
+          box-shadow: 0 10px 24px rgba(15,23,42,0.06);
+        }
+        .stat-title {
+          color: #64748b;
+          font-size: 14px;
+          margin-bottom: 8px;
+        }
+        .stat-value {
+          color: #111827;
+          font-size: 28px;
+          font-weight: 800;
+        }
         .field label {
           display: block;
           margin-bottom: 8px;
@@ -105,29 +128,6 @@
           min-height: 90px;
           padding: 12px;
           resize: vertical;
-        }
-        .centers-box {
-          border: 1px solid #e5e7eb;
-          border-radius: 16px;
-          padding: 14px;
-          background: #f8fafc;
-          margin-top: 14px;
-        }
-        .centers-grid {
-          display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 10px;
-          margin-top: 12px;
-        }
-        .center-item {
-          background: #fff;
-          border: 1px solid #dbe3ee;
-          border-radius: 12px;
-          padding: 10px 12px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 13px;
         }
         .add-btn, .save-btn {
           border: none;
@@ -161,6 +161,7 @@
           align-items: center;
           gap: 10px;
           margin-bottom: 14px;
+          flex-wrap: wrap;
         }
         .remove-btn {
           border: none;
@@ -222,7 +223,7 @@
         .subfields {
           display: grid;
           gap: 10px;
-          min-width: 260px;
+          min-width: 240px;
         }
         .mini-label {
           font-size: 12px;
@@ -231,33 +232,66 @@
           display: block;
           font-weight: 700;
         }
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 14px;
+        .multi-box {
+          position: relative;
         }
-        .stat {
+        .multi-trigger {
+          width: 100%;
+          min-height: 48px;
+          border-radius: 12px;
+          border: 1px solid #d1d5db;
           background: #fff;
-          border-radius: 18px;
-          border: 1px solid #e5e7eb;
-          padding: 18px;
-          box-shadow: 0 10px 24px rgba(15,23,42,0.06);
-        }
-        .stat-title {
-          color: #64748b;
+          padding: 10px 12px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          cursor: pointer;
           font-size: 14px;
-          margin-bottom: 8px;
         }
-        .stat-value {
-          color: #111827;
-          font-size: 28px;
-          font-weight: 800;
+        .multi-placeholder {
+          color: #64748b;
+        }
+        .multi-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+        }
+        .tag {
+          background: #eff6ff;
+          color: #1d4ed8;
+          border-radius: 999px;
+          padding: 4px 10px;
+          font-size: 12px;
+          font-weight: 700;
+        }
+        .dropdown {
+          position: absolute;
+          top: calc(100% + 8px);
+          right: 0;
+          left: 0;
+          background: #fff;
+          border: 1px solid #d1d5db;
+          border-radius: 14px;
+          box-shadow: 0 14px 24px rgba(15,23,42,0.08);
+          padding: 10px;
+          z-index: 20;
+          max-height: 280px;
+          overflow: auto;
+        }
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px;
+          border-radius: 10px;
+          font-size: 14px;
+        }
+        .dropdown-item:hover {
+          background: #f8fafc;
         }
         @media (max-width: 1000px) {
           .grid-4, .stats-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-          .centers-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
@@ -272,9 +306,12 @@
           .hero-left { align-items: flex-start; }
           .hero-icon { width: 60px; height: 60px; font-size: 28px; }
           .hero-logo, .hero-logo-fallback { width: 52px; height: 52px; }
-          .grid-4, .stats-grid, .centers-grid {
+          .grid-4, .stats-grid {
             grid-template-columns: 1fr;
           }
           th, td { font-size: 13px; }
+          .section-head {
+            align-items: stretch;
+          }
         }
-      </style><div class="container"><div class="hero"><div class="hero-left"><img src="/alrajhi.png" alt="شعار الراجحي" class="hero-logo"/><div><div class="badge">تقرير يومي</div><h1>نظام التقرير اليومي</h1><p>اختر الموقع ثم المشرف والمراكز، وبعدها أضف الأقسام وسجّل التقييم اليومي.</p></div></div><div class="hero-icon">🗂️</div></div><div class="stats-grid"><div class="stat"><div class="stat-title">عدد المراكز المختارة</div><div class="stat-value">0</div></div><div class="stat"><div class="stat-title">عدد الأقسام المضافة</div><div class="stat-value">0</div></div><div class="stat"><div class="stat-title">الموقع</div><div class="stat-value" style="font-size:18px">-</div></div><div class="stat"><div class="stat-title">المشرف</div><div class="stat-value" style="font-size:18px">-</div></div></div><div class="card"><h2 style="margin-top:0">البيانات الأساسية</h2><div class="grid-4"><div class="field"><label>موقع التقييم</label><select class="select"><option value="" selected="">اختر الموقع</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="عرفات">عرفات</option><option value="منى">منى</option><option value="مزدلفة">مزدلفة</option></select></div><div class="field"><label>اسم المشرف</label><select class="select" disabled=""><option value="" selected="">اختر المشرف</option></select></div><div class="field"><label>الفترة</label><input class="input" readOnly="" placeholder="تظهر تلقائيًا" value=""/></div><div class="field"><label>تاريخ التقرير</label><input class="input" type="date" value="2026-04-18"/></div></div><div class="centers-box"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap"><strong>مراكز الضيافة</strong><label style="display:flex;align-items:center;gap:8px;font-size:14px"><input type="checkbox" disabled=""/>اختيار الكل</label></div><div class="centers-grid"><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 101</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 102</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 103</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 105</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 106</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 107</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 108</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 109</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 110</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 112</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 113</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 114</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 115</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 116</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 117</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 118</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 119</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 120</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 121</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 122</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 123</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 124</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 125</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 126</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 127</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 128</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 129</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 130</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 131</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 132</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 133</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 134</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 135</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 136</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 137</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر رقم 138</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة باكستان رقم 140</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة باكستان رقم 141</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة باكستان رقم 142</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة باكستان رقم 143</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة باكستان رقم 144</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة باكستان رقم 145</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة باكستان رقم 146</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة باكستان رقم 147</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة باكستان رقم 148</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة النيجر رقم 150</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة النيجر رقم 151</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة النيجر رقم 152</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة النيجر رقم 153</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة باكستان 1</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة باكستان 2</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضيافة مصر</span></label><label class="center-item"><input type="checkbox" disabled=""/><span>مركز ضياقة النيجر</span></label></div></div><div style="margin-top:16px"><button class="add-btn" type="button">إضافة قسم</button></div></div><div class="card"><button class="save-btn" type="button">حفظ التقرير اليومي</button></div></div></div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-4a462cecab786e93.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[1959,[],\"ClientPageRoot\"]\n5:I[4334,[\"730\",\"static/chunks/44530001-06db68a5a9898251.js\",\"297\",\"static/chunks/297-c8838cd3824be299.js\",\"22\",\"static/chunks/app/reports/page-43bddea5a5e4716f.js\"],\"default\"]\n8:I[4431,[],\"OutletBoundary\"]\na:I[5278,[],\"AsyncMetadataOutlet\"]\nc:I[4431,[],\"ViewportBoundary\"]\ne:I[4431,[],\"MetadataBoundary\"]\nf:\"$Sreact.suspense\"\n11:I[7150,[],\"\"]\n:HL[\"/_next/static/css/0030e12f56c3664b.css\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"cMboK_zs0WXyB8FyU8upj\",\"p\":\"\",\"c\":[\"\",\"reports\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"reports\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/0030e12f56c3664b.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"ar\",\"dir\":\"rtl\",\"children\":[\"$\",\"body\",null,{\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]}]]}],{\"children\":[\"reports\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"searchParams\":{},\"params\":{},\"promises\":[\"$@6\",\"$@7\"]}],null,[\"$\",\"$L8\",null,{\"children\":[\"$L9\",[\"$\",\"$La\",null,{\"promise\":\"$@b\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[[\"$\",\"$Lc\",null,{\"children\":\"$Ld\"}],null],[\"$\",\"$Le\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$f\",null,{\"fallback\":null,\"children\":\"$L10\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$11\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"6:{}\n7:\"$0:f:0:1:2:children:2:children:1:props:children:0:props:params\"\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n9:null\n"])</script><script>self.__next_f.push([1,"b:{\"metadata\":[[\"$\",\"title\",\"0\",{\"children\":\"نظام تقارير الزيارات الميدانية\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel\"}]],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"10:\"$b:metadata\"\n"])</script></body></html>
+      </style><div class="container"><div class="hero"><div class="hero-left"><img src="/alrajhi.png" alt="شعار الراجحي" class="hero-logo"/><div><div class="badge">تقرير يومي</div><h1>نظام التقرير اليومي</h1><p>اختر الموقع ثم المشرف، وبعدها أضف الأقسام وحدد مراكز كل قسم بشكل مستقل.</p></div></div><div class="hero-icon">🗂️</div></div><div class="stats-grid"><div class="stat"><div class="stat-title">الموقع</div><div class="stat-value" style="font-size:20px">-</div></div><div class="stat"><div class="stat-title">المشرف</div><div class="stat-value" style="font-size:20px">-</div></div><div class="stat"><div class="stat-title">عدد الأقسام</div><div class="stat-value">0</div></div><div class="stat"><div class="stat-title">تاريخ التقرير</div><div class="stat-value" style="font-size:20px">2026-04-18</div></div></div><div class="card"><h2 style="margin-top:0">البيانات الأساسية</h2><div class="grid-4"><div class="field"><label>موقع التقييم</label><select class="select"><option value="" selected="">اختر الموقع</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="عرفات">عرفات</option><option value="منى">منى</option><option value="مزدلفة">مزدلفة</option></select></div><div class="field"><label>اسم المشرف</label><select class="select" disabled=""><option value="" selected="">اختر المشرف</option></select></div><div class="field"><label>الفترة</label><input class="input" readOnly="" placeholder="تظهر تلقائيًا" value=""/></div><div class="field"><label>تاريخ التقرير</label><input class="input" type="date" value="2026-04-18"/></div></div><div style="margin-top:16px"><button class="add-btn" type="button">إضافة قسم</button></div></div><div class="card"><button class="save-btn" type="button">حفظ التقرير اليومي</button></div></div></div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-4a462cecab786e93.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[1959,[],\"ClientPageRoot\"]\n5:I[4334,[\"730\",\"static/chunks/44530001-06db68a5a9898251.js\",\"297\",\"static/chunks/297-c8838cd3824be299.js\",\"22\",\"static/chunks/app/reports/page-57226ad8d5123f65.js\"],\"default\"]\n8:I[4431,[],\"OutletBoundary\"]\na:I[5278,[],\"AsyncMetadataOutlet\"]\nc:I[4431,[],\"ViewportBoundary\"]\ne:I[4431,[],\"MetadataBoundary\"]\nf:\"$Sreact.suspense\"\n11:I[7150,[],\"\"]\n:HL[\"/_next/static/css/0030e12f56c3664b.css\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"Nb6OjENIYj9ai1ZeVFbXh\",\"p\":\"\",\"c\":[\"\",\"reports\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"reports\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/0030e12f56c3664b.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"ar\",\"dir\":\"rtl\",\"children\":[\"$\",\"body\",null,{\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]}]]}],{\"children\":[\"reports\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"searchParams\":{},\"params\":{},\"promises\":[\"$@6\",\"$@7\"]}],null,[\"$\",\"$L8\",null,{\"children\":[\"$L9\",[\"$\",\"$La\",null,{\"promise\":\"$@b\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[[\"$\",\"$Lc\",null,{\"children\":\"$Ld\"}],null],[\"$\",\"$Le\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$f\",null,{\"fallback\":null,\"children\":\"$L10\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$11\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"6:{}\n7:\"$0:f:0:1:2:children:2:children:1:props:children:0:props:params\"\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n9:null\n"])</script><script>self.__next_f.push([1,"b:{\"metadata\":[[\"$\",\"title\",\"0\",{\"children\":\"نظام تقارير الزيارات الميدانية\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel\"}]],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"10:\"$b:metadata\"\n"])</script></body></html>
