@@ -1,5 +1,5 @@
 (()=>{var a={};a.id=22,a.ids=[22],a.modules={261:a=>{"use strict";a.exports=require("next/dist/shared/lib/router/utils/app-paths")},846:a=>{"use strict";a.exports=require("next/dist/compiled/next-server/app-page.runtime.prod.js")},1025:a=>{"use strict";a.exports=require("next/dist/server/app-render/dynamic-access-async-storage.external.js")},1179:(a,b,c)=>{Promise.resolve().then(c.bind(c,3402))},1795:(a,b,c)=>{Promise.resolve().then(c.bind(c,2915))},2443:(a,b,c)=>{"use strict";c.r(b),c.d(b,{GlobalError:()=>D.a,__next_app__:()=>J,handler:()=>L,pages:()=>I,routeModule:()=>K,tree:()=>H});var d=c(9754),e=c(9117),f=c(6595),g=c(2324),h=c(9326),i=c(8928),j=c(175),k=c(12),l=c(4290),m=c(2696),n=c(2802),o=c(7533),p=c(5229),q=c(2822),r=c(261),s=c(6453),t=c(2474),u=c(6713),v=c(1356),w=c(2685),x=c(6225),y=c(3446),z=c(2762),A=c(5742),B=c(6439),C=c(1170),D=c.n(C),E=c(2506),F=c(1203),G={};for(let a in E)0>["default","tree","pages","GlobalError","__next_app__","routeModule","handler"].indexOf(a)&&(G[a]=()=>E[a]);c.d(b,G);let H={children:["",{children:["reports",{children:["__PAGE__",{},{page:[()=>Promise.resolve().then(c.bind(c,3402)),"/Users/majedalmasoum/Downloads/field-visits-system/app/reports/page.tsx"]}]},{}]},{layout:[()=>Promise.resolve().then(c.bind(c,6953)),"/Users/majedalmasoum/Downloads/field-visits-system/app/layout.tsx"],"global-error":[()=>Promise.resolve().then(c.t.bind(c,1170,23)),"next/dist/client/components/builtin/global-error.js"],"not-found":[()=>Promise.resolve().then(c.t.bind(c,7028,23)),"next/dist/client/components/builtin/not-found.js"],forbidden:[()=>Promise.resolve().then(c.t.bind(c,461,23)),"next/dist/client/components/builtin/forbidden.js"],unauthorized:[()=>Promise.resolve().then(c.t.bind(c,2768,23)),"next/dist/client/components/builtin/unauthorized.js"]}]}.children,I=["/Users/majedalmasoum/Downloads/field-visits-system/app/reports/page.tsx"],J={require:c,loadChunk:()=>Promise.resolve()},K=new d.AppPageRouteModule({definition:{kind:e.RouteKind.APP_PAGE,page:"/reports/page",pathname:"/reports",bundlePath:"",filename:"",appPaths:[]},userland:{loaderTree:H},distDir:".next",relativeProjectDir:""});async function L(a,b,d){var C;let G="/reports/page";"/index"===G&&(G="/");let M=(0,h.getRequestMeta)(a,"postponed"),N=(0,h.getRequestMeta)(a,"minimalMode"),O=await K.prepare(a,b,{srcPage:G,multiZoneDraftMode:!1});if(!O)return b.statusCode=400,b.end("Bad Request"),null==d.waitUntil||d.waitUntil.call(d,Promise.resolve()),null;let{buildId:P,query:Q,params:R,parsedUrl:S,pageIsDynamic:T,buildManifest:U,nextFontManifest:V,reactLoadableManifest:W,serverActionsManifest:X,clientReferenceManifest:Y,subresourceIntegrityManifest:Z,prerenderManifest:$,isDraftMode:_,resolvedPathname:aa,revalidateOnlyGenerated:ab,routerServerContext:ac,nextConfig:ad,interceptionRoutePatterns:ae}=O,af=S.pathname||"/",ag=(0,r.normalizeAppPath)(G),{isOnDemandRevalidate:ah}=O,ai=K.match(af,$),aj=!!$.routes[aa],ak=!!(ai||aj||$.routes[ag]),al=a.headers["user-agent"]||"",am=(0,u.getBotType)(al),an=(0,p.isHtmlBotRequest)(a),ao=(0,h.getRequestMeta)(a,"isPrefetchRSCRequest")??"1"===a.headers[t.NEXT_ROUTER_PREFETCH_HEADER],ap=(0,h.getRequestMeta)(a,"isRSCRequest")??!!a.headers[t.RSC_HEADER],aq=(0,s.getIsPossibleServerAction)(a),ar=(0,m.checkIsAppPPREnabled)(ad.experimental.ppr)&&(null==(C=$.routes[ag]??$.dynamicRoutes[ag])?void 0:C.renderingMode)==="PARTIALLY_STATIC",as=!1,at=!1,au=ar?M:void 0,av=ar&&ap&&!ao,aw=(0,h.getRequestMeta)(a,"segmentPrefetchRSCRequest"),ax=!al||(0,p.shouldServeStreamingMetadata)(al,ad.htmlLimitedBots);an&&ar&&(ak=!1,ax=!1);let ay=!0===K.isDev||!ak||"string"==typeof M||av,az=an&&ar,aA=null;_||!ak||ay||aq||au||av||(aA=aa);let aB=aA;!aB&&K.isDev&&(aB=aa),K.isDev||_||!ak||!ap||av||(0,k.d)(a.headers);let aC={...E,tree:H,pages:I,GlobalError:D(),handler:L,routeModule:K,__next_app__:J};X&&Y&&(0,o.setReferenceManifestsSingleton)({page:G,clientReferenceManifest:Y,serverActionsManifest:X,serverModuleMap:(0,q.createServerModuleMap)({serverActionsManifest:X})});let aD=a.method||"GET",aE=(0,g.getTracer)(),aF=aE.getActiveScopeSpan();try{let f=K.getVaryHeader(aa,ae);b.setHeader("Vary",f);let k=async(c,d)=>{let e=new l.NodeNextRequest(a),f=new l.NodeNextResponse(b);return K.render(e,f,d).finally(()=>{if(!c)return;c.setAttributes({"http.status_code":b.statusCode,"next.rsc":!1});let d=aE.getRootSpanAttributes();if(!d)return;if(d.get("next.span_type")!==i.BaseServerSpan.handleRequest)return void console.warn(`Unexpected root span type '${d.get("next.span_type")}'. Please report this Next.js issue https://github.com/vercel/next.js`);let e=d.get("next.route");if(e){let a=`${aD} ${e}`;c.setAttributes({"next.route":e,"http.route":e,"next.span_name":a}),c.updateName(a)}else c.updateName(`${aD} ${a.url}`)})},m=async({span:e,postponed:f,fallbackRouteParams:g})=>{let i={query:Q,params:R,page:ag,sharedContext:{buildId:P},serverComponentsHmrCache:(0,h.getRequestMeta)(a,"serverComponentsHmrCache"),fallbackRouteParams:g,renderOpts:{App:()=>null,Document:()=>null,pageConfig:{},ComponentMod:aC,Component:(0,j.T)(aC),params:R,routeModule:K,page:G,postponed:f,shouldWaitOnAllReady:az,serveStreamingMetadata:ax,supportsDynamicResponse:"string"==typeof f||ay,buildManifest:U,nextFontManifest:V,reactLoadableManifest:W,subresourceIntegrityManifest:Z,serverActionsManifest:X,clientReferenceManifest:Y,setIsrStatus:null==ac?void 0:ac.setIsrStatus,dir:c(9902).join(process.cwd(),K.relativeProjectDir),isDraftMode:_,isRevalidate:ak&&!f&&!av,botType:am,isOnDemandRevalidate:ah,isPossibleServerAction:aq,assetPrefix:ad.assetPrefix,nextConfigOutput:ad.output,crossOrigin:ad.crossOrigin,trailingSlash:ad.trailingSlash,previewProps:$.preview,deploymentId:ad.deploymentId,enableTainting:ad.experimental.taint,htmlLimitedBots:ad.htmlLimitedBots,devtoolSegmentExplorer:ad.experimental.devtoolSegmentExplorer,reactMaxHeadersLength:ad.reactMaxHeadersLength,multiZoneDraftMode:!1,incrementalCache:(0,h.getRequestMeta)(a,"incrementalCache"),cacheLifeProfiles:ad.experimental.cacheLife,basePath:ad.basePath,serverActions:ad.experimental.serverActions,...as?{nextExport:!0,supportsDynamicResponse:!1,isStaticGeneration:!0,isRevalidate:!0,isDebugDynamicAccesses:as}:{},experimental:{isRoutePPREnabled:ar,expireTime:ad.expireTime,staleTimes:ad.experimental.staleTimes,cacheComponents:!!ad.experimental.cacheComponents,clientSegmentCache:!!ad.experimental.clientSegmentCache,clientParamParsing:!!ad.experimental.clientParamParsing,dynamicOnHover:!!ad.experimental.dynamicOnHover,inlineCss:!!ad.experimental.inlineCss,authInterrupts:!!ad.experimental.authInterrupts,clientTraceMetadata:ad.experimental.clientTraceMetadata||[]},waitUntil:d.waitUntil,onClose:a=>{b.on("close",a)},onAfterTaskError:()=>{},onInstrumentationRequestError:(b,c,d)=>K.onRequestError(a,b,d,ac),err:(0,h.getRequestMeta)(a,"invokeError"),dev:K.isDev}},l=await k(e,i),{metadata:m}=l,{cacheControl:n,headers:o={},fetchTags:p}=m;if(p&&(o[y.NEXT_CACHE_TAGS_HEADER]=p),a.fetchMetrics=m.fetchMetrics,ak&&(null==n?void 0:n.revalidate)===0&&!K.isDev&&!ar){let a=m.staticBailoutInfo,b=Object.defineProperty(Error(`Page changed from static to dynamic at runtime ${aa}${(null==a?void 0:a.description)?`, reason: ${a.description}`:""}
-see more here https://nextjs.org/docs/messages/app-static-to-dynamic-error`),"__NEXT_ERROR_CODE",{value:"E132",enumerable:!1,configurable:!0});if(null==a?void 0:a.stack){let c=a.stack;b.stack=b.message+c.substring(c.indexOf("\n"))}throw b}return{value:{kind:v.CachedRouteKind.APP_PAGE,html:l,headers:o,rscData:m.flightData,postponed:m.postponed,status:m.statusCode,segmentData:m.segmentData},cacheControl:n}},o=async({hasResolved:c,previousCacheEntry:f,isRevalidating:g,span:i})=>{let j,k=!1===K.isDev,l=c||b.writableEnded;if(ah&&ab&&!f&&!N)return(null==ac?void 0:ac.render404)?await ac.render404(a,b):(b.statusCode=404,b.end("This page could not be found")),null;if(ai&&(j=(0,w.parseFallbackField)(ai.fallback)),j===w.FallbackMode.PRERENDER&&(0,u.isBot)(al)&&(!ar||an)&&(j=w.FallbackMode.BLOCKING_STATIC_RENDER),(null==f?void 0:f.isStale)===-1&&(ah=!0),ah&&(j!==w.FallbackMode.NOT_FOUND||f)&&(j=w.FallbackMode.BLOCKING_STATIC_RENDER),!N&&j!==w.FallbackMode.BLOCKING_STATIC_RENDER&&aB&&!l&&!_&&T&&(k||!aj)){let b;if((k||ai)&&j===w.FallbackMode.NOT_FOUND)throw new B.NoFallbackError;if(ar&&!ap){let c="string"==typeof(null==ai?void 0:ai.fallback)?ai.fallback:k?ag:null;if(b=await K.handleResponse({cacheKey:c,req:a,nextConfig:ad,routeKind:e.RouteKind.APP_PAGE,isFallback:!0,prerenderManifest:$,isRoutePPREnabled:ar,responseGenerator:async()=>m({span:i,postponed:void 0,fallbackRouteParams:k||at?(0,n.u)(ag):null}),waitUntil:d.waitUntil}),null===b)return null;if(b)return delete b.cacheControl,b}}let o=ah||g||!au?void 0:au;if(as&&void 0!==o)return{cacheControl:{revalidate:1,expire:void 0},value:{kind:v.CachedRouteKind.PAGES,html:x.default.EMPTY,pageData:{},headers:void 0,status:void 0}};let p=T&&ar&&((0,h.getRequestMeta)(a,"renderFallbackShell")||at)?(0,n.u)(af):null;return m({span:i,postponed:o,fallbackRouteParams:p})},p=async c=>{var f,g,i,j,k;let l,n=await K.handleResponse({cacheKey:aA,responseGenerator:a=>o({span:c,...a}),routeKind:e.RouteKind.APP_PAGE,isOnDemandRevalidate:ah,isRoutePPREnabled:ar,req:a,nextConfig:ad,prerenderManifest:$,waitUntil:d.waitUntil});if(_&&b.setHeader("Cache-Control","private, no-cache, no-store, max-age=0, must-revalidate"),K.isDev&&b.setHeader("Cache-Control","no-store, must-revalidate"),!n){if(aA)throw Object.defineProperty(Error("invariant: cache entry required but not generated"),"__NEXT_ERROR_CODE",{value:"E62",enumerable:!1,configurable:!0});return null}if((null==(f=n.value)?void 0:f.kind)!==v.CachedRouteKind.APP_PAGE)throw Object.defineProperty(Error(`Invariant app-page handler received invalid cache entry ${null==(i=n.value)?void 0:i.kind}`),"__NEXT_ERROR_CODE",{value:"E707",enumerable:!1,configurable:!0});let p="string"==typeof n.value.postponed;ak&&!av&&(!p||ao)&&(N||b.setHeader("x-nextjs-cache",ah?"REVALIDATED":n.isMiss?"MISS":n.isStale?"STALE":"HIT"),b.setHeader(t.NEXT_IS_PRERENDER_HEADER,"1"));let{value:q}=n;if(au)l={revalidate:0,expire:void 0};else if(N&&ap&&!ao&&ar)l={revalidate:0,expire:void 0};else if(!K.isDev)if(_)l={revalidate:0,expire:void 0};else if(ak){if(n.cacheControl)if("number"==typeof n.cacheControl.revalidate){if(n.cacheControl.revalidate<1)throw Object.defineProperty(Error(`Invalid revalidate configuration provided: ${n.cacheControl.revalidate} < 1`),"__NEXT_ERROR_CODE",{value:"E22",enumerable:!1,configurable:!0});l={revalidate:n.cacheControl.revalidate,expire:(null==(j=n.cacheControl)?void 0:j.expire)??ad.expireTime}}else l={revalidate:y.CACHE_ONE_YEAR,expire:void 0}}else b.getHeader("Cache-Control")||(l={revalidate:0,expire:void 0});if(n.cacheControl=l,"string"==typeof aw&&(null==q?void 0:q.kind)===v.CachedRouteKind.APP_PAGE&&q.segmentData){b.setHeader(t.NEXT_DID_POSTPONE_HEADER,"2");let c=null==(k=q.headers)?void 0:k[y.NEXT_CACHE_TAGS_HEADER];N&&ak&&c&&"string"==typeof c&&b.setHeader(y.NEXT_CACHE_TAGS_HEADER,c);let d=q.segmentData.get(aw);return void 0!==d?(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:x.default.fromStatic(d,t.RSC_CONTENT_TYPE_HEADER),cacheControl:n.cacheControl}):(b.statusCode=204,(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:x.default.EMPTY,cacheControl:n.cacheControl}))}let r=(0,h.getRequestMeta)(a,"onCacheEntry");if(r&&await r({...n,value:{...n.value,kind:"PAGE"}},{url:(0,h.getRequestMeta)(a,"initURL")}))return null;if(p&&au)throw Object.defineProperty(Error("Invariant: postponed state should not be present on a resume request"),"__NEXT_ERROR_CODE",{value:"E396",enumerable:!1,configurable:!0});if(q.headers){let a={...q.headers};for(let[c,d]of(N&&ak||delete a[y.NEXT_CACHE_TAGS_HEADER],Object.entries(a)))if(void 0!==d)if(Array.isArray(d))for(let a of d)b.appendHeader(c,a);else"number"==typeof d&&(d=d.toString()),b.appendHeader(c,d)}let s=null==(g=q.headers)?void 0:g[y.NEXT_CACHE_TAGS_HEADER];if(N&&ak&&s&&"string"==typeof s&&b.setHeader(y.NEXT_CACHE_TAGS_HEADER,s),!q.status||ap&&ar||(b.statusCode=q.status),!N&&q.status&&F.RedirectStatusCode[q.status]&&ap&&(b.statusCode=200),p&&b.setHeader(t.NEXT_DID_POSTPONE_HEADER,"1"),ap&&!_){if(void 0===q.rscData){if(q.postponed)throw Object.defineProperty(Error("Invariant: Expected postponed to be undefined"),"__NEXT_ERROR_CODE",{value:"E372",enumerable:!1,configurable:!0});return(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:q.html,cacheControl:av?{revalidate:0,expire:void 0}:n.cacheControl})}return(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:x.default.fromStatic(q.rscData,t.RSC_CONTENT_TYPE_HEADER),cacheControl:n.cacheControl})}let u=q.html;if(!p||N||ap)return(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:u,cacheControl:n.cacheControl});if(as)return u.push(new ReadableStream({start(a){a.enqueue(z.ENCODED_TAGS.CLOSED.BODY_AND_HTML),a.close()}})),(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:u,cacheControl:{revalidate:0,expire:void 0}});let w=new TransformStream;return u.push(w.readable),m({span:c,postponed:q.postponed,fallbackRouteParams:null}).then(async a=>{var b,c;if(!a)throw Object.defineProperty(Error("Invariant: expected a result to be returned"),"__NEXT_ERROR_CODE",{value:"E463",enumerable:!1,configurable:!0});if((null==(b=a.value)?void 0:b.kind)!==v.CachedRouteKind.APP_PAGE)throw Object.defineProperty(Error(`Invariant: expected a page response, got ${null==(c=a.value)?void 0:c.kind}`),"__NEXT_ERROR_CODE",{value:"E305",enumerable:!1,configurable:!0});await a.value.html.pipeTo(w.writable)}).catch(a=>{w.writable.abort(a).catch(a=>{console.error("couldn't abort transformer",a)})}),(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:u,cacheControl:{revalidate:0,expire:void 0}})};if(!aF)return await aE.withPropagatedContext(a.headers,()=>aE.trace(i.BaseServerSpan.handleRequest,{spanName:`${aD} ${a.url}`,kind:g.SpanKind.SERVER,attributes:{"http.method":aD,"http.target":a.url}},p));await p(aF)}catch(b){throw b instanceof B.NoFallbackError||await K.onRequestError(a,b,{routerKind:"App Router",routePath:G,routeType:"render",revalidateReason:(0,f.c)({isRevalidate:ak,isOnDemandRevalidate:ah})},ac),b}}},2704:()=>{},2915:(a,b,c)=>{"use strict";let d,e;c.r(b),c.d(b,{default:()=>cQ});var f,g,h,i,j,k,l=c(1124),m=c(8301);function n(a,b){var c={};for(var d in a)Object.prototype.hasOwnProperty.call(a,d)&&0>b.indexOf(d)&&(c[d]=a[d]);if(null!=a&&"function"==typeof Object.getOwnPropertySymbols)for(var e=0,d=Object.getOwnPropertySymbols(a);e<d.length;e++)0>b.indexOf(d[e])&&Object.prototype.propertyIsEnumerable.call(a,d[e])&&(c[d[e]]=a[d[e]]);return c}Object.create;Object.create,"function"==typeof SuppressedError&&SuppressedError;class o extends Error{constructor(a,b="FunctionsError",c){super(a),this.name=b,this.context=c}}class p extends o{constructor(a){super("Failed to send a request to the Edge Function","FunctionsFetchError",a)}}class q extends o{constructor(a){super("Relay Error invoking the Edge Function","FunctionsRelayError",a)}}class r extends o{constructor(a){super("Edge Function returned a non-2xx status code","FunctionsHttpError",a)}}!function(a){a.Any="any",a.ApNortheast1="ap-northeast-1",a.ApNortheast2="ap-northeast-2",a.ApSouth1="ap-south-1",a.ApSoutheast1="ap-southeast-1",a.ApSoutheast2="ap-southeast-2",a.CaCentral1="ca-central-1",a.EuCentral1="eu-central-1",a.EuWest1="eu-west-1",a.EuWest2="eu-west-2",a.EuWest3="eu-west-3",a.SaEast1="sa-east-1",a.UsEast1="us-east-1",a.UsWest1="us-west-1",a.UsWest2="us-west-2"}(f||(f={}));class s{constructor(a,{headers:b={},customFetch:c,region:d=f.Any}={}){this.url=a,this.headers=b,this.region=d,this.fetch=(a=>a?(...b)=>a(...b):(...a)=>fetch(...a))(c)}setAuth(a){this.headers.Authorization=`Bearer ${a}`}invoke(a){var b,c,d,e;return b=this,c=arguments,d=void 0,e=function*(a,b={}){var c;let d,e;try{let f,{headers:g,method:h,body:i,signal:j,timeout:k}=b,l={},{region:m}=b;m||(m=this.region);let n=new URL(`${this.url}/${a}`);m&&"any"!==m&&(l["x-region"]=m,n.searchParams.set("forceFunctionRegion",m)),i&&(g&&!Object.prototype.hasOwnProperty.call(g,"Content-Type")||!g)?"undefined"!=typeof Blob&&i instanceof Blob||i instanceof ArrayBuffer?(l["Content-Type"]="application/octet-stream",f=i):"string"==typeof i?(l["Content-Type"]="text/plain",f=i):"undefined"!=typeof FormData&&i instanceof FormData?f=i:(l["Content-Type"]="application/json",f=JSON.stringify(i)):f=!i||"string"==typeof i||"undefined"!=typeof Blob&&i instanceof Blob||i instanceof ArrayBuffer||"undefined"!=typeof FormData&&i instanceof FormData?i:JSON.stringify(i);let o=j;k&&(e=new AbortController,d=setTimeout(()=>e.abort(),k),j?(o=e.signal,j.addEventListener("abort",()=>e.abort())):o=e.signal);let s=yield this.fetch(n.toString(),{method:h||"POST",headers:Object.assign(Object.assign(Object.assign({},l),this.headers),g),body:f,signal:o}).catch(a=>{throw new p(a)}),t=s.headers.get("x-relay-error");if(t&&"true"===t)throw new q(s);if(!s.ok)throw new r(s);let u=(null!=(c=s.headers.get("Content-Type"))?c:"text/plain").split(";")[0].trim();return{data:"application/json"===u?yield s.json():"application/octet-stream"===u||"application/pdf"===u?yield s.blob():"text/event-stream"===u?s:"multipart/form-data"===u?yield s.formData():yield s.text(),error:null,response:s}}catch(a){return{data:null,error:a,response:a instanceof r||a instanceof q?a.context:void 0}}finally{d&&clearTimeout(d)}},new(d||(d=Promise))(function(a,f){function g(a){try{i(e.next(a))}catch(a){f(a)}}function h(a){try{i(e.throw(a))}catch(a){f(a)}}function i(b){var c;b.done?a(b.value):((c=b.value)instanceof d?c:new d(function(a){a(c)})).then(g,h)}i((e=e.apply(b,c||[])).next())})}}var t=class extends Error{constructor(a){super(a.message),this.name="PostgrestError",this.details=a.details,this.hint=a.hint,this.code=a.code}},u=class{constructor(a){var b,c,d;this.shouldThrowOnError=!1,this.method=a.method,this.url=a.url,this.headers=new Headers(a.headers),this.schema=a.schema,this.body=a.body,this.shouldThrowOnError=null!=(b=a.shouldThrowOnError)&&b,this.signal=a.signal,this.isMaybeSingle=null!=(c=a.isMaybeSingle)&&c,this.urlLengthLimit=null!=(d=a.urlLengthLimit)?d:8e3,a.fetch?this.fetch=a.fetch:this.fetch=fetch}throwOnError(){return this.shouldThrowOnError=!0,this}setHeader(a,b){return this.headers=new Headers(this.headers),this.headers.set(a,b),this}then(a,b){var c=this;void 0===this.schema||(["GET","HEAD"].includes(this.method)?this.headers.set("Accept-Profile",this.schema):this.headers.set("Content-Profile",this.schema)),"GET"!==this.method&&"HEAD"!==this.method&&this.headers.set("Content-Type","application/json");let d=(0,this.fetch)(this.url.toString(),{method:this.method,headers:this.headers,body:JSON.stringify(this.body),signal:this.signal}).then(async a=>{let b=null,d=null,e=null,f=a.status,g=a.statusText;if(a.ok){var h,i,j;if("HEAD"!==c.method){let b=await a.text();""===b||(d="text/csv"===c.headers.get("Accept")||c.headers.get("Accept")&&(null==(j=c.headers.get("Accept"))?void 0:j.includes("application/vnd.pgrst.plan+text"))?b:JSON.parse(b))}let k=null==(h=c.headers.get("Prefer"))?void 0:h.match(/count=(exact|planned|estimated)/),l=null==(i=a.headers.get("content-range"))?void 0:i.split("/");k&&l&&l.length>1&&(e=parseInt(l[1])),c.isMaybeSingle&&Array.isArray(d)&&(d.length>1?(b={code:"PGRST116",details:`Results contain ${d.length} rows, application/vnd.pgrst.object+json requires 1 row`,hint:null,message:"JSON object requested, multiple (or no) rows returned"},d=null,e=null,f=406,g="Not Acceptable"):d=1===d.length?d[0]:null)}else{let e=await a.text();try{b=JSON.parse(e),Array.isArray(b)&&404===a.status&&(d=[],b=null,f=200,g="OK")}catch(c){404===a.status&&""===e?(f=204,g="No Content"):b={message:e}}if(b&&c.shouldThrowOnError)throw new t(b)}return{error:b,data:d,count:e,status:f,statusText:g}});return this.shouldThrowOnError||(d=d.catch(a=>{var b,c,d,e,f,g;let h="",i="",j="",k=null==a?void 0:a.cause;if(k){let b=null!=(c=null==k?void 0:k.message)?c:"",g=null!=(d=null==k?void 0:k.code)?d:"";h=`${null!=(e=null==a?void 0:a.name)?e:"FetchError"}: ${null==a?void 0:a.message}
+see more here https://nextjs.org/docs/messages/app-static-to-dynamic-error`),"__NEXT_ERROR_CODE",{value:"E132",enumerable:!1,configurable:!0});if(null==a?void 0:a.stack){let c=a.stack;b.stack=b.message+c.substring(c.indexOf("\n"))}throw b}return{value:{kind:v.CachedRouteKind.APP_PAGE,html:l,headers:o,rscData:m.flightData,postponed:m.postponed,status:m.statusCode,segmentData:m.segmentData},cacheControl:n}},o=async({hasResolved:c,previousCacheEntry:f,isRevalidating:g,span:i})=>{let j,k=!1===K.isDev,l=c||b.writableEnded;if(ah&&ab&&!f&&!N)return(null==ac?void 0:ac.render404)?await ac.render404(a,b):(b.statusCode=404,b.end("This page could not be found")),null;if(ai&&(j=(0,w.parseFallbackField)(ai.fallback)),j===w.FallbackMode.PRERENDER&&(0,u.isBot)(al)&&(!ar||an)&&(j=w.FallbackMode.BLOCKING_STATIC_RENDER),(null==f?void 0:f.isStale)===-1&&(ah=!0),ah&&(j!==w.FallbackMode.NOT_FOUND||f)&&(j=w.FallbackMode.BLOCKING_STATIC_RENDER),!N&&j!==w.FallbackMode.BLOCKING_STATIC_RENDER&&aB&&!l&&!_&&T&&(k||!aj)){let b;if((k||ai)&&j===w.FallbackMode.NOT_FOUND)throw new B.NoFallbackError;if(ar&&!ap){let c="string"==typeof(null==ai?void 0:ai.fallback)?ai.fallback:k?ag:null;if(b=await K.handleResponse({cacheKey:c,req:a,nextConfig:ad,routeKind:e.RouteKind.APP_PAGE,isFallback:!0,prerenderManifest:$,isRoutePPREnabled:ar,responseGenerator:async()=>m({span:i,postponed:void 0,fallbackRouteParams:k||at?(0,n.u)(ag):null}),waitUntil:d.waitUntil}),null===b)return null;if(b)return delete b.cacheControl,b}}let o=ah||g||!au?void 0:au;if(as&&void 0!==o)return{cacheControl:{revalidate:1,expire:void 0},value:{kind:v.CachedRouteKind.PAGES,html:x.default.EMPTY,pageData:{},headers:void 0,status:void 0}};let p=T&&ar&&((0,h.getRequestMeta)(a,"renderFallbackShell")||at)?(0,n.u)(af):null;return m({span:i,postponed:o,fallbackRouteParams:p})},p=async c=>{var f,g,i,j,k;let l,n=await K.handleResponse({cacheKey:aA,responseGenerator:a=>o({span:c,...a}),routeKind:e.RouteKind.APP_PAGE,isOnDemandRevalidate:ah,isRoutePPREnabled:ar,req:a,nextConfig:ad,prerenderManifest:$,waitUntil:d.waitUntil});if(_&&b.setHeader("Cache-Control","private, no-cache, no-store, max-age=0, must-revalidate"),K.isDev&&b.setHeader("Cache-Control","no-store, must-revalidate"),!n){if(aA)throw Object.defineProperty(Error("invariant: cache entry required but not generated"),"__NEXT_ERROR_CODE",{value:"E62",enumerable:!1,configurable:!0});return null}if((null==(f=n.value)?void 0:f.kind)!==v.CachedRouteKind.APP_PAGE)throw Object.defineProperty(Error(`Invariant app-page handler received invalid cache entry ${null==(i=n.value)?void 0:i.kind}`),"__NEXT_ERROR_CODE",{value:"E707",enumerable:!1,configurable:!0});let p="string"==typeof n.value.postponed;ak&&!av&&(!p||ao)&&(N||b.setHeader("x-nextjs-cache",ah?"REVALIDATED":n.isMiss?"MISS":n.isStale?"STALE":"HIT"),b.setHeader(t.NEXT_IS_PRERENDER_HEADER,"1"));let{value:q}=n;if(au)l={revalidate:0,expire:void 0};else if(N&&ap&&!ao&&ar)l={revalidate:0,expire:void 0};else if(!K.isDev)if(_)l={revalidate:0,expire:void 0};else if(ak){if(n.cacheControl)if("number"==typeof n.cacheControl.revalidate){if(n.cacheControl.revalidate<1)throw Object.defineProperty(Error(`Invalid revalidate configuration provided: ${n.cacheControl.revalidate} < 1`),"__NEXT_ERROR_CODE",{value:"E22",enumerable:!1,configurable:!0});l={revalidate:n.cacheControl.revalidate,expire:(null==(j=n.cacheControl)?void 0:j.expire)??ad.expireTime}}else l={revalidate:y.CACHE_ONE_YEAR,expire:void 0}}else b.getHeader("Cache-Control")||(l={revalidate:0,expire:void 0});if(n.cacheControl=l,"string"==typeof aw&&(null==q?void 0:q.kind)===v.CachedRouteKind.APP_PAGE&&q.segmentData){b.setHeader(t.NEXT_DID_POSTPONE_HEADER,"2");let c=null==(k=q.headers)?void 0:k[y.NEXT_CACHE_TAGS_HEADER];N&&ak&&c&&"string"==typeof c&&b.setHeader(y.NEXT_CACHE_TAGS_HEADER,c);let d=q.segmentData.get(aw);return void 0!==d?(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:x.default.fromStatic(d,t.RSC_CONTENT_TYPE_HEADER),cacheControl:n.cacheControl}):(b.statusCode=204,(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:x.default.EMPTY,cacheControl:n.cacheControl}))}let r=(0,h.getRequestMeta)(a,"onCacheEntry");if(r&&await r({...n,value:{...n.value,kind:"PAGE"}},{url:(0,h.getRequestMeta)(a,"initURL")}))return null;if(p&&au)throw Object.defineProperty(Error("Invariant: postponed state should not be present on a resume request"),"__NEXT_ERROR_CODE",{value:"E396",enumerable:!1,configurable:!0});if(q.headers){let a={...q.headers};for(let[c,d]of(N&&ak||delete a[y.NEXT_CACHE_TAGS_HEADER],Object.entries(a)))if(void 0!==d)if(Array.isArray(d))for(let a of d)b.appendHeader(c,a);else"number"==typeof d&&(d=d.toString()),b.appendHeader(c,d)}let s=null==(g=q.headers)?void 0:g[y.NEXT_CACHE_TAGS_HEADER];if(N&&ak&&s&&"string"==typeof s&&b.setHeader(y.NEXT_CACHE_TAGS_HEADER,s),!q.status||ap&&ar||(b.statusCode=q.status),!N&&q.status&&F.RedirectStatusCode[q.status]&&ap&&(b.statusCode=200),p&&b.setHeader(t.NEXT_DID_POSTPONE_HEADER,"1"),ap&&!_){if(void 0===q.rscData){if(q.postponed)throw Object.defineProperty(Error("Invariant: Expected postponed to be undefined"),"__NEXT_ERROR_CODE",{value:"E372",enumerable:!1,configurable:!0});return(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:q.html,cacheControl:av?{revalidate:0,expire:void 0}:n.cacheControl})}return(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:x.default.fromStatic(q.rscData,t.RSC_CONTENT_TYPE_HEADER),cacheControl:n.cacheControl})}let u=q.html;if(!p||N||ap)return(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:u,cacheControl:n.cacheControl});if(as)return u.push(new ReadableStream({start(a){a.enqueue(z.ENCODED_TAGS.CLOSED.BODY_AND_HTML),a.close()}})),(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:u,cacheControl:{revalidate:0,expire:void 0}});let w=new TransformStream;return u.push(w.readable),m({span:c,postponed:q.postponed,fallbackRouteParams:null}).then(async a=>{var b,c;if(!a)throw Object.defineProperty(Error("Invariant: expected a result to be returned"),"__NEXT_ERROR_CODE",{value:"E463",enumerable:!1,configurable:!0});if((null==(b=a.value)?void 0:b.kind)!==v.CachedRouteKind.APP_PAGE)throw Object.defineProperty(Error(`Invariant: expected a page response, got ${null==(c=a.value)?void 0:c.kind}`),"__NEXT_ERROR_CODE",{value:"E305",enumerable:!1,configurable:!0});await a.value.html.pipeTo(w.writable)}).catch(a=>{w.writable.abort(a).catch(a=>{console.error("couldn't abort transformer",a)})}),(0,A.sendRenderResult)({req:a,res:b,generateEtags:ad.generateEtags,poweredByHeader:ad.poweredByHeader,result:u,cacheControl:{revalidate:0,expire:void 0}})};if(!aF)return await aE.withPropagatedContext(a.headers,()=>aE.trace(i.BaseServerSpan.handleRequest,{spanName:`${aD} ${a.url}`,kind:g.SpanKind.SERVER,attributes:{"http.method":aD,"http.target":a.url}},p));await p(aF)}catch(b){throw b instanceof B.NoFallbackError||await K.onRequestError(a,b,{routerKind:"App Router",routePath:G,routeType:"render",revalidateReason:(0,f.c)({isRevalidate:ak,isOnDemandRevalidate:ah})},ac),b}}},2704:()=>{},2915:(a,b,c)=>{"use strict";let d,e;c.r(b),c.d(b,{default:()=>cT});var f,g,h,i,j,k,l=c(1124),m=c(8301);function n(a,b){var c={};for(var d in a)Object.prototype.hasOwnProperty.call(a,d)&&0>b.indexOf(d)&&(c[d]=a[d]);if(null!=a&&"function"==typeof Object.getOwnPropertySymbols)for(var e=0,d=Object.getOwnPropertySymbols(a);e<d.length;e++)0>b.indexOf(d[e])&&Object.prototype.propertyIsEnumerable.call(a,d[e])&&(c[d[e]]=a[d[e]]);return c}Object.create;Object.create,"function"==typeof SuppressedError&&SuppressedError;class o extends Error{constructor(a,b="FunctionsError",c){super(a),this.name=b,this.context=c}}class p extends o{constructor(a){super("Failed to send a request to the Edge Function","FunctionsFetchError",a)}}class q extends o{constructor(a){super("Relay Error invoking the Edge Function","FunctionsRelayError",a)}}class r extends o{constructor(a){super("Edge Function returned a non-2xx status code","FunctionsHttpError",a)}}!function(a){a.Any="any",a.ApNortheast1="ap-northeast-1",a.ApNortheast2="ap-northeast-2",a.ApSouth1="ap-south-1",a.ApSoutheast1="ap-southeast-1",a.ApSoutheast2="ap-southeast-2",a.CaCentral1="ca-central-1",a.EuCentral1="eu-central-1",a.EuWest1="eu-west-1",a.EuWest2="eu-west-2",a.EuWest3="eu-west-3",a.SaEast1="sa-east-1",a.UsEast1="us-east-1",a.UsWest1="us-west-1",a.UsWest2="us-west-2"}(f||(f={}));class s{constructor(a,{headers:b={},customFetch:c,region:d=f.Any}={}){this.url=a,this.headers=b,this.region=d,this.fetch=(a=>a?(...b)=>a(...b):(...a)=>fetch(...a))(c)}setAuth(a){this.headers.Authorization=`Bearer ${a}`}invoke(a){var b,c,d,e;return b=this,c=arguments,d=void 0,e=function*(a,b={}){var c;let d,e;try{let f,{headers:g,method:h,body:i,signal:j,timeout:k}=b,l={},{region:m}=b;m||(m=this.region);let n=new URL(`${this.url}/${a}`);m&&"any"!==m&&(l["x-region"]=m,n.searchParams.set("forceFunctionRegion",m)),i&&(g&&!Object.prototype.hasOwnProperty.call(g,"Content-Type")||!g)?"undefined"!=typeof Blob&&i instanceof Blob||i instanceof ArrayBuffer?(l["Content-Type"]="application/octet-stream",f=i):"string"==typeof i?(l["Content-Type"]="text/plain",f=i):"undefined"!=typeof FormData&&i instanceof FormData?f=i:(l["Content-Type"]="application/json",f=JSON.stringify(i)):f=!i||"string"==typeof i||"undefined"!=typeof Blob&&i instanceof Blob||i instanceof ArrayBuffer||"undefined"!=typeof FormData&&i instanceof FormData?i:JSON.stringify(i);let o=j;k&&(e=new AbortController,d=setTimeout(()=>e.abort(),k),j?(o=e.signal,j.addEventListener("abort",()=>e.abort())):o=e.signal);let s=yield this.fetch(n.toString(),{method:h||"POST",headers:Object.assign(Object.assign(Object.assign({},l),this.headers),g),body:f,signal:o}).catch(a=>{throw new p(a)}),t=s.headers.get("x-relay-error");if(t&&"true"===t)throw new q(s);if(!s.ok)throw new r(s);let u=(null!=(c=s.headers.get("Content-Type"))?c:"text/plain").split(";")[0].trim();return{data:"application/json"===u?yield s.json():"application/octet-stream"===u||"application/pdf"===u?yield s.blob():"text/event-stream"===u?s:"multipart/form-data"===u?yield s.formData():yield s.text(),error:null,response:s}}catch(a){return{data:null,error:a,response:a instanceof r||a instanceof q?a.context:void 0}}finally{d&&clearTimeout(d)}},new(d||(d=Promise))(function(a,f){function g(a){try{i(e.next(a))}catch(a){f(a)}}function h(a){try{i(e.throw(a))}catch(a){f(a)}}function i(b){var c;b.done?a(b.value):((c=b.value)instanceof d?c:new d(function(a){a(c)})).then(g,h)}i((e=e.apply(b,c||[])).next())})}}var t=class extends Error{constructor(a){super(a.message),this.name="PostgrestError",this.details=a.details,this.hint=a.hint,this.code=a.code}},u=class{constructor(a){var b,c,d;this.shouldThrowOnError=!1,this.method=a.method,this.url=a.url,this.headers=new Headers(a.headers),this.schema=a.schema,this.body=a.body,this.shouldThrowOnError=null!=(b=a.shouldThrowOnError)&&b,this.signal=a.signal,this.isMaybeSingle=null!=(c=a.isMaybeSingle)&&c,this.urlLengthLimit=null!=(d=a.urlLengthLimit)?d:8e3,a.fetch?this.fetch=a.fetch:this.fetch=fetch}throwOnError(){return this.shouldThrowOnError=!0,this}setHeader(a,b){return this.headers=new Headers(this.headers),this.headers.set(a,b),this}then(a,b){var c=this;void 0===this.schema||(["GET","HEAD"].includes(this.method)?this.headers.set("Accept-Profile",this.schema):this.headers.set("Content-Profile",this.schema)),"GET"!==this.method&&"HEAD"!==this.method&&this.headers.set("Content-Type","application/json");let d=(0,this.fetch)(this.url.toString(),{method:this.method,headers:this.headers,body:JSON.stringify(this.body),signal:this.signal}).then(async a=>{let b=null,d=null,e=null,f=a.status,g=a.statusText;if(a.ok){var h,i,j;if("HEAD"!==c.method){let b=await a.text();""===b||(d="text/csv"===c.headers.get("Accept")||c.headers.get("Accept")&&(null==(j=c.headers.get("Accept"))?void 0:j.includes("application/vnd.pgrst.plan+text"))?b:JSON.parse(b))}let k=null==(h=c.headers.get("Prefer"))?void 0:h.match(/count=(exact|planned|estimated)/),l=null==(i=a.headers.get("content-range"))?void 0:i.split("/");k&&l&&l.length>1&&(e=parseInt(l[1])),c.isMaybeSingle&&Array.isArray(d)&&(d.length>1?(b={code:"PGRST116",details:`Results contain ${d.length} rows, application/vnd.pgrst.object+json requires 1 row`,hint:null,message:"JSON object requested, multiple (or no) rows returned"},d=null,e=null,f=406,g="Not Acceptable"):d=1===d.length?d[0]:null)}else{let e=await a.text();try{b=JSON.parse(e),Array.isArray(b)&&404===a.status&&(d=[],b=null,f=200,g="OK")}catch(c){404===a.status&&""===e?(f=204,g="No Content"):b={message:e}}if(b&&c.shouldThrowOnError)throw new t(b)}return{error:b,data:d,count:e,status:f,statusText:g}});return this.shouldThrowOnError||(d=d.catch(a=>{var b,c,d,e,f,g;let h="",i="",j="",k=null==a?void 0:a.cause;if(k){let b=null!=(c=null==k?void 0:k.message)?c:"",g=null!=(d=null==k?void 0:k.code)?d:"";h=`${null!=(e=null==a?void 0:a.name)?e:"FetchError"}: ${null==a?void 0:a.message}
 
 Caused by: ${null!=(f=null==k?void 0:k.name)?f:"Error"}: ${b}`,g&&(h+=` (${g})`),(null==k?void 0:k.stack)&&(h+=`
 ${k.stack}`)}else h=null!=(g=null==a?void 0:a.stack)?g:"";let l=this.url.toString().length;return(null==a?void 0:a.name)==="AbortError"||(null==a?void 0:a.code)==="ABORT_ERR"?(j="",i="Request was aborted (timeout or manual cancellation)",l>this.urlLengthLimit&&(i+=`. Note: Your request URL is ${l} characters, which may exceed server limits. If selecting many fields, consider using views. If filtering with large arrays (e.g., .in('id', [many IDs])), consider using an RPC function to pass values server-side.`)):((null==k?void 0:k.name)==="HeadersOverflowError"||(null==k?void 0:k.code)==="UND_ERR_HEADERS_OVERFLOW")&&(j="",i="HTTP headers exceeded server limits (typically 16KB)",l>this.urlLengthLimit&&(i+=`. Your request URL is ${l} characters. If selecting many fields, consider using views. If filtering with large arrays (e.g., .in('id', [200+ IDs])), consider using an RPC function instead.`)),{error:{message:`${null!=(b=null==a?void 0:a.name)?b:"FetchError"}: ${null==a?void 0:a.message}`,details:h,hint:i,code:j},data:null,count:null,status:0,statusText:""}})),d.then(a,b)}returns(){return this}overrideTypes(){return this}},v=class extends u{select(a){let b=!1,c=(null!=a?a:"*").split("").map(a=>/\s/.test(a)&&!b?"":('"'===a&&(b=!b),a)).join("");return this.url.searchParams.set("select",c),this.headers.append("Prefer","return=representation"),this}order(a,{ascending:b=!0,nullsFirst:c,foreignTable:d,referencedTable:e=d}={}){let f=e?`${e}.order`:"order",g=this.url.searchParams.get(f);return this.url.searchParams.set(f,`${g?`${g},`:""}${a}.${b?"asc":"desc"}${void 0===c?"":c?".nullsfirst":".nullslast"}`),this}limit(a,{foreignTable:b,referencedTable:c=b}={}){let d=void 0===c?"limit":`${c}.limit`;return this.url.searchParams.set(d,`${a}`),this}range(a,b,{foreignTable:c,referencedTable:d=c}={}){let e=void 0===d?"offset":`${d}.offset`,f=void 0===d?"limit":`${d}.limit`;return this.url.searchParams.set(e,`${a}`),this.url.searchParams.set(f,`${b-a+1}`),this}abortSignal(a){return this.signal=a,this}single(){return this.headers.set("Accept","application/vnd.pgrst.object+json"),this}maybeSingle(){return this.isMaybeSingle=!0,this}csv(){return this.headers.set("Accept","text/csv"),this}geojson(){return this.headers.set("Accept","application/geo+json"),this}explain({analyze:a=!1,verbose:b=!1,settings:c=!1,buffers:d=!1,wal:e=!1,format:f="text"}={}){var g;let h=[a?"analyze":null,b?"verbose":null,c?"settings":null,d?"buffers":null,e?"wal":null].filter(Boolean).join("|"),i=null!=(g=this.headers.get("Accept"))?g:"application/json";return this.headers.set("Accept",`application/vnd.pgrst.plan+${f}; for="${i}"; options=${h};`),this}rollback(){return this.headers.append("Prefer","tx=rollback"),this}returns(){return this}maxAffected(a){return this.headers.append("Prefer","handling=strict"),this.headers.append("Prefer",`max-affected=${a}`),this}};let w=RegExp("[,()]");var x=class extends v{eq(a,b){return this.url.searchParams.append(a,`eq.${b}`),this}neq(a,b){return this.url.searchParams.append(a,`neq.${b}`),this}gt(a,b){return this.url.searchParams.append(a,`gt.${b}`),this}gte(a,b){return this.url.searchParams.append(a,`gte.${b}`),this}lt(a,b){return this.url.searchParams.append(a,`lt.${b}`),this}lte(a,b){return this.url.searchParams.append(a,`lte.${b}`),this}like(a,b){return this.url.searchParams.append(a,`like.${b}`),this}likeAllOf(a,b){return this.url.searchParams.append(a,`like(all).{${b.join(",")}}`),this}likeAnyOf(a,b){return this.url.searchParams.append(a,`like(any).{${b.join(",")}}`),this}ilike(a,b){return this.url.searchParams.append(a,`ilike.${b}`),this}ilikeAllOf(a,b){return this.url.searchParams.append(a,`ilike(all).{${b.join(",")}}`),this}ilikeAnyOf(a,b){return this.url.searchParams.append(a,`ilike(any).{${b.join(",")}}`),this}regexMatch(a,b){return this.url.searchParams.append(a,`match.${b}`),this}regexIMatch(a,b){return this.url.searchParams.append(a,`imatch.${b}`),this}is(a,b){return this.url.searchParams.append(a,`is.${b}`),this}isDistinct(a,b){return this.url.searchParams.append(a,`isdistinct.${b}`),this}in(a,b){let c=Array.from(new Set(b)).map(a=>"string"==typeof a&&w.test(a)?`"${a}"`:`${a}`).join(",");return this.url.searchParams.append(a,`in.(${c})`),this}notIn(a,b){let c=Array.from(new Set(b)).map(a=>"string"==typeof a&&w.test(a)?`"${a}"`:`${a}`).join(",");return this.url.searchParams.append(a,`not.in.(${c})`),this}contains(a,b){return"string"==typeof b?this.url.searchParams.append(a,`cs.${b}`):Array.isArray(b)?this.url.searchParams.append(a,`cs.{${b.join(",")}}`):this.url.searchParams.append(a,`cs.${JSON.stringify(b)}`),this}containedBy(a,b){return"string"==typeof b?this.url.searchParams.append(a,`cd.${b}`):Array.isArray(b)?this.url.searchParams.append(a,`cd.{${b.join(",")}}`):this.url.searchParams.append(a,`cd.${JSON.stringify(b)}`),this}rangeGt(a,b){return this.url.searchParams.append(a,`sr.${b}`),this}rangeGte(a,b){return this.url.searchParams.append(a,`nxl.${b}`),this}rangeLt(a,b){return this.url.searchParams.append(a,`sl.${b}`),this}rangeLte(a,b){return this.url.searchParams.append(a,`nxr.${b}`),this}rangeAdjacent(a,b){return this.url.searchParams.append(a,`adj.${b}`),this}overlaps(a,b){return"string"==typeof b?this.url.searchParams.append(a,`ov.${b}`):this.url.searchParams.append(a,`ov.{${b.join(",")}}`),this}textSearch(a,b,{config:c,type:d}={}){let e="";"plain"===d?e="pl":"phrase"===d?e="ph":"websearch"===d&&(e="w");let f=void 0===c?"":`(${c})`;return this.url.searchParams.append(a,`${e}fts${f}.${b}`),this}match(a){return Object.entries(a).filter(([a,b])=>void 0!==b).forEach(([a,b])=>{this.url.searchParams.append(a,`eq.${b}`)}),this}not(a,b,c){return this.url.searchParams.append(a,`not.${b}.${c}`),this}or(a,{foreignTable:b,referencedTable:c=b}={}){let d=c?`${c}.or`:"or";return this.url.searchParams.append(d,`(${a})`),this}filter(a,b,c){return this.url.searchParams.append(a,`${b}.${c}`),this}},y=class{constructor(a,{headers:b={},schema:c,fetch:d,urlLengthLimit:e=8e3}){this.url=a,this.headers=new Headers(b),this.schema=c,this.fetch=d,this.urlLengthLimit=e}cloneRequestState(){return{url:new URL(this.url.toString()),headers:new Headers(this.headers)}}select(a,b){let{head:c=!1,count:d}=null!=b?b:{},e=!1,f=(null!=a?a:"*").split("").map(a=>/\s/.test(a)&&!e?"":('"'===a&&(e=!e),a)).join(""),{url:g,headers:h}=this.cloneRequestState();return g.searchParams.set("select",f),d&&h.append("Prefer",`count=${d}`),new x({method:c?"HEAD":"GET",url:g,headers:h,schema:this.schema,fetch:this.fetch,urlLengthLimit:this.urlLengthLimit})}insert(a,{count:b,defaultToNull:c=!0}={}){var d;let{url:e,headers:f}=this.cloneRequestState();if(b&&f.append("Prefer",`count=${b}`),c||f.append("Prefer","missing=default"),Array.isArray(a)){let b=a.reduce((a,b)=>a.concat(Object.keys(b)),[]);if(b.length>0){let a=[...new Set(b)].map(a=>`"${a}"`);e.searchParams.set("columns",a.join(","))}}return new x({method:"POST",url:e,headers:f,schema:this.schema,body:a,fetch:null!=(d=this.fetch)?d:fetch,urlLengthLimit:this.urlLengthLimit})}upsert(a,{onConflict:b,ignoreDuplicates:c=!1,count:d,defaultToNull:e=!0}={}){var f;let{url:g,headers:h}=this.cloneRequestState();if(h.append("Prefer",`resolution=${c?"ignore":"merge"}-duplicates`),void 0!==b&&g.searchParams.set("on_conflict",b),d&&h.append("Prefer",`count=${d}`),e||h.append("Prefer","missing=default"),Array.isArray(a)){let b=a.reduce((a,b)=>a.concat(Object.keys(b)),[]);if(b.length>0){let a=[...new Set(b)].map(a=>`"${a}"`);g.searchParams.set("columns",a.join(","))}}return new x({method:"POST",url:g,headers:h,schema:this.schema,body:a,fetch:null!=(f=this.fetch)?f:fetch,urlLengthLimit:this.urlLengthLimit})}update(a,{count:b}={}){var c;let{url:d,headers:e}=this.cloneRequestState();return b&&e.append("Prefer",`count=${b}`),new x({method:"PATCH",url:d,headers:e,schema:this.schema,body:a,fetch:null!=(c=this.fetch)?c:fetch,urlLengthLimit:this.urlLengthLimit})}delete({count:a}={}){var b;let{url:c,headers:d}=this.cloneRequestState();return a&&d.append("Prefer",`count=${a}`),new x({method:"DELETE",url:c,headers:d,schema:this.schema,fetch:null!=(b=this.fetch)?b:fetch,urlLengthLimit:this.urlLengthLimit})}};function z(a){return(z="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(a){return typeof a}:function(a){return a&&"function"==typeof Symbol&&a.constructor===Symbol&&a!==Symbol.prototype?"symbol":typeof a})(a)}function A(a,b){var c=Object.keys(a);if(Object.getOwnPropertySymbols){var d=Object.getOwnPropertySymbols(a);b&&(d=d.filter(function(b){return Object.getOwnPropertyDescriptor(a,b).enumerable})),c.push.apply(c,d)}return c}function B(a){for(var b=1;b<arguments.length;b++){var c=null!=arguments[b]?arguments[b]:{};b%2?A(Object(c),!0).forEach(function(b){!function(a,b,c){var d;(d=function(a,b){if("object"!=z(a)||!a)return a;var c=a[Symbol.toPrimitive];if(void 0!==c){var d=c.call(a,b||"default");if("object"!=z(d))return d;throw TypeError("@@toPrimitive must return a primitive value.")}return("string"===b?String:Number)(a)}(b,"string"),(b="symbol"==z(d)?d:d+"")in a)?Object.defineProperty(a,b,{value:c,enumerable:!0,configurable:!0,writable:!0}):a[b]=c}(a,b,c[b])}):Object.getOwnPropertyDescriptors?Object.defineProperties(a,Object.getOwnPropertyDescriptors(c)):A(Object(c)).forEach(function(b){Object.defineProperty(a,b,Object.getOwnPropertyDescriptor(c,b))})}return a}var C=class a{constructor(a,{headers:b={},schema:c,fetch:d,timeout:e,urlLengthLimit:f=8e3}={}){this.url=a,this.headers=new Headers(b),this.schemaName=c,this.urlLengthLimit=f;let g=null!=d?d:globalThis.fetch;void 0!==e&&e>0?this.fetch=(a,b)=>{let c=new AbortController,d=setTimeout(()=>c.abort(),e),f=null==b?void 0:b.signal;if(f){if(f.aborted)return clearTimeout(d),g(a,b);let e=()=>{clearTimeout(d),c.abort()};return f.addEventListener("abort",e,{once:!0}),g(a,B(B({},b),{},{signal:c.signal})).finally(()=>{clearTimeout(d),f.removeEventListener("abort",e)})}return g(a,B(B({},b),{},{signal:c.signal})).finally(()=>clearTimeout(d))}:this.fetch=g}from(a){if(!a||"string"!=typeof a||""===a.trim())throw Error("Invalid relation name: relation must be a non-empty string.");return new y(new URL(`${this.url}/${a}`),{headers:new Headers(this.headers),schema:this.schemaName,fetch:this.fetch,urlLengthLimit:this.urlLengthLimit})}schema(b){return new a(this.url,{headers:this.headers,schema:b,fetch:this.fetch,urlLengthLimit:this.urlLengthLimit})}rpc(a,b={},{head:c=!1,get:d=!1,count:e}={}){var f;let g,h,i=new URL(`${this.url}/rpc/${a}`),j=a=>null!==a&&"object"==typeof a&&(!Array.isArray(a)||a.some(j)),k=c&&Object.values(b).some(j);k?(g="POST",h=b):c||d?(g=c?"HEAD":"GET",Object.entries(b).filter(([a,b])=>void 0!==b).map(([a,b])=>[a,Array.isArray(b)?`{${b.join(",")}}`:`${b}`]).forEach(([a,b])=>{i.searchParams.append(a,b)})):(g="POST",h=b);let l=new Headers(this.headers);return k?l.set("Prefer",e?`count=${e},return=minimal`:"return=minimal"):e&&l.set("Prefer",`count=${e}`),new x({method:g,url:i,headers:l,schema:this.schemaName,body:h,fetch:null!=(f=this.fetch)?f:fetch,urlLengthLimit:this.urlLengthLimit})}};class D{constructor(){}static detectEnvironment(){var a;if("undefined"!=typeof WebSocket)return{type:"native",constructor:WebSocket};if("undefined"!=typeof globalThis&&void 0!==globalThis.WebSocket)return{type:"native",constructor:globalThis.WebSocket};if("undefined"!=typeof global&&void 0!==global.WebSocket)return{type:"native",constructor:global.WebSocket};if("undefined"!=typeof globalThis&&void 0!==globalThis.WebSocketPair&&void 0===globalThis.WebSocket)return{type:"cloudflare",error:"Cloudflare Workers detected. WebSocket clients are not supported in Cloudflare Workers.",workaround:"Use Cloudflare Workers WebSocket API for server-side WebSocket handling, or deploy to a different runtime."};if("undefined"!=typeof globalThis&&globalThis.EdgeRuntime||"undefined"!=typeof navigator&&(null==(a=navigator.userAgent)?void 0:a.includes("Vercel-Edge")))return{type:"unsupported",error:"Edge runtime detected (Vercel Edge/Netlify Edge). WebSockets are not supported in edge functions.",workaround:"Use serverless functions or a different deployment target for WebSocket functionality."};let b=globalThis.process;if(b){let a=b.versions;if(a&&a.node){let b=parseInt(a.node.replace(/^v/,"").split(".")[0]);return b>=22?void 0!==globalThis.WebSocket?{type:"native",constructor:globalThis.WebSocket}:{type:"unsupported",error:`Node.js ${b} detected but native WebSocket not found.`,workaround:"Provide a WebSocket implementation via the transport option."}:{type:"unsupported",error:`Node.js ${b} detected without native WebSocket support.`,workaround:'For Node.js < 22, install "ws" package and provide it via the transport option:\nimport ws from "ws"\nnew RealtimeClient(url, { transport: ws })'}}}return{type:"unsupported",error:"Unknown JavaScript runtime without WebSocket support.",workaround:"Ensure you're running in a supported environment (browser, Node.js, Deno) or provide a custom WebSocket implementation."}}static getWebSocketConstructor(){let a=this.detectEnvironment();if(a.constructor)return a.constructor;let b=a.error||"WebSocket not supported in this environment.";throw a.workaround&&(b+=`
@@ -39,149 +39,7 @@ ${r}`}({domain:s.host,address:u,statement:q,uri:s.href,version:"1",chainId:v,non
 
 Check your Supabase project's API settings to find these values
 
-https://supabase.com/dashboard/project/_/settings/api`);let{storage:f}=function(a,b){let c,d,e=a.cookies??null,f=a.cookieEncoding,g={},h={};if(e)if("get"in e){let a=async a=>{let b=a.flatMap(a=>[a,...Array.from({length:5}).map((b,c)=>`${a}.${c}`)]),c=[];for(let a=0;a<b.length;a+=1){let d=await e.get(b[a]);(d||"string"==typeof d)&&c.push({name:b[a],value:d})}return c};if(c=async b=>await a(b),"set"in e&&"remove"in e)d=async a=>{for(let b=0;b<a.length;b+=1){let{name:c,value:d,options:f}=a[b];d?await e.set(c,d,f):await e.remove(c,f)}};else if(b)d=async()=>{console.warn("@supabase/ssr: createServerClient was configured without set and remove cookie methods, but the client needs to set cookies. This can lead to issues such as random logouts, early session termination or increased token refresh requests. If in NextJS, check your middleware.ts file, route handlers and server actions for correctness. Consider switching to the getAll and setAll cookie methods instead of get, set and remove which are deprecated and can be difficult to use correctly.")};else throw Error("@supabase/ssr: createBrowserClient requires configuring a getAll and setAll cookie method (deprecated: alternatively both get, set and remove can be used)")}else if("getAll"in e)if(c=async()=>await e.getAll(),"setAll"in e)d=e.setAll;else if(b)d=async()=>{console.warn("@supabase/ssr: createServerClient was configured without the setAll cookie method, but the client needs to set cookies. This can lead to issues such as random logouts, early session termination or increased token refresh requests. If in NextJS, check your middleware.ts file, route handlers and server actions for correctness.")};else throw Error("@supabase/ssr: createBrowserClient requires configuring both getAll and setAll cookie methods (deprecated: alternatively both get, set and remove can be used)");else throw Error(`@supabase/ssr: ${b?"createServerClient":"createBrowserClient"} requires configuring getAll and setAll cookie methods (deprecated: alternatively use get, set and remove).${cB()?" As this is called in a browser runtime, consider removing the cookies option object to use the document.cookie API automatically.":""}`);else if(!b&&cB())c=()=>(()=>{let a=(0,cA.q)(document.cookie);return Object.keys(a).map(b=>({name:b,value:a[b]}))})(),d=a=>{a.forEach(({name:a,value:b,options:c})=>{document.cookie=(0,cA.l)(a,b,c)})};else if(b)throw Error("@supabase/ssr: createServerClient must be initialized with cookie options that specify getAll and setAll functions (deprecated, not recommended: alternatively use get, set and remove)");else c=()=>[],d=()=>{throw Error("@supabase/ssr: createBrowserClient in non-browser runtimes (including Next.js pre-rendering mode) was not initialized cookie options that specify getAll and setAll functions (deprecated: alternatively use get, set and remove), but they were needed")};return b?{getAll:c,setAll:d,setItems:g,removedItems:h,storage:{isServer:!0,getItem:async a=>{if("string"==typeof g[a])return g[a];if(h[a])return null;let b=await c([a]),d=await cG(a,async a=>{let c=b?.find(({name:b})=>b===a)||null;return c?c.value:null});if(!d)return null;let e=d;return"string"==typeof d&&d.startsWith(cM)&&(e=cL(d.substring(cM.length))),e},setItem:async(b,e)=>{b.endsWith("-code-verifier")&&await cN({getAll:c,setAll:d,setItems:{[b]:e},removedItems:{}},{cookieOptions:a?.cookieOptions??null,cookieEncoding:f}),g[b]=e,delete h[b]},removeItem:async a=>{delete g[a],h[a]=!0}}}:{getAll:c,setAll:d,setItems:g,removedItems:h,storage:{isServer:!1,getItem:async a=>{let b=await c([a]),d=await cG(a,async a=>{let c=b?.find(({name:b})=>b===a)||null;return c?c.value:null});if(!d)return null;let e=d;return d.startsWith(cM)&&(e=cL(d.substring(cM.length))),e},setItem:async(b,e)=>{let g=await c([b]),h=new Set((g?.map(({name:a})=>a)||[]).filter(a=>cE(a,b))),i=e;"base64url"===f&&(i=cM+cK(e));let j=cF(b,i);j.forEach(({name:a})=>{h.delete(a)});let k={...cC,...a?.cookieOptions,maxAge:0},l={...cC,...a?.cookieOptions,maxAge:cC.maxAge};delete k.name,delete l.name;let m=[...[...h].map(a=>({name:a,value:"",options:k})),...j.map(({name:a,value:b})=>({name:a,value:b,options:l}))];m.length>0&&await d(m)},removeItem:async b=>{let e=await c([b]),f=(e?.map(({name:a})=>a)||[]).filter(a=>cE(a,b)),g={...cC,...a?.cookieOptions,maxAge:0};delete g.name,f.length>0&&await d(f.map(a=>({name:a,value:"",options:g})))}}}}({...c,cookieEncoding:c?.cookieEncoding??"base64url"},!1),g=new cz(a,b,{...c,global:{...c?.global,headers:{...c?.global?.headers,"X-Client-Info":"supabase-ssr/0.5.2"}},auth:{...c?.auth,...c?.cookieOptions?.name?{storageKey:c.cookieOptions.name}:null,flowType:"pkce",autoRefreshToken:cB(),detectSessionInUrl:cB(),persistSession:!0,storage:f}});return d&&(e=g),g}("https://lkjzuuzwrsdocxaqzdrs.supabase.co","sb_publishable_GZvDhwuDcZVaVSneJBPAhw_BiIM-xw0"),cP=["عرفة","منى","مزدلفة"];function cQ(){let[a,b]=(0,m.useState)({date:"",mashaer:"عرفة",marker:"",center:"",observer:"",status:"جيد",notes:"",actions:""}),[c,d]=(0,m.useState)([]),[e,f]=(0,m.useState)(!1),[g,h]=(0,m.useState)(!0),[i,j]=(0,m.useState)(""),[k,n]=(0,m.useState)(new Date().toISOString().slice(0,10)),[o,p]=(0,m.useState)(!1);async function q(){h(!0);let{data:a,error:b}=await cO.from("visits").select("*").order("created_at",{ascending:!1});b?j("❌ "+b.message):d(a||[]),h(!1)}let r=(0,m.useMemo)(()=>c.filter(a=>(a.date||"")===k),[c,k]),s=(0,m.useMemo)(()=>{let a=r.length,b=r.filter(a=>"ممتاز"===a.status).length,c=r.filter(a=>"جيد"===a.status).length,d=r.filter(a=>"سيئ"===a.status).length,e={};return r.forEach(a=>{let b=a.mashaer||"غير محدد";e[b]=(e[b]||0)+1}),{total:a,excellent:b,good:c,bad:d,mashaerCounts:e,latestVisit:r[0]?`${r[0].date||"-"} ${r[0].visit_time||""}`.trim():"-"}},[r]),t=!!a.date&&!!a.mashaer&&!!a.marker.trim()&&!!a.center.trim()&&!!a.observer.trim()&&!!a.status&&!!a.notes.trim()&&!!a.actions.trim();async function u(){let{data:a,error:b}=await cO.from("visits").select("report_id").order("report_id",{ascending:!1}).limit(1);if(b)return 1e3;let c=a?.[0]?.report_id;return"number"!=typeof c||Number.isNaN(c)?1e3:c+1}async function v(c){if(c.preventDefault(),j(""),!t)return void j("❌ جميع الحقول مطلوبة");f(!0);let d=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",hour12:!1}),e=await u(),g={report_id:e,date:a.date,visit_time:d,mashaer:a.mashaer,marker:a.marker.trim(),center:a.center.trim(),observer:a.observer.trim(),status:a.status,notes:a.notes.trim(),actions:a.actions.trim()},{error:h}=await cO.from("visits").insert([g]);h?j("❌ "+h.message):(j(`✅ تم حفظ التقرير رقم ${e} بنجاح عند ${d}`),b({date:"",mashaer:"عرفة",marker:"",center:"",observer:"",status:"جيد",notes:"",actions:""}),n(g.date),await q()),f(!1)}function w(a){let b=window.open("","_blank","width=900,height=700");if(!b)return;let c=`${window.location.origin}/alrajhi.png`,d=`
-      <html lang="ar" dir="rtl">
-      <head>
-        <meta charset="UTF-8" />
-        <title>تقرير زيارة</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            padding: 32px;
-            color: #111827;
-            direction: rtl;
-          }
-          .header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 22px;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 16px;
-          }
-          .logo {
-            width: 70px;
-            height: auto;
-            object-fit: contain;
-          }
-          .logo-fallback {
-            width: 70px;
-            height: 70px;
-            border-radius: 14px;
-            background: #e5f0ff;
-            color: #1d4ed8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 14px;
-          }
-          .title-wrap h1 {
-            margin: 0;
-            font-size: 28px;
-          }
-          .title-wrap p {
-            color: #6b7280;
-            margin: 6px 0 0;
-          }
-          .report-box {
-            margin-bottom: 18px;
-            border: 2px solid #1d4ed8;
-            border-radius: 14px;
-            padding: 14px 18px;
-            display: inline-block;
-            font-weight: 800;
-            font-size: 22px;
-            color: #1d4ed8;
-            background: #eff6ff;
-          }
-          .card {
-            border: 1px solid #d1d5db;
-            border-radius: 16px;
-            padding: 24px;
-          }
-          .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 18px;
-          }
-          .item {
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 14px;
-          }
-          .label {
-            font-size: 13px;
-            color: #6b7280;
-            margin-bottom: 6px;
-          }
-          .value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #111827;
-            word-break: break-word;
-          }
-          .notes {
-            margin-top: 10px;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 14px;
-            line-height: 1.9;
-            white-space: pre-wrap;
-          }
-          .footer {
-            margin-top: 24px;
-            font-size: 12px;
-            color: #6b7280;
-          }
-          @media print {
-            .print-btn { display: none; }
-            body { padding: 0; }
-          }
-        </style>
-      </head>
-      <body>
-        <button class="print-btn" onclick="window.print()" style="margin-bottom:20px;padding:10px 16px;border:none;border-radius:10px;background:#1d4ed8;color:#fff;cursor:pointer;">تنزيل / طباعة PDF</button>
-
-        <div class="header">
-          <img src="${c}" class="logo" onerror="this.style.display='none';document.getElementById('fallbackLogo').style.display='flex';" />
-          <div id="fallbackLogo" class="logo-fallback" style="display:none;">الراجحي</div>
-          <div class="title-wrap">
-            <h1>تقرير زيارة ميدانية</h1>
-            <p>تقرير فردي قابل للطباعة أو الحفظ بصيغة PDF</p>
-          </div>
-        </div>
-
-        <div class="report-box">رقم التقرير: ${cR(String(a.report_id??"-"))}</div>
-
-        <div class="card">
-          <div class="grid">
-            <div class="item"><div class="label">رقم التقرير</div><div class="value">${cR(String(a.report_id??"-"))}</div></div>
-            <div class="item"><div class="label">التاريخ</div><div class="value">${cR(a.date||"-")}</div></div>
-            <div class="item"><div class="label">الوقت</div><div class="value">${cR(a.visit_time||"-")}</div></div>
-            <div class="item"><div class="label">المشعر</div><div class="value">${cR(a.mashaer||"-")}</div></div>
-            <div class="item"><div class="label">رقم الشاخص</div><div class="value">${cR(a.marker||"-")}</div></div>
-            <div class="item"><div class="label">رقم مركز الضيافة</div><div class="value">${cR(a.center||"-")}</div></div>
-            <div class="item"><div class="label">اسم المراقب</div><div class="value">${cR(a.observer||"-")}</div></div>
-            <div class="item"><div class="label">الحالة</div><div class="value">${cR(a.status||"-")}</div></div>
-          </div>
-
-          <div class="item">
-            <div class="label">الملاحظات</div>
-            <div class="notes">${cR(a.notes||"-")}</div>
-          </div>
-
-          <div class="item" style="margin-top:10px;">
-            <div class="label">الإجراءات</div>
-            <div class="notes">${cR(a.actions||"-")}</div>
-          </div>
-
-          <div class="footer">تم إنشاء هذا التقرير من نظام تقارير الزيارات الميدانية.</div>
-        </div>
-      </body>
-      </html>
-    `;b.document.open(),b.document.write(d),b.document.close()}return(0,l.jsxs)("div",{className:"page",children:[(0,l.jsx)("style",{children:`
+https://supabase.com/dashboard/project/_/settings/api`);let{storage:f}=function(a,b){let c,d,e=a.cookies??null,f=a.cookieEncoding,g={},h={};if(e)if("get"in e){let a=async a=>{let b=a.flatMap(a=>[a,...Array.from({length:5}).map((b,c)=>`${a}.${c}`)]),c=[];for(let a=0;a<b.length;a+=1){let d=await e.get(b[a]);(d||"string"==typeof d)&&c.push({name:b[a],value:d})}return c};if(c=async b=>await a(b),"set"in e&&"remove"in e)d=async a=>{for(let b=0;b<a.length;b+=1){let{name:c,value:d,options:f}=a[b];d?await e.set(c,d,f):await e.remove(c,f)}};else if(b)d=async()=>{console.warn("@supabase/ssr: createServerClient was configured without set and remove cookie methods, but the client needs to set cookies. This can lead to issues such as random logouts, early session termination or increased token refresh requests. If in NextJS, check your middleware.ts file, route handlers and server actions for correctness. Consider switching to the getAll and setAll cookie methods instead of get, set and remove which are deprecated and can be difficult to use correctly.")};else throw Error("@supabase/ssr: createBrowserClient requires configuring a getAll and setAll cookie method (deprecated: alternatively both get, set and remove can be used)")}else if("getAll"in e)if(c=async()=>await e.getAll(),"setAll"in e)d=e.setAll;else if(b)d=async()=>{console.warn("@supabase/ssr: createServerClient was configured without the setAll cookie method, but the client needs to set cookies. This can lead to issues such as random logouts, early session termination or increased token refresh requests. If in NextJS, check your middleware.ts file, route handlers and server actions for correctness.")};else throw Error("@supabase/ssr: createBrowserClient requires configuring both getAll and setAll cookie methods (deprecated: alternatively both get, set and remove can be used)");else throw Error(`@supabase/ssr: ${b?"createServerClient":"createBrowserClient"} requires configuring getAll and setAll cookie methods (deprecated: alternatively use get, set and remove).${cB()?" As this is called in a browser runtime, consider removing the cookies option object to use the document.cookie API automatically.":""}`);else if(!b&&cB())c=()=>(()=>{let a=(0,cA.q)(document.cookie);return Object.keys(a).map(b=>({name:b,value:a[b]}))})(),d=a=>{a.forEach(({name:a,value:b,options:c})=>{document.cookie=(0,cA.l)(a,b,c)})};else if(b)throw Error("@supabase/ssr: createServerClient must be initialized with cookie options that specify getAll and setAll functions (deprecated, not recommended: alternatively use get, set and remove)");else c=()=>[],d=()=>{throw Error("@supabase/ssr: createBrowserClient in non-browser runtimes (including Next.js pre-rendering mode) was not initialized cookie options that specify getAll and setAll functions (deprecated: alternatively use get, set and remove), but they were needed")};return b?{getAll:c,setAll:d,setItems:g,removedItems:h,storage:{isServer:!0,getItem:async a=>{if("string"==typeof g[a])return g[a];if(h[a])return null;let b=await c([a]),d=await cG(a,async a=>{let c=b?.find(({name:b})=>b===a)||null;return c?c.value:null});if(!d)return null;let e=d;return"string"==typeof d&&d.startsWith(cM)&&(e=cL(d.substring(cM.length))),e},setItem:async(b,e)=>{b.endsWith("-code-verifier")&&await cN({getAll:c,setAll:d,setItems:{[b]:e},removedItems:{}},{cookieOptions:a?.cookieOptions??null,cookieEncoding:f}),g[b]=e,delete h[b]},removeItem:async a=>{delete g[a],h[a]=!0}}}:{getAll:c,setAll:d,setItems:g,removedItems:h,storage:{isServer:!1,getItem:async a=>{let b=await c([a]),d=await cG(a,async a=>{let c=b?.find(({name:b})=>b===a)||null;return c?c.value:null});if(!d)return null;let e=d;return d.startsWith(cM)&&(e=cL(d.substring(cM.length))),e},setItem:async(b,e)=>{let g=await c([b]),h=new Set((g?.map(({name:a})=>a)||[]).filter(a=>cE(a,b))),i=e;"base64url"===f&&(i=cM+cK(e));let j=cF(b,i);j.forEach(({name:a})=>{h.delete(a)});let k={...cC,...a?.cookieOptions,maxAge:0},l={...cC,...a?.cookieOptions,maxAge:cC.maxAge};delete k.name,delete l.name;let m=[...[...h].map(a=>({name:a,value:"",options:k})),...j.map(({name:a,value:b})=>({name:a,value:b,options:l}))];m.length>0&&await d(m)},removeItem:async b=>{let e=await c([b]),f=(e?.map(({name:a})=>a)||[]).filter(a=>cE(a,b)),g={...cC,...a?.cookieOptions,maxAge:0};delete g.name,f.length>0&&await d(f.map(a=>({name:a,value:"",options:g})))}}}}({...c,cookieEncoding:c?.cookieEncoding??"base64url"},!1),g=new cz(a,b,{...c,global:{...c?.global,headers:{...c?.global?.headers,"X-Client-Info":"supabase-ssr/0.5.2"}},auth:{...c?.auth,...c?.cookieOptions?.name?{storageKey:c.cookieOptions.name}:null,flowType:"pkce",autoRefreshToken:cB(),detectSessionInUrl:cB(),persistSession:!0,storage:f}});return d&&(e=g),g}("https://lkjzuuzwrsdocxaqzdrs.supabase.co","sb_publishable_GZvDhwuDcZVaVSneJBPAhw_BiIM-xw0"),cP=["مكة المكرمة","المدينة المنورة","عرفات","منى","مزدلفة"],cQ={"مكة المكرمة":[{name:"يوسف الهذلي",period:"الأولى"},{name:"فايز الشريف",period:"الثانية"},{name:"خالد عليوة",period:"الثالثة"}],"المدينة المنورة":[{name:"وراد سمان",period:"الأولى"},{name:"عبد المجيد الصخيري",period:"الثانية"}],عرفات:[{name:"رامي الغامدي",period:"المشاعر"}],منى:[{name:"رامي الغامدي",period:"المشاعر"}],مزدلفة:[{name:"رامي الغامدي",period:"المشاعر"}]},cR=["مركز ضيافة مصر رقم 101","مركز ضيافة مصر رقم 102","مركز ضيافة مصر رقم 103","مركز ضيافة مصر رقم 105","مركز ضيافة مصر رقم 106","مركز ضيافة مصر رقم 107","مركز ضيافة مصر رقم 108","مركز ضيافة مصر رقم 109","مركز ضيافة مصر رقم 110","مركز ضيافة مصر رقم 112","مركز ضيافة مصر رقم 113","مركز ضيافة مصر رقم 114","مركز ضيافة مصر رقم 115","مركز ضيافة مصر رقم 116","مركز ضيافة مصر رقم 117","مركز ضيافة مصر رقم 118","مركز ضيافة مصر رقم 119","مركز ضيافة مصر رقم 120","مركز ضيافة مصر رقم 121","مركز ضيافة مصر رقم 122","مركز ضيافة مصر رقم 123","مركز ضيافة مصر رقم 124","مركز ضيافة مصر رقم 125","مركز ضيافة مصر رقم 126","مركز ضيافة مصر رقم 127","مركز ضيافة مصر رقم 128","مركز ضيافة مصر رقم 129","مركز ضيافة مصر رقم 130","مركز ضيافة مصر رقم 131","مركز ضيافة مصر رقم 132","مركز ضيافة مصر رقم 133","مركز ضيافة مصر رقم 134","مركز ضيافة مصر رقم 135","مركز ضيافة مصر رقم 136","مركز ضيافة مصر رقم 137","مركز ضيافة مصر رقم 138","مركز ضيافة باكستان رقم 140","مركز ضيافة باكستان رقم 141","مركز ضيافة باكستان رقم 142","مركز ضيافة باكستان رقم 143","مركز ضيافة باكستان رقم 144","مركز ضيافة باكستان رقم 145","مركز ضيافة باكستان رقم 146","مركز ضيافة باكستان رقم 147","مركز ضيافة باكستان رقم 148","مركز ضيافة النيجر رقم 150","مركز ضيافة النيجر رقم 151","مركز ضيافة النيجر رقم 152","مركز ضيافة النيجر رقم 153","مركز ضيافة باكستان 1","مركز ضيافة باكستان 2","مركز ضيافة مصر","مركز ضياقة النيجر"],cS=["الجولات الميدانية","الجولات الميدانية للمشاعر","الاستقبال","المغادرة"];function cT(){let a=new Date().toISOString().slice(0,10),[b,c]=(0,m.useState)(a),[d,e]=(0,m.useState)(""),[f,g]=(0,m.useState)(""),[h,i]=(0,m.useState)(""),[j,k]=(0,m.useState)([]),[n,o]=(0,m.useState)(!1),[p,q]=(0,m.useState)([]),[r,s]=(0,m.useState)(!1),[t,u]=(0,m.useState)(""),[v,w]=(0,m.useState)(!1),x=(0,m.useMemo)(()=>d&&cQ[d]||[],[d]),y=(0,m.useMemo)(()=>cR,[d]);function z(a){q(b=>b.map(b=>{let c=new Map(b.rows.map(a=>[a.center,a]));return{...b,rows:a.map(a=>c.get(a)||{center:a,answer:"",notes:"",actions:"",result:"",modarStatus:""})}}))}function A(a,b,c){q(d=>d.map(d=>d.id!==a?d:{...d,rows:d.rows.map(a=>a.center!==b?a:{...a,...c,..."لا"===c.answer?{notes:"",actions:"",result:"",modarStatus:""}:{}})}))}async function B(){let{data:a}=await cO.from("daily_report_items").select("report_id").order("report_id",{ascending:!1}).limit(1),b=a?.[0]?.report_id;return"number"==typeof b?b+1:1e3}async function C(){u("");let a=function(){if(!d||!f||!h||!b)return"أكمل البيانات الأساسية";if(0===j.length)return"اختر مركز ضيافة واحد على الأقل";if(0===p.length)return"أضف قسمًا واحدًا على الأقل";for(let a of p){if(!a.sectionName)return"اختر اسم القسم لكل قسم مضاف";for(let b of a.rows){if(!b.answer)return`حدد نعم أو لا للمركز: ${b.center}`;if("نعم"===b.answer){if(!b.notes.trim()||!b.actions.trim()||!b.result.trim())return`أكمل الملاحظات والإجراءات والنتيجة للمركز: ${b.center}`;if(!b.modarStatus)return`حدد حالة المحضر في منصة مدار للمركز: ${b.center}`}}}return""}();if(a)return void u(`❌ ${a}`);s(!0);try{let a=await B(),c=p.flatMap(c=>c.rows.map(e=>({report_id:a,report_date:b,supervisor_name:f,period:h,assessment_location:d,hospitality_center:e.center,section_name:c.sectionName,answer:e.answer,notes:"نعم"===e.answer?e.notes.trim():null,actions:"نعم"===e.answer?e.actions.trim():null,result:"نعم"===e.answer?e.result.trim():null,modar_status:"نعم"===e.answer?e.modarStatus:null}))),{error:e}=await cO.from("daily_report_items").insert(c);if(e)throw e;u(`✅ تم حفظ التقرير اليومي رقم ${a}`),k([]),o(!1),q([])}catch(a){u(`❌ ${a.message||"حدث خطأ أثناء الحفظ"}`)}finally{s(!1)}}return(0,l.jsxs)("div",{className:"page",children:[(0,l.jsx)("style",{children:`
         * { box-sizing: border-box; }
         .page {
           min-height: 100vh;
@@ -190,7 +48,7 @@ https://supabase.com/dashboard/project/_/settings/api`);let{storage:f}=function(
           direction: rtl;
           font-family: Arial, sans-serif;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1280px; margin: 0 auto; }
         .hero {
           background: linear-gradient(135deg, #0f3d74 0%, #1d4f91 65%, #2563eb 100%);
           color: #fff;
@@ -208,26 +66,30 @@ https://supabase.com/dashboard/project/_/settings/api`);let{storage:f}=function(
           align-items: center;
           gap: 14px;
         }
-        .hero-logo {
+        .hero-logo, .hero-logo-fallback {
           width: 70px;
           height: 70px;
-          object-fit: contain;
-          background: rgba(255,255,255,0.12);
           border-radius: 16px;
+          background: rgba(255,255,255,0.12);
+          object-fit: contain;
           padding: 8px;
         }
         .hero-logo-fallback {
-          width: 70px;
-          height: 70px;
-          background: rgba(255,255,255,0.14);
-          border-radius: 16px;
           display: flex;
           align-items: center;
           justify-content: center;
           font-weight: 800;
-          font-size: 15px;
           color: #fff;
-          padding: 8px;
+        }
+        .hero h1 {
+          margin: 0;
+          font-size: 34px;
+          font-weight: 800;
+        }
+        .hero p {
+          margin: 8px 0 0;
+          opacity: 0.95;
+          line-height: 1.8;
         }
         .badge {
           display: inline-block;
@@ -236,52 +98,31 @@ https://supabase.com/dashboard/project/_/settings/api`);let{storage:f}=function(
           background: rgba(255,255,255,0.15);
           border: 1px solid rgba(255,255,255,0.2);
           font-size: 13px;
-          margin-bottom: 12px;
+          margin-bottom: 10px;
         }
-        .hero h1 { margin: 0; font-size: 38px; font-weight: 800; }
-        .hero p { margin: 10px 0 0; font-size: 17px; line-height: 1.8; opacity: 0.95; }
         .hero-icon {
-          width: 84px; height: 84px; border-radius: 20px; background: rgba(255,255,255,0.14);
-          display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0;
+          width: 84px;
+          height: 84px;
+          border-radius: 20px;
+          background: rgba(255,255,255,0.14);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 36px;
         }
-        .stats {
-          display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 14px;
-          margin-bottom: 18px;
-        }
-        .stat-card, .card {
+        .card {
           background: #fff;
           border-radius: 22px;
           padding: 20px;
           border: 1px solid #e5e7eb;
           box-shadow: 0 10px 24px rgba(15,23,42,0.06);
-        }
-        .stat-title { color: #64748b; font-size: 14px; margin-bottom: 8px; }
-        .stat-value { color: #111827; font-size: 34px; font-weight: 800; }
-        .stat-value.small { font-size: 20px; line-height: 1.5; }
-        .content {
-          display: grid;
-          grid-template-columns: 1.2fr 0.8fr;
-          gap: 18px;
-          align-items: start;
           margin-bottom: 18px;
         }
-        .section-title { margin: 0; font-size: 26px; font-weight: 800; color: #0f172a; }
-        .section-text { margin: 8px 0 0; font-size: 15px; color: #64748b; line-height: 1.7; }
-        .filter-box {
-          margin-top: 16px;
-          border: 1px solid #e5e7eb;
-          border-radius: 14px;
-          padding: 14px;
-          background: #f8fafc;
-        }
-        .field-grid {
+        .grid-4 {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 14px;
         }
-        .field { margin-bottom: 14px; }
         .field label {
           display: block;
           margin-bottom: 8px;
@@ -289,69 +130,64 @@ https://supabase.com/dashboard/project/_/settings/api`);let{storage:f}=function(
           font-weight: 700;
           font-size: 14px;
         }
-        .input, .textarea {
+        .input, .select, .textarea {
           width: 100%;
           border-radius: 12px;
           border: 1px solid #d1d5db;
           font-size: 14px;
           background: #fff;
+          font-family: inherit;
         }
-        .mashaer-buttons {
+        .input, .select {
+          height: 48px;
+          padding: 0 12px;
+        }
+        .textarea {
+          min-height: 90px;
+          padding: 12px;
+          resize: vertical;
+        }
+        .centers-box {
+          border: 1px solid #e5e7eb;
+          border-radius: 16px;
+          padding: 14px;
+          background: #f8fafc;
+          margin-top: 14px;
+        }
+        .centers-grid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 10px;
+          margin-top: 12px;
         }
-        .mashaer-btn {
-          height: 48px;
-          border-radius: 12px;
-          border: 1px solid #d1d5db;
+        .center-item {
           background: #fff;
-          color: #0f172a;
-          font-size: 14px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: 0.2s ease;
+          border: 1px solid #dbe3ee;
+          border-radius: 12px;
+          padding: 10px 12px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
         }
-        .mashaer-btn.active {
-          background: #1d4ed8;
-          color: #fff;
-          border-color: #1d4ed8;
-          box-shadow: 0 8px 20px rgba(29,78,216,0.18);
-        }
-        .input { height: 48px; padding: 0 12px; }
-        .textarea { min-height: 130px; padding: 12px; resize: vertical; }
-        .primary-btn, .excel-btn, .pdf-btn, .pdf-mobile-btn {
+        .add-btn, .save-btn {
           border: none;
           border-radius: 12px;
           color: #fff;
           cursor: pointer;
           font-weight: 800;
+          font-family: inherit;
         }
-        .primary-btn {
+        .add-btn {
+          background: #0f766e;
+          padding: 12px 16px;
+        }
+        .save-btn {
           width: 100%;
           background: #1d4ed8;
           padding: 14px;
           font-size: 16px;
-          margin-top: 8px;
-        }
-        .excel-btn {
-          width: 100%;
-          margin-top: 16px;
-          background: #059669;
-          padding: 14px;
-          font-size: 16px;
-        }
-        .pdf-btn, .pdf-mobile-btn {
-          background: #7c3aed;
-          padding: 8px 12px;
-          font-size: 13px;
-          white-space: nowrap;
-        }
-        .pdf-mobile-btn {
-          display: none;
-          width: 100%;
           margin-top: 10px;
-          padding: 12px;
         }
         .message {
           margin-top: 14px;
@@ -360,68 +196,112 @@ https://supabase.com/dashboard/project/_/settings/api`);let{storage:f}=function(
           border: 1px solid;
           text-align: center;
         }
-        .summary-list { display: grid; gap: 10px; }
-        .summary-row {
-          background: #f8fafc;
-          border: 1px solid #e5e7eb;
-          border-radius: 14px;
-          padding: 14px 16px;
+        .section-head {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 10px;
+          margin-bottom: 14px;
         }
-        .summary-label { color: #475569; font-size: 15px; }
-        .summary-value { color: #111827; font-weight: 800; font-size: 18px; }
-        .note-box {
-          margin-top: 16px;
-          background: #eff6ff;
-          border: 1px solid #bfdbfe;
-          border-radius: 14px;
-          padding: 14px;
-          color: #1e3a8a;
-          line-height: 1.8;
-          font-size: 14px;
+        .remove-btn {
+          border: none;
+          background: #fee2e2;
+          color: #991b1b;
+          border-radius: 10px;
+          padding: 10px 12px;
+          cursor: pointer;
+          font-weight: 700;
+          font-family: inherit;
         }
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th {
+        .table-wrap {
+          overflow-x: auto;
+          border: 1px solid #e5e7eb;
+          border-radius: 16px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          background: #fff;
+        }
+        th, td {
+          border-bottom: 1px solid #eef2f7;
+          padding: 12px;
           text-align: right;
-          padding: 14px;
-          border-bottom: 1px solid #e5e7eb;
+          vertical-align: top;
+          font-size: 14px;
+          white-space: nowrap;
+        }
+        th {
           background: #f8fafc;
           color: #475569;
-          font-size: 14px;
-          white-space: nowrap;
+          font-weight: 800;
         }
-        td {
-          text-align: right;
-          padding: 14px;
-          border-bottom: 1px solid #eef2f7;
-          color: #111827;
-          font-size: 14px;
-          white-space: nowrap;
-          vertical-align: top;
+        .answer-box {
+          display: flex;
+          gap: 8px;
         }
-        td.notes {
-          white-space: normal;
-          min-width: 260px;
-          line-height: 1.7;
-        }
-        .status-pill {
-          display: inline-block;
-          padding: 6px 12px;
+        .pill-btn {
+          border: 1px solid #d1d5db;
+          background: #fff;
+          color: #0f172a;
           border-radius: 999px;
-          font-size: 13px;
+          padding: 8px 14px;
+          cursor: pointer;
+          font-weight: 700;
+          font-family: inherit;
+        }
+        .pill-btn.active-yes {
+          background: #dcfce7;
+          border-color: #86efac;
+          color: #166534;
+        }
+        .pill-btn.active-no {
+          background: #fee2e2;
+          border-color: #fca5a5;
+          color: #991b1b;
+        }
+        .subfields {
+          display: grid;
+          gap: 10px;
+          min-width: 260px;
+        }
+        .mini-label {
+          font-size: 12px;
+          color: #64748b;
+          margin-bottom: 4px;
+          display: block;
           font-weight: 700;
         }
-        .empty { text-align: center; padding: 36px; color: #64748b; font-size: 16px; }
-        .actions-cell { min-width: 110px; }
-
-        @media (max-width: 900px) {
-          .stats { grid-template-columns: 1fr 1fr; }
-          .content { grid-template-columns: 1fr; }
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 14px;
         }
-
+        .stat {
+          background: #fff;
+          border-radius: 18px;
+          border: 1px solid #e5e7eb;
+          padding: 18px;
+          box-shadow: 0 10px 24px rgba(15,23,42,0.06);
+        }
+        .stat-title {
+          color: #64748b;
+          font-size: 14px;
+          margin-bottom: 8px;
+        }
+        .stat-value {
+          color: #111827;
+          font-size: 28px;
+          font-weight: 800;
+        }
+        @media (max-width: 1000px) {
+          .grid-4, .stats-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+          .centers-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
         @media (max-width: 640px) {
           .page { padding: 14px; }
           .hero {
@@ -429,60 +309,13 @@ https://supabase.com/dashboard/project/_/settings/api`);let{storage:f}=function(
             border-radius: 18px;
             align-items: flex-start;
           }
-          .hero-left { align-items: flex-start; }
           .hero h1 { font-size: 28px; }
-          .hero p { font-size: 14px; }
-          .hero-logo, .hero-logo-fallback {
-            width: 52px;
-            height: 52px;
-            border-radius: 12px;
+          .hero-left { align-items: flex-start; }
+          .hero-icon { width: 60px; height: 60px; font-size: 28px; }
+          .hero-logo, .hero-logo-fallback { width: 52px; height: 52px; }
+          .grid-4, .stats-grid, .centers-grid {
+            grid-template-columns: 1fr;
           }
-          .hero-icon {
-            width: 60px; height: 60px; font-size: 28px; border-radius: 16px;
-          }
-          .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
-          .stat-card, .card { padding: 16px; border-radius: 18px; }
-          .stat-value { font-size: 28px; }
-          .stat-value.small { font-size: 16px; }
-          .section-title { font-size: 22px; }
-          .field-grid { grid-template-columns: 1fr; }
-          .mashaer-buttons { grid-template-columns: 1fr; }
-          th, td { padding: 10px; font-size: 13px; }
-          .desktop-pdf { display: none; }
-          .pdf-mobile-btn { display: block; }
+          th, td { font-size: 13px; }
         }
-      `}),(0,l.jsxs)("div",{className:"container",children:[(0,l.jsxs)("div",{className:"hero",children:[(0,l.jsxs)("div",{className:"hero-left",children:[o?(0,l.jsx)("div",{className:"hero-logo-fallback",children:"الراجحي"}):(0,l.jsx)("img",{src:"/alrajhi.png",alt:"شعار الراجحي",className:"hero-logo",onError:()=>p(!0)}),(0,l.jsxs)("div",{children:[(0,l.jsx)("div",{className:"badge",children:"لوحة المتابعة"}),(0,l.jsx)("h1",{children:"تقارير الزيارات الميدانية"}),(0,l.jsx)("p",{children:"سجّل الزيارات، راقب الحالة العامة، وصدّر السجلات إلى Excel من نفس الصفحة."})]})]}),(0,l.jsx)("div",{className:"hero-icon",children:"\uD83D\uDCCB"})]}),(0,l.jsxs)("div",{className:"stats",children:[(0,l.jsx)(cT,{title:"زيارات التاريخ المختار",value:String(s.total)}),(0,l.jsx)(cT,{title:"ممتاز",value:String(s.excellent)}),(0,l.jsx)(cU,{counts:s.mashaerCounts}),(0,l.jsx)(cT,{title:"آخر زيارة",value:s.latestVisit,small:!0})]}),(0,l.jsxs)("div",{className:"content",children:[(0,l.jsxs)("div",{className:"card",children:[(0,l.jsxs)("div",{style:{marginBottom:18},children:[(0,l.jsx)("h2",{className:"section-title",children:"إضافة زيارة جديدة"}),(0,l.jsx)("p",{className:"section-text",children:"الوقت يُسجل تلقائيًا وقت الحفظ، وكل الحقول مطلوبة."})]}),(0,l.jsxs)("form",{onSubmit:v,children:[(0,l.jsxs)("div",{className:"field-grid",children:[(0,l.jsx)(cS,{label:"المشعر",children:(0,l.jsx)("div",{className:"mashaer-buttons",children:cP.map(c=>(0,l.jsx)("button",{type:"button",className:`mashaer-btn ${a.mashaer===c?"active":""}`,onClick:()=>b({...a,mashaer:c}),children:c},c))})}),(0,l.jsx)(cS,{label:"التاريخ",children:(0,l.jsx)("input",{className:"input",type:"date",value:a.date,onChange:c=>b({...a,date:c.target.value}),required:!0})}),(0,l.jsx)(cS,{label:"رقم الشاخص",children:(0,l.jsx)("input",{className:"input",value:a.marker,onChange:c=>b({...a,marker:c.target.value}),placeholder:"مثال: 54-1\\\\533",required:!0})}),(0,l.jsx)(cS,{label:"رقم مركز الضيافة",children:(0,l.jsx)("input",{className:"input",value:a.center,onChange:c=>b({...a,center:c.target.value}),placeholder:"مثال: 151-152",required:!0})}),(0,l.jsx)(cS,{label:"اسم المراقب",children:(0,l.jsx)("input",{className:"input",value:a.observer,onChange:c=>b({...a,observer:c.target.value}),placeholder:"اسم المراقب",required:!0})}),(0,l.jsx)(cS,{label:"الحالة",children:(0,l.jsxs)("select",{className:"input",value:a.status,onChange:c=>b({...a,status:c.target.value}),required:!0,children:[(0,l.jsx)("option",{children:"ممتاز"}),(0,l.jsx)("option",{children:"جيد"}),(0,l.jsx)("option",{children:"سيئ"})]})})]}),(0,l.jsx)(cS,{label:"الملاحظات",children:(0,l.jsx)("textarea",{className:"textarea",value:a.notes,onChange:c=>b({...a,notes:c.target.value}),placeholder:"اكتب الملاحظات هنا",required:!0})}),(0,l.jsx)(cS,{label:"الإجراءات",children:(0,l.jsx)("textarea",{className:"textarea",value:a.actions,onChange:c=>b({...a,actions:c.target.value}),placeholder:"اكتب الإجراءات المتخذة",required:!0})}),(0,l.jsx)("button",{className:"primary-btn",type:"submit",disabled:e||!t,children:e?"جاري الحفظ...":"حفظ الزيارة"}),i?(0,l.jsx)("div",{className:"message",style:{background:i.includes("❌")?"#fef2f2":"#eff6ff",color:i.includes("❌")?"#b91c1c":"#1d4ed8",borderColor:i.includes("❌")?"#fecaca":"#bfdbfe"},children:i}):null]})]}),(0,l.jsxs)("div",{className:"card",children:[(0,l.jsxs)("div",{style:{marginBottom:18},children:[(0,l.jsx)("h2",{className:"section-title",children:"ملخص سريع"}),(0,l.jsx)("p",{className:"section-text",children:"الملخص والجدول يعرضان بيانات التاريخ المختار فقط."})]}),(0,l.jsx)("div",{className:"filter-box",children:(0,l.jsx)(cS,{label:"اختر التاريخ",children:(0,l.jsx)("input",{className:"input",type:"date",value:k,onChange:a=>n(a.target.value)})})}),(0,l.jsxs)("div",{className:"summary-list",children:[(0,l.jsx)(cV,{label:"إجمالي السجلات",value:String(s.total)}),(0,l.jsx)(cV,{label:"ممتاز",value:String(s.excellent)}),(0,l.jsx)(cV,{label:"جيد",value:String(s.good)}),(0,l.jsx)(cV,{label:"سيئ",value:String(s.bad)}),(0,l.jsx)(cW,{counts:s.mashaerCounts})]}),(0,l.jsx)("button",{className:"excel-btn",type:"button",onClick:function(){let a=r.map(a=>`
-          <tr>
-            <td>${cR(String(a.report_id??""))}</td>
-            <td>${cR(a.date||"")}</td>
-            <td>${cR(a.visit_time||"")}</td>
-            <td>${cR(a.mashaer||"")}</td>
-            <td>${cR(a.marker||"")}</td>
-            <td>${cR(a.center||"")}</td>
-            <td>${cR(a.observer||"")}</td>
-            <td>${cR(a.status||"")}</td>
-            <td>${cR(a.notes||"")}</td>
-            <td>${cR(a.actions||"")}</td>
-          </tr>
-        `).join(""),b=new Blob([`\uFEFF
-      <html>
-      <head><meta charset="UTF-8" /></head>
-      <body>
-        <table border="1">
-          <tr>
-            <th>رقم التقرير</th>
-            <th>التاريخ</th>
-            <th>الوقت</th>
-            <th>المشعر</th>
-            <th>رقم الشاخص</th>
-            <th>رقم مركز الضيافة</th>
-            <th>اسم المراقب</th>
-            <th>الحالة</th>
-            <th>الملاحظات</th>
-            <th>الإجراءات</th>
-          </tr>
-          ${a}
-        </table>
-      </body>
-      </html>
-    `],{type:"application/vnd.ms-excel;charset=utf-8;"}),c=URL.createObjectURL(b),d=document.createElement("a");d.href=c,d.download=`visits-${k}.xls`,d.click(),URL.revokeObjectURL(c)},children:"تصدير Excel"}),(0,l.jsx)("div",{className:"note-box",children:"التصدير يعرض أيضًا رقم التقرير داخل الملف."})]})]}),(0,l.jsxs)("div",{className:"card",children:[(0,l.jsxs)("div",{style:{marginBottom:18},children:[(0,l.jsx)("h2",{className:"section-title",children:"زيارات التاريخ المختار"}),(0,l.jsxs)("p",{className:"section-text",children:["عرض مباشر لبيانات: ",k]})]}),g?(0,l.jsx)("div",{className:"empty",children:"جاري تحميل البيانات..."}):0===r.length?(0,l.jsx)("div",{className:"empty",children:"لا توجد بيانات لهذا التاريخ."}):(0,l.jsx)("div",{className:"table-wrap",children:(0,l.jsxs)("table",{children:[(0,l.jsx)("thead",{children:(0,l.jsxs)("tr",{children:[(0,l.jsx)(cX,{children:"رقم التقرير"}),(0,l.jsx)(cX,{children:"التاريخ"}),(0,l.jsx)(cX,{children:"الوقت"}),(0,l.jsx)(cX,{children:"المشعر"}),(0,l.jsx)(cX,{children:"الشاخص"}),(0,l.jsx)(cX,{children:"الضيافة"}),(0,l.jsx)(cX,{children:"المراقب"}),(0,l.jsx)(cX,{children:"الحالة"}),(0,l.jsx)(cX,{children:"الملاحظات"}),(0,l.jsx)(cX,{children:"الإجراءات"}),(0,l.jsx)(cX,{className:"desktop-pdf",children:"PDF"})]})}),(0,l.jsx)("tbody",{children:r.map((a,b)=>(0,l.jsxs)("tr",{style:{background:b%2==0?"#fff":"#f8fafc"},children:[(0,l.jsx)(cY,{children:String(a.report_id??"-")}),(0,l.jsx)(cY,{children:a.date||"-"}),(0,l.jsx)(cY,{children:a.visit_time||"-"}),(0,l.jsx)(cY,{children:a.mashaer||"-"}),(0,l.jsx)(cY,{children:a.marker||"-"}),(0,l.jsx)(cY,{children:a.center||"-"}),(0,l.jsx)(cY,{children:a.observer||"-"}),(0,l.jsx)(cY,{children:(0,l.jsx)("span",{className:"status-pill",style:{background:"ممتاز"===a.status?"#dcfce7":"سيئ"===a.status?"#fee2e2":"#dbeafe",color:"ممتاز"===a.status?"#166534":"سيئ"===a.status?"#991b1b":"#1d4ed8"},children:a.status||"-"})}),(0,l.jsx)(cY,{notes:!0,children:a.notes||"-"}),(0,l.jsxs)(cY,{notes:!0,children:[(0,l.jsx)("div",{children:a.actions||"-"}),(0,l.jsx)("button",{className:"pdf-mobile-btn",type:"button",onClick:()=>w(a),children:"تنزيل PDF"})]}),(0,l.jsx)(cY,{className:"actions-cell desktop-pdf",children:(0,l.jsx)("button",{className:"pdf-btn",type:"button",onClick:()=>w(a),children:"تنزيل PDF"})})]},a.id||b))})]})})]})]})]})}function cR(a){return a.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function cS({label:a,children:b}){return(0,l.jsxs)("div",{className:"field",children:[(0,l.jsx)("label",{children:a}),b]})}function cT({title:a,value:b,small:c=!1}){return(0,l.jsxs)("div",{className:"stat-card",children:[(0,l.jsx)("div",{className:"stat-title",children:a}),(0,l.jsx)("div",{className:`stat-value${c?" small":""}`,children:b})]})}function cU({counts:a}){let b=Object.entries(a);return(0,l.jsxs)("div",{className:"stat-card",children:[(0,l.jsx)("div",{className:"stat-title",children:"الزيارات حسب المشاعر"}),(0,l.jsx)("div",{style:{display:"grid",gap:"8px",marginTop:"10px"},children:0===b.length?(0,l.jsx)("div",{className:"stat-value small",children:"-"}):b.map(([a,b])=>(0,l.jsxs)("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"8px",fontSize:"15px",color:"#111827"},children:[(0,l.jsx)("span",{children:a}),(0,l.jsx)("strong",{children:b})]},a))})]})}function cV({label:a,value:b}){return(0,l.jsxs)("div",{className:"summary-row",children:[(0,l.jsx)("span",{className:"summary-label",children:a}),(0,l.jsx)("span",{className:"summary-value",children:b})]})}function cW({counts:a}){let b=Object.entries(a);return(0,l.jsxs)("div",{className:"summary-row",style:{display:"block"},children:[(0,l.jsx)("div",{className:"summary-label",style:{marginBottom:"8px",fontWeight:800},children:"الزيارات حسب المشاعر"}),0===b.length?(0,l.jsx)("div",{className:"summary-value",children:"-"}):(0,l.jsx)("div",{style:{display:"grid",gap:"8px"},children:b.map(([a,b])=>(0,l.jsxs)("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"8px"},children:[(0,l.jsx)("span",{className:"summary-label",children:a}),(0,l.jsx)("span",{className:"summary-value",children:b})]},a))})]})}function cX({children:a,className:b=""}){return(0,l.jsx)("th",{className:b,children:a})}function cY({children:a,notes:b=!1,className:c=""}){return(0,l.jsx)("td",{className:`${b?"notes":""} ${c}`.trim(),children:a})}},3033:a=>{"use strict";a.exports=require("next/dist/server/app-render/work-unit-async-storage.external.js")},3295:a=>{"use strict";a.exports=require("next/dist/server/app-render/after-task-async-storage.external.js")},3354:(a,b,c)=>{Promise.resolve().then(c.t.bind(c,4160,23)),Promise.resolve().then(c.t.bind(c,1603,23)),Promise.resolve().then(c.t.bind(c,8495,23)),Promise.resolve().then(c.t.bind(c,5170,23)),Promise.resolve().then(c.t.bind(c,7526,23)),Promise.resolve().then(c.t.bind(c,8922,23)),Promise.resolve().then(c.t.bind(c,9234,23)),Promise.resolve().then(c.t.bind(c,2263,23)),Promise.resolve().then(c.bind(c,2146))},3402:(a,b,c)=>{"use strict";c.r(b),c.d(b,{default:()=>d});let d=(0,c(7954).registerClientReference)(function(){throw Error("Attempted to call the default export of \"/Users/majedalmasoum/Downloads/field-visits-system/app/reports/page.tsx\" from the server, but it's on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.")},"/Users/majedalmasoum/Downloads/field-visits-system/app/reports/page.tsx","default")},3484:()=>{},5159:(a,b)=>{"use strict";b.q=function(a,b){if("string"!=typeof a)throw TypeError("argument str must be a string");var c={},e=a.length;if(e<2)return c;var f=b&&b.decode||k,g=0,h=0,l=0;do{if(-1===(h=a.indexOf("=",g)))break;if(-1===(l=a.indexOf(";",g)))l=e;else if(h>l){g=a.lastIndexOf(";",h-1)+1;continue}var m=i(a,g,h),n=j(a,h,m),o=a.slice(m,n);if(!d.call(c,o)){var p=i(a,h+1,l),q=j(a,l,p);34===a.charCodeAt(p)&&34===a.charCodeAt(q-1)&&(p++,q--);var r=a.slice(p,q);c[o]=function(a,b){try{return b(a)}catch(b){return a}}(r,f)}g=l+1}while(g<e);return c},b.l=function(a,b,d){var i=d&&d.encode||encodeURIComponent;if("function"!=typeof i)throw TypeError("option encode is invalid");if(!e.test(a))throw TypeError("argument name is invalid");var j=i(b);if(!f.test(j))throw TypeError("argument val is invalid");var k=a+"="+j;if(!d)return k;if(null!=d.maxAge){var l=Math.floor(d.maxAge);if(!isFinite(l))throw TypeError("option maxAge is invalid");k+="; Max-Age="+l}if(d.domain){if(!g.test(d.domain))throw TypeError("option domain is invalid");k+="; Domain="+d.domain}if(d.path){if(!h.test(d.path))throw TypeError("option path is invalid");k+="; Path="+d.path}if(d.expires){var m,n=d.expires;if(m=n,"[object Date]"!==c.call(m)||isNaN(n.valueOf()))throw TypeError("option expires is invalid");k+="; Expires="+n.toUTCString()}if(d.httpOnly&&(k+="; HttpOnly"),d.secure&&(k+="; Secure"),d.partitioned&&(k+="; Partitioned"),d.priority)switch("string"==typeof d.priority?d.priority.toLowerCase():d.priority){case"low":k+="; Priority=Low";break;case"medium":k+="; Priority=Medium";break;case"high":k+="; Priority=High";break;default:throw TypeError("option priority is invalid")}if(d.sameSite)switch("string"==typeof d.sameSite?d.sameSite.toLowerCase():d.sameSite){case!0:case"strict":k+="; SameSite=Strict";break;case"lax":k+="; SameSite=Lax";break;case"none":k+="; SameSite=None";break;default:throw TypeError("option sameSite is invalid")}return k};var c=Object.prototype.toString,d=Object.prototype.hasOwnProperty,e=/^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/,f=/^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u005D-\u007E]*\1$/,g=/^([.]?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i,h=/^[\u0020-\u003A\u003D-\u007E]*$/;function i(a,b,c){do{var d=a.charCodeAt(b);if(32!==d&&9!==d)return b}while(++b<c);return c}function j(a,b,c){for(;b>c;){var d=a.charCodeAt(--b);if(32!==d&&9!==d)return b+1}return c}function k(a){return -1!==a.indexOf("%")?decodeURIComponent(a):a}},5202:(a,b,c)=>{Promise.resolve().then(c.t.bind(c,1170,23)),Promise.resolve().then(c.t.bind(c,3597,23)),Promise.resolve().then(c.t.bind(c,6893,23)),Promise.resolve().then(c.t.bind(c,9748,23)),Promise.resolve().then(c.t.bind(c,6060,23)),Promise.resolve().then(c.t.bind(c,7184,23)),Promise.resolve().then(c.t.bind(c,9576,23)),Promise.resolve().then(c.t.bind(c,3041,23)),Promise.resolve().then(c.t.bind(c,1384,23))},6439:a=>{"use strict";a.exports=require("next/dist/shared/lib/no-fallback-error.external")},6713:a=>{"use strict";a.exports=require("next/dist/shared/lib/router/utils/is-bot")},6953:(a,b,c)=>{"use strict";c.r(b),c.d(b,{default:()=>f,metadata:()=>e});var d=c(5338);c(2704);let e={title:"نظام تقارير الزيارات الميدانية",description:"نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel"};function f({children:a}){return(0,d.jsx)("html",{lang:"ar",dir:"rtl",children:(0,d.jsx)("body",{children:a})})}},8354:a=>{"use strict";a.exports=require("util")},9121:a=>{"use strict";a.exports=require("next/dist/server/app-render/action-async-storage.external.js")},9294:a=>{"use strict";a.exports=require("next/dist/server/app-render/work-async-storage.external.js")},9902:a=>{"use strict";a.exports=require("path")},9932:()=>{}};var b=require("../../webpack-runtime.js");b.C(a);var c=b.X(0,[778],()=>b(b.s=2443));module.exports=c})();
+      `}),(0,l.jsxs)("div",{className:"container",children:[(0,l.jsxs)("div",{className:"hero",children:[(0,l.jsxs)("div",{className:"hero-left",children:[v?(0,l.jsx)("div",{className:"hero-logo-fallback",children:"الراجحي"}):(0,l.jsx)("img",{src:"/alrajhi.png",alt:"شعار الراجحي",className:"hero-logo",onError:()=>w(!0)}),(0,l.jsxs)("div",{children:[(0,l.jsx)("div",{className:"badge",children:"تقرير يومي"}),(0,l.jsx)("h1",{children:"نظام التقرير اليومي"}),(0,l.jsx)("p",{children:"اختر الموقع ثم المشرف والمراكز، وبعدها أضف الأقسام وسجّل التقييم اليومي."})]})]}),(0,l.jsx)("div",{className:"hero-icon",children:"\uD83D\uDDC2️"})]}),(0,l.jsxs)("div",{className:"stats-grid",children:[(0,l.jsxs)("div",{className:"stat",children:[(0,l.jsx)("div",{className:"stat-title",children:"عدد المراكز المختارة"}),(0,l.jsx)("div",{className:"stat-value",children:j.length})]}),(0,l.jsxs)("div",{className:"stat",children:[(0,l.jsx)("div",{className:"stat-title",children:"عدد الأقسام المضافة"}),(0,l.jsx)("div",{className:"stat-value",children:p.length})]}),(0,l.jsxs)("div",{className:"stat",children:[(0,l.jsx)("div",{className:"stat-title",children:"الموقع"}),(0,l.jsx)("div",{className:"stat-value",style:{fontSize:"18px"},children:d||"-"})]}),(0,l.jsxs)("div",{className:"stat",children:[(0,l.jsx)("div",{className:"stat-title",children:"المشرف"}),(0,l.jsx)("div",{className:"stat-value",style:{fontSize:"18px"},children:f||"-"})]})]}),(0,l.jsxs)("div",{className:"card",children:[(0,l.jsx)("h2",{style:{marginTop:0},children:"البيانات الأساسية"}),(0,l.jsxs)("div",{className:"grid-4",children:[(0,l.jsxs)("div",{className:"field",children:[(0,l.jsx)("label",{children:"موقع التقييم"}),(0,l.jsxs)("select",{className:"select",value:d,onChange:a=>{e(a.target.value),g(""),i(""),k([]),o(!1),q([])},children:[(0,l.jsx)("option",{value:"",children:"اختر الموقع"}),cP.map(a=>(0,l.jsx)("option",{value:a,children:a},a))]})]}),(0,l.jsxs)("div",{className:"field",children:[(0,l.jsx)("label",{children:"اسم المشرف"}),(0,l.jsxs)("select",{className:"select",value:f,onChange:a=>(function(a){g(a);let b=x.find(b=>b.name===a);i(b?.period||"")})(a.target.value),disabled:!d,children:[(0,l.jsx)("option",{value:"",children:"اختر المشرف"}),x.map(a=>(0,l.jsx)("option",{value:a.name,children:a.name},a.name))]})]}),(0,l.jsxs)("div",{className:"field",children:[(0,l.jsx)("label",{children:"الفترة"}),(0,l.jsx)("input",{className:"input",value:h,readOnly:!0,placeholder:"تظهر تلقائيًا"})]}),(0,l.jsxs)("div",{className:"field",children:[(0,l.jsx)("label",{children:"تاريخ التقرير"}),(0,l.jsx)("input",{className:"input",type:"date",value:b,onChange:a=>c(a.target.value)})]})]}),(0,l.jsxs)("div",{className:"centers-box",children:[(0,l.jsxs)("div",{style:{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",flexWrap:"wrap"},children:[(0,l.jsx)("strong",{children:"مراكز الضيافة"}),(0,l.jsxs)("label",{style:{display:"flex",alignItems:"center",gap:8,fontSize:14},children:[(0,l.jsx)("input",{type:"checkbox",checked:n,onChange:function(){let a=n?[]:[...y];k(a),o(!n),z(a)},disabled:!d}),"اختيار الكل"]})]}),(0,l.jsx)("div",{className:"centers-grid",children:y.map(a=>(0,l.jsxs)("label",{className:"center-item",children:[(0,l.jsx)("input",{type:"checkbox",checked:j.includes(a),onChange:()=>(function(a){let b=j.includes(a)?j.filter(b=>b!==a):[...j,a];k(b),o(b.length===y.length&&y.length>0),z(b)})(a),disabled:!d}),(0,l.jsx)("span",{children:a})]},a))})]}),(0,l.jsx)("div",{style:{marginTop:16},children:(0,l.jsx)("button",{className:"add-btn",type:"button",onClick:function(){if(0===j.length)return void u("❌ اختر مركز ضيافة واحد على الأقل قبل إضافة قسم");q(a=>[...a,{id:Math.random().toString(36).slice(2,10),sectionName:"",rows:j.map(a=>({center:a,answer:"",notes:"",actions:"",result:"",modarStatus:""}))}]),u("")},children:"إضافة قسم"})}),t?(0,l.jsx)("div",{className:"message",style:{background:t.includes("❌")?"#fef2f2":"#eff6ff",color:t.includes("❌")?"#b91c1c":"#1d4ed8",borderColor:t.includes("❌")?"#fecaca":"#bfdbfe"},children:t}):null]}),p.map((a,b)=>(0,l.jsxs)("div",{className:"card",children:[(0,l.jsxs)("div",{className:"section-head",children:[(0,l.jsx)("div",{style:{flex:1},children:(0,l.jsxs)("h3",{style:{margin:0},children:["القسم ",b+1]})}),(0,l.jsx)("div",{style:{flex:1,minWidth:240},children:(0,l.jsxs)("select",{className:"select",value:a.sectionName,onChange:b=>{var c,d;return c=a.id,d=b.target.value,void q(a=>a.map(a=>a.id===c?{...a,sectionName:d}:a))},children:[(0,l.jsx)("option",{value:"",children:"اختر القسم"}),cS.map(a=>(0,l.jsx)("option",{value:a,children:a},a))]})}),(0,l.jsx)("button",{className:"remove-btn",type:"button",onClick:()=>{var b;return b=a.id,void q(a=>a.filter(a=>a.id!==b))},children:"حذف القسم"})]}),(0,l.jsx)("div",{className:"table-wrap",children:(0,l.jsxs)("table",{children:[(0,l.jsx)("thead",{children:(0,l.jsxs)("tr",{children:[(0,l.jsx)("th",{children:"مركز الضيافة"}),(0,l.jsx)("th",{children:"التقييم"}),(0,l.jsx)("th",{children:"الملاحظات"}),(0,l.jsx)("th",{children:"الإجراءات"}),(0,l.jsx)("th",{children:"النتيجة"}),(0,l.jsx)("th",{children:"محضر داخل منصة مدار"})]})}),(0,l.jsx)("tbody",{children:a.rows.map(b=>(0,l.jsxs)("tr",{children:[(0,l.jsx)("td",{children:b.center}),(0,l.jsx)("td",{children:(0,l.jsxs)("div",{className:"answer-box",children:[(0,l.jsx)("button",{type:"button",className:`pill-btn ${"نعم"===b.answer?"active-yes":""}`,onClick:()=>A(a.id,b.center,{answer:"نعم"}),children:"نعم"}),(0,l.jsx)("button",{type:"button",className:`pill-btn ${"لا"===b.answer?"active-no":""}`,onClick:()=>A(a.id,b.center,{answer:"لا"}),children:"لا"})]})}),(0,l.jsx)("td",{children:"نعم"===b.answer?(0,l.jsx)("div",{className:"subfields",children:(0,l.jsxs)("div",{children:[(0,l.jsx)("span",{className:"mini-label",children:"الملاحظات"}),(0,l.jsx)("textarea",{className:"textarea",value:b.notes,onChange:c=>A(a.id,b.center,{notes:c.target.value})})]})}):"-"}),(0,l.jsx)("td",{children:"نعم"===b.answer?(0,l.jsx)("div",{className:"subfields",children:(0,l.jsxs)("div",{children:[(0,l.jsx)("span",{className:"mini-label",children:"الإجراءات"}),(0,l.jsx)("textarea",{className:"textarea",value:b.actions,onChange:c=>A(a.id,b.center,{actions:c.target.value})})]})}):"-"}),(0,l.jsx)("td",{children:"نعم"===b.answer?(0,l.jsx)("div",{className:"subfields",children:(0,l.jsxs)("div",{children:[(0,l.jsx)("span",{className:"mini-label",children:"النتيجة"}),(0,l.jsx)("textarea",{className:"textarea",value:b.result,onChange:c=>A(a.id,b.center,{result:c.target.value})})]})}):"-"}),(0,l.jsx)("td",{children:"نعم"===b.answer?(0,l.jsxs)("select",{className:"select",value:b.modarStatus,onChange:c=>A(a.id,b.center,{modarStatus:c.target.value}),children:[(0,l.jsx)("option",{value:"",children:"اختر"}),(0,l.jsx)("option",{value:"نعم",children:"نعم، تم إعداد محضر داخل منصة مدار"}),(0,l.jsx)("option",{value:"لا",children:"لا، لم يتم إدخال محضر داخل منصة مدار"})]}):"-"})]},b.center))})]})})]},a.id)),(0,l.jsx)("div",{className:"card",children:(0,l.jsx)("button",{className:"save-btn",type:"button",onClick:C,disabled:r,children:r?"جاري حفظ التقرير...":"حفظ التقرير اليومي"})})]})]})}},3033:a=>{"use strict";a.exports=require("next/dist/server/app-render/work-unit-async-storage.external.js")},3295:a=>{"use strict";a.exports=require("next/dist/server/app-render/after-task-async-storage.external.js")},3354:(a,b,c)=>{Promise.resolve().then(c.t.bind(c,4160,23)),Promise.resolve().then(c.t.bind(c,1603,23)),Promise.resolve().then(c.t.bind(c,8495,23)),Promise.resolve().then(c.t.bind(c,5170,23)),Promise.resolve().then(c.t.bind(c,7526,23)),Promise.resolve().then(c.t.bind(c,8922,23)),Promise.resolve().then(c.t.bind(c,9234,23)),Promise.resolve().then(c.t.bind(c,2263,23)),Promise.resolve().then(c.bind(c,2146))},3402:(a,b,c)=>{"use strict";c.r(b),c.d(b,{default:()=>d});let d=(0,c(7954).registerClientReference)(function(){throw Error("Attempted to call the default export of \"/Users/majedalmasoum/Downloads/field-visits-system/app/reports/page.tsx\" from the server, but it's on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.")},"/Users/majedalmasoum/Downloads/field-visits-system/app/reports/page.tsx","default")},3484:()=>{},5159:(a,b)=>{"use strict";b.q=function(a,b){if("string"!=typeof a)throw TypeError("argument str must be a string");var c={},e=a.length;if(e<2)return c;var f=b&&b.decode||k,g=0,h=0,l=0;do{if(-1===(h=a.indexOf("=",g)))break;if(-1===(l=a.indexOf(";",g)))l=e;else if(h>l){g=a.lastIndexOf(";",h-1)+1;continue}var m=i(a,g,h),n=j(a,h,m),o=a.slice(m,n);if(!d.call(c,o)){var p=i(a,h+1,l),q=j(a,l,p);34===a.charCodeAt(p)&&34===a.charCodeAt(q-1)&&(p++,q--);var r=a.slice(p,q);c[o]=function(a,b){try{return b(a)}catch(b){return a}}(r,f)}g=l+1}while(g<e);return c},b.l=function(a,b,d){var i=d&&d.encode||encodeURIComponent;if("function"!=typeof i)throw TypeError("option encode is invalid");if(!e.test(a))throw TypeError("argument name is invalid");var j=i(b);if(!f.test(j))throw TypeError("argument val is invalid");var k=a+"="+j;if(!d)return k;if(null!=d.maxAge){var l=Math.floor(d.maxAge);if(!isFinite(l))throw TypeError("option maxAge is invalid");k+="; Max-Age="+l}if(d.domain){if(!g.test(d.domain))throw TypeError("option domain is invalid");k+="; Domain="+d.domain}if(d.path){if(!h.test(d.path))throw TypeError("option path is invalid");k+="; Path="+d.path}if(d.expires){var m,n=d.expires;if(m=n,"[object Date]"!==c.call(m)||isNaN(n.valueOf()))throw TypeError("option expires is invalid");k+="; Expires="+n.toUTCString()}if(d.httpOnly&&(k+="; HttpOnly"),d.secure&&(k+="; Secure"),d.partitioned&&(k+="; Partitioned"),d.priority)switch("string"==typeof d.priority?d.priority.toLowerCase():d.priority){case"low":k+="; Priority=Low";break;case"medium":k+="; Priority=Medium";break;case"high":k+="; Priority=High";break;default:throw TypeError("option priority is invalid")}if(d.sameSite)switch("string"==typeof d.sameSite?d.sameSite.toLowerCase():d.sameSite){case!0:case"strict":k+="; SameSite=Strict";break;case"lax":k+="; SameSite=Lax";break;case"none":k+="; SameSite=None";break;default:throw TypeError("option sameSite is invalid")}return k};var c=Object.prototype.toString,d=Object.prototype.hasOwnProperty,e=/^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/,f=/^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u005D-\u007E]*\1$/,g=/^([.]?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i,h=/^[\u0020-\u003A\u003D-\u007E]*$/;function i(a,b,c){do{var d=a.charCodeAt(b);if(32!==d&&9!==d)return b}while(++b<c);return c}function j(a,b,c){for(;b>c;){var d=a.charCodeAt(--b);if(32!==d&&9!==d)return b+1}return c}function k(a){return -1!==a.indexOf("%")?decodeURIComponent(a):a}},5202:(a,b,c)=>{Promise.resolve().then(c.t.bind(c,1170,23)),Promise.resolve().then(c.t.bind(c,3597,23)),Promise.resolve().then(c.t.bind(c,6893,23)),Promise.resolve().then(c.t.bind(c,9748,23)),Promise.resolve().then(c.t.bind(c,6060,23)),Promise.resolve().then(c.t.bind(c,7184,23)),Promise.resolve().then(c.t.bind(c,9576,23)),Promise.resolve().then(c.t.bind(c,3041,23)),Promise.resolve().then(c.t.bind(c,1384,23))},6439:a=>{"use strict";a.exports=require("next/dist/shared/lib/no-fallback-error.external")},6713:a=>{"use strict";a.exports=require("next/dist/shared/lib/router/utils/is-bot")},6953:(a,b,c)=>{"use strict";c.r(b),c.d(b,{default:()=>f,metadata:()=>e});var d=c(5338);c(2704);let e={title:"نظام تقارير الزيارات الميدانية",description:"نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel"};function f({children:a}){return(0,d.jsx)("html",{lang:"ar",dir:"rtl",children:(0,d.jsx)("body",{children:a})})}},8354:a=>{"use strict";a.exports=require("util")},9121:a=>{"use strict";a.exports=require("next/dist/server/app-render/action-async-storage.external.js")},9294:a=>{"use strict";a.exports=require("next/dist/server/app-render/work-async-storage.external.js")},9902:a=>{"use strict";a.exports=require("path")},9932:()=>{}};var b=require("../../webpack-runtime.js");b.C(a);var c=b.X(0,[778],()=>b(b.s=2443));module.exports=c})();

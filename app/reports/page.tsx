@@ -1,378 +1,336 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { createClient } from '@/lib/supabase-browser';
 
-type VisitRow = {
-  id?: string;
-  report_id?: number | null;
-  date?: string | null;
-  visit_time?: string | null;
-  mashaer?: string | null;
-  marker?: string | null;
-  center?: string | null;
-  observer?: string | null;
-  status?: string | null;
-  actions?: string | null;
-  notes?: string | null;
-  created_at?: string | null;
+const supabase = createClient();
+
+const LOCATIONS = ['مكة المكرمة', 'المدينة المنورة', 'عرفات', 'منى', 'مزدلفة'];
+
+const SUPERVISORS_BY_LOCATION: Record<string, { name: string; period: string }[]> = {
+  'مكة المكرمة': [
+    { name: 'يوسف الهذلي', period: 'الأولى' },
+    { name: 'فايز الشريف', period: 'الثانية' },
+    { name: 'خالد عليوة', period: 'الثالثة' },
+  ],
+  'المدينة المنورة': [
+    { name: 'وراد سمان', period: 'الأولى' },
+    { name: 'عبد المجيد الصخيري', period: 'الثانية' },
+  ],
+  'عرفات': [{ name: 'رامي الغامدي', period: 'المشاعر' }],
+  'منى': [{ name: 'رامي الغامدي', period: 'المشاعر' }],
+  'مزدلفة': [{ name: 'رامي الغامدي', period: 'المشاعر' }],
 };
 
-const supabase = createClient();
-const MASHAER_OPTIONS = ['عرفة', 'منى', 'مزدلفة'];
+const ALL_CENTERS = [
+  'مركز ضيافة مصر رقم 101',
+  'مركز ضيافة مصر رقم 102',
+  'مركز ضيافة مصر رقم 103',
+  'مركز ضيافة مصر رقم 105',
+  'مركز ضيافة مصر رقم 106',
+  'مركز ضيافة مصر رقم 107',
+  'مركز ضيافة مصر رقم 108',
+  'مركز ضيافة مصر رقم 109',
+  'مركز ضيافة مصر رقم 110',
+  'مركز ضيافة مصر رقم 112',
+  'مركز ضيافة مصر رقم 113',
+  'مركز ضيافة مصر رقم 114',
+  'مركز ضيافة مصر رقم 115',
+  'مركز ضيافة مصر رقم 116',
+  'مركز ضيافة مصر رقم 117',
+  'مركز ضيافة مصر رقم 118',
+  'مركز ضيافة مصر رقم 119',
+  'مركز ضيافة مصر رقم 120',
+  'مركز ضيافة مصر رقم 121',
+  'مركز ضيافة مصر رقم 122',
+  'مركز ضيافة مصر رقم 123',
+  'مركز ضيافة مصر رقم 124',
+  'مركز ضيافة مصر رقم 125',
+  'مركز ضيافة مصر رقم 126',
+  'مركز ضيافة مصر رقم 127',
+  'مركز ضيافة مصر رقم 128',
+  'مركز ضيافة مصر رقم 129',
+  'مركز ضيافة مصر رقم 130',
+  'مركز ضيافة مصر رقم 131',
+  'مركز ضيافة مصر رقم 132',
+  'مركز ضيافة مصر رقم 133',
+  'مركز ضيافة مصر رقم 134',
+  'مركز ضيافة مصر رقم 135',
+  'مركز ضيافة مصر رقم 136',
+  'مركز ضيافة مصر رقم 137',
+  'مركز ضيافة مصر رقم 138',
+  'مركز ضيافة باكستان رقم 140',
+  'مركز ضيافة باكستان رقم 141',
+  'مركز ضيافة باكستان رقم 142',
+  'مركز ضيافة باكستان رقم 143',
+  'مركز ضيافة باكستان رقم 144',
+  'مركز ضيافة باكستان رقم 145',
+  'مركز ضيافة باكستان رقم 146',
+  'مركز ضيافة باكستان رقم 147',
+  'مركز ضيافة باكستان رقم 148',
+  'مركز ضيافة النيجر رقم 150',
+  'مركز ضيافة النيجر رقم 151',
+  'مركز ضيافة النيجر رقم 152',
+  'مركز ضيافة النيجر رقم 153',
+  'مركز ضيافة باكستان 1',
+  'مركز ضيافة باكستان 2',
+  'مركز ضيافة مصر',
+  'مركز ضياقة النيجر',
+];
 
-export default function ReportsPage() {
-  const [form, setForm] = useState({
-    date: '',
-    mashaer: 'عرفة',
-    marker: '',
-    center: '',
-    observer: '',
-    status: 'جيد',
+const SECTION_OPTIONS = [
+  'الجولات الميدانية',
+  'الجولات الميدانية للمشاعر',
+  'الاستقبال',
+  'المغادرة',
+];
+
+type SectionRow = {
+  center: string;
+  answer: '' | 'نعم' | 'لا';
+  notes: string;
+  actions: string;
+  result: string;
+  modarStatus: '' | 'نعم' | 'لا';
+};
+
+type SectionBlock = {
+  id: string;
+  sectionName: string;
+  rows: SectionRow[];
+};
+
+function uid() {
+  return Math.random().toString(36).slice(2, 10);
+}
+
+function makeRows(centers: string[]): SectionRow[] {
+  return centers.map((center) => ({
+    center,
+    answer: '',
     notes: '',
     actions: '',
-  });
+    result: '',
+    modarStatus: '',
+  }));
+}
 
-  const [rows, setRows] = useState<VisitRow[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [loadingRows, setLoadingRows] = useState(true);
+export default function ReportsPage() {
+  const today = new Date().toISOString().slice(0, 10);
+
+  const [reportDate, setReportDate] = useState(today);
+  const [location, setLocation] = useState('');
+  const [supervisor, setSupervisor] = useState('');
+  const [period, setPeriod] = useState('');
+  const [selectedCenters, setSelectedCenters] = useState<string[]>([]);
+  const [selectAllCenters, setSelectAllCenters] = useState(false);
+  const [sections, setSections] = useState<SectionBlock[]>([]);
+  const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
-  const [filterDate, setFilterDate] = useState(new Date().toISOString().slice(0, 10));
   const [logoFailed, setLogoFailed] = useState(false);
 
-  async function loadRows() {
-    setLoadingRows(true);
-    const { data, error } = await supabase
-      .from('visits')
-      .select('*')
-      .order('created_at', { ascending: false });
+  const supervisorOptions = useMemo(() => {
+    return location ? SUPERVISORS_BY_LOCATION[location] || [] : [];
+  }, [location]);
 
-    if (error) {
-      setMessage('❌ ' + error.message);
-    } else {
-      setRows(data || []);
-    }
-    setLoadingRows(false);
+  const centerOptions = useMemo(() => {
+    return ALL_CENTERS;
+  }, [location]);
+
+  function onChangeLocation(value: string) {
+    setLocation(value);
+    setSupervisor('');
+    setPeriod('');
+    setSelectedCenters([]);
+    setSelectAllCenters(false);
+    setSections([]);
   }
 
-  useEffect(() => {
-    loadRows();
-  }, []);
+  function onChangeSupervisor(name: string) {
+    setSupervisor(name);
+    const found = supervisorOptions.find((s) => s.name === name);
+    setPeriod(found?.period || '');
+  }
 
-  const filteredRows = useMemo(() => {
-    return rows.filter((r) => (r.date || '') === filterDate);
-  }, [rows, filterDate]);
+  function toggleCenter(center: string) {
+    const exists = selectedCenters.includes(center);
+    const next = exists
+      ? selectedCenters.filter((c) => c !== center)
+      : [...selectedCenters, center];
 
-  const stats = useMemo(() => {
-    const source = filteredRows;
-    const total = source.length;
-    const excellent = source.filter((r) => r.status === 'ممتاز').length;
-    const good = source.filter((r) => r.status === 'جيد').length;
-    const bad = source.filter((r) => r.status === 'سيئ').length;
+    setSelectedCenters(next);
+    setSelectAllCenters(next.length === centerOptions.length && centerOptions.length > 0);
+    syncSectionsWithCenters(next);
+  }
 
-    const mashaerCounts: Record<string, number> = {};
-    source.forEach((r) => {
-      const key = r.mashaer || 'غير محدد';
-      mashaerCounts[key] = (mashaerCounts[key] || 0) + 1;
-    });
+  function toggleAllCenters() {
+    const next = selectAllCenters ? [] : [...centerOptions];
+    setSelectedCenters(next);
+    setSelectAllCenters(!selectAllCenters);
+    syncSectionsWithCenters(next);
+  }
 
-    const latestVisit = source[0]
-      ? `${source[0].date || '-'} ${source[0].visit_time || ''}`.trim()
-      : '-';
+  function syncSectionsWithCenters(nextCenters: string[]) {
+    setSections((prev) =>
+      prev.map((section) => {
+        const map = new Map(section.rows.map((r) => [r.center, r]));
+        return {
+          ...section,
+          rows: nextCenters.map(
+            (center) =>
+              map.get(center) || {
+                center,
+                answer: '',
+                notes: '',
+                actions: '',
+                result: '',
+                modarStatus: '',
+              }
+          ),
+        };
+      })
+    );
+  }
 
-    return { total, excellent, good, bad, mashaerCounts, latestVisit };
-  }, [filteredRows]);
+  function addSection() {
+    if (selectedCenters.length === 0) {
+      setMessage('❌ اختر مركز ضيافة واحد على الأقل قبل إضافة قسم');
+      return;
+    }
+    setSections((prev) => [
+      ...prev,
+      {
+        id: uid(),
+        sectionName: '',
+        rows: makeRows(selectedCenters),
+      },
+    ]);
+    setMessage('');
+  }
 
-  const isFormValid =
-    !!form.date &&
-    !!form.mashaer &&
-    !!form.marker.trim() &&
-    !!form.center.trim() &&
-    !!form.observer.trim() &&
-    !!form.status &&
-    !!form.notes.trim() &&
-    !!form.actions.trim();
+  function removeSection(id: string) {
+    setSections((prev) => prev.filter((s) => s.id !== id));
+  }
+
+  function updateSectionName(id: string, value: string) {
+    setSections((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, sectionName: value } : s))
+    );
+  }
+
+  function updateRow(
+    sectionId: string,
+    center: string,
+    patch: Partial<SectionRow>
+  ) {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id !== sectionId
+          ? section
+          : {
+              ...section,
+              rows: section.rows.map((row) =>
+                row.center !== center
+                  ? row
+                  : {
+                      ...row,
+                      ...patch,
+                      ...(patch.answer === 'لا'
+                        ? { notes: '', actions: '', result: '', modarStatus: '' }
+                        : {}),
+                    }
+              ),
+            }
+      )
+    );
+  }
 
   async function getNextReportId() {
-    const { data, error } = await supabase
-      .from('visits')
+    const { data } = await supabase
+      .from('daily_report_items')
       .select('report_id')
       .order('report_id', { ascending: false })
       .limit(1);
 
-    if (error) return 1000;
-
-    const lastId = data?.[0]?.report_id;
-    if (typeof lastId === 'number' && !Number.isNaN(lastId)) {
-      return lastId + 1;
-    }
-    return 1000;
+    const last = data?.[0]?.report_id;
+    return typeof last === 'number' ? last + 1 : 1000;
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setMessage('');
+  function validateBeforeSave() {
+    if (!location || !supervisor || !period || !reportDate) {
+      return 'أكمل البيانات الأساسية';
+    }
+    if (selectedCenters.length === 0) {
+      return 'اختر مركز ضيافة واحد على الأقل';
+    }
+    if (sections.length === 0) {
+      return 'أضف قسمًا واحدًا على الأقل';
+    }
 
-    if (!isFormValid) {
-      setMessage('❌ جميع الحقول مطلوبة');
+    for (const section of sections) {
+      if (!section.sectionName) {
+        return 'اختر اسم القسم لكل قسم مضاف';
+      }
+
+      for (const row of section.rows) {
+        if (!row.answer) {
+          return `حدد نعم أو لا للمركز: ${row.center}`;
+        }
+        if (row.answer === 'نعم') {
+          if (!row.notes.trim() || !row.actions.trim() || !row.result.trim()) {
+            return `أكمل الملاحظات والإجراءات والنتيجة للمركز: ${row.center}`;
+          }
+          if (!row.modarStatus) {
+            return `حدد حالة المحضر في منصة مدار للمركز: ${row.center}`;
+          }
+        }
+      }
+    }
+
+    return '';
+  }
+
+  async function handleSave() {
+    setMessage('');
+    const validationError = validateBeforeSave();
+    if (validationError) {
+      setMessage(`❌ ${validationError}`);
       return;
     }
 
-    setLoading(true);
+    setSaving(true);
+    try {
+      const reportId = await getNextReportId();
 
-    const now = new Date();
-    const autoTime = now.toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
+      const payload = sections.flatMap((section) =>
+        section.rows.map((row) => ({
+          report_id: reportId,
+          report_date: reportDate,
+          supervisor_name: supervisor,
+          period,
+          assessment_location: location,
+          hospitality_center: row.center,
+          section_name: section.sectionName,
+          answer: row.answer,
+          notes: row.answer === 'نعم' ? row.notes.trim() : null,
+          actions: row.answer === 'نعم' ? row.actions.trim() : null,
+          result: row.answer === 'نعم' ? row.result.trim() : null,
+          modar_status: row.answer === 'نعم' ? row.modarStatus : null,
+        }))
+      );
 
-    const nextReportId = await getNextReportId();
+      const { error } = await supabase.from('daily_report_items').insert(payload);
+      if (error) throw error;
 
-    const payload = {
-      report_id: nextReportId,
-      date: form.date,
-      visit_time: autoTime,
-      mashaer: form.mashaer,
-      marker: form.marker.trim(),
-      center: form.center.trim(),
-      observer: form.observer.trim(),
-      status: form.status,
-      notes: form.notes.trim(),
-      actions: form.actions.trim(),
-    };
-
-    const { error } = await supabase.from('visits').insert([payload]);
-
-    if (error) {
-      setMessage('❌ ' + error.message);
-    } else {
-      setMessage(`✅ تم حفظ التقرير رقم ${nextReportId} بنجاح عند ${autoTime}`);
-      setForm({
-        date: '',
-        mashaer: 'عرفة',
-        marker: '',
-        center: '',
-        observer: '',
-        status: 'جيد',
-        notes: '',
-        actions: '',
-      });
-      setFilterDate(payload.date);
-      await loadRows();
+      setMessage(`✅ تم حفظ التقرير اليومي رقم ${reportId}`);
+      setSelectedCenters([]);
+      setSelectAllCenters(false);
+      setSections([]);
+    } catch (e: any) {
+      setMessage(`❌ ${e.message || 'حدث خطأ أثناء الحفظ'}`);
+    } finally {
+      setSaving(false);
     }
-
-    setLoading(false);
-  }
-
-  function exportExcelFriendly() {
-    const rowsHtml = filteredRows
-      .map(
-        (r) => `
-          <tr>
-            <td>${escapeHtml(String(r.report_id ?? ''))}</td>
-            <td>${escapeHtml(r.date || '')}</td>
-            <td>${escapeHtml(r.visit_time || '')}</td>
-            <td>${escapeHtml(r.mashaer || '')}</td>
-            <td>${escapeHtml(r.marker || '')}</td>
-            <td>${escapeHtml(r.center || '')}</td>
-            <td>${escapeHtml(r.observer || '')}</td>
-            <td>${escapeHtml(r.status || '')}</td>
-            <td>${escapeHtml(r.notes || '')}</td>
-            <td>${escapeHtml(r.actions || '')}</td>
-          </tr>
-        `
-      )
-      .join('');
-
-    const html = `
-      <html>
-      <head><meta charset="UTF-8" /></head>
-      <body>
-        <table border="1">
-          <tr>
-            <th>رقم التقرير</th>
-            <th>التاريخ</th>
-            <th>الوقت</th>
-            <th>المشعر</th>
-            <th>رقم الشاخص</th>
-            <th>رقم مركز الضيافة</th>
-            <th>اسم المراقب</th>
-            <th>الحالة</th>
-            <th>الملاحظات</th>
-            <th>الإجراءات</th>
-          </tr>
-          ${rowsHtml}
-        </table>
-      </body>
-      </html>
-    `;
-
-    const blob = new Blob(['\uFEFF' + html], {
-      type: 'application/vnd.ms-excel;charset=utf-8;',
-    });
-
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `visits-${filterDate}.xls`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function downloadVisitPdf(row: VisitRow) {
-    const win = window.open('', '_blank', 'width=900,height=700');
-    if (!win) return;
-
-    const logoUrl = `${window.location.origin}/alrajhi.png`;
-
-    const html = `
-      <html lang="ar" dir="rtl">
-      <head>
-        <meta charset="UTF-8" />
-        <title>تقرير زيارة</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            padding: 32px;
-            color: #111827;
-            direction: rtl;
-          }
-          .header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 22px;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 16px;
-          }
-          .logo {
-            width: 70px;
-            height: auto;
-            object-fit: contain;
-          }
-          .logo-fallback {
-            width: 70px;
-            height: 70px;
-            border-radius: 14px;
-            background: #e5f0ff;
-            color: #1d4ed8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 14px;
-          }
-          .title-wrap h1 {
-            margin: 0;
-            font-size: 28px;
-          }
-          .title-wrap p {
-            color: #6b7280;
-            margin: 6px 0 0;
-          }
-          .report-box {
-            margin-bottom: 18px;
-            border: 2px solid #1d4ed8;
-            border-radius: 14px;
-            padding: 14px 18px;
-            display: inline-block;
-            font-weight: 800;
-            font-size: 22px;
-            color: #1d4ed8;
-            background: #eff6ff;
-          }
-          .card {
-            border: 1px solid #d1d5db;
-            border-radius: 16px;
-            padding: 24px;
-          }
-          .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 18px;
-          }
-          .item {
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 14px;
-          }
-          .label {
-            font-size: 13px;
-            color: #6b7280;
-            margin-bottom: 6px;
-          }
-          .value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #111827;
-            word-break: break-word;
-          }
-          .notes {
-            margin-top: 10px;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 14px;
-            line-height: 1.9;
-            white-space: pre-wrap;
-          }
-          .footer {
-            margin-top: 24px;
-            font-size: 12px;
-            color: #6b7280;
-          }
-          @media print {
-            .print-btn { display: none; }
-            body { padding: 0; }
-          }
-        </style>
-      </head>
-      <body>
-        <button class="print-btn" onclick="window.print()" style="margin-bottom:20px;padding:10px 16px;border:none;border-radius:10px;background:#1d4ed8;color:#fff;cursor:pointer;">تنزيل / طباعة PDF</button>
-
-        <div class="header">
-          <img src="${logoUrl}" class="logo" onerror="this.style.display='none';document.getElementById('fallbackLogo').style.display='flex';" />
-          <div id="fallbackLogo" class="logo-fallback" style="display:none;">الراجحي</div>
-          <div class="title-wrap">
-            <h1>تقرير زيارة ميدانية</h1>
-            <p>تقرير فردي قابل للطباعة أو الحفظ بصيغة PDF</p>
-          </div>
-        </div>
-
-        <div class="report-box">رقم التقرير: ${escapeHtml(String(row.report_id ?? '-'))}</div>
-
-        <div class="card">
-          <div class="grid">
-            <div class="item"><div class="label">رقم التقرير</div><div class="value">${escapeHtml(String(row.report_id ?? '-'))}</div></div>
-            <div class="item"><div class="label">التاريخ</div><div class="value">${escapeHtml(row.date || '-')}</div></div>
-            <div class="item"><div class="label">الوقت</div><div class="value">${escapeHtml(row.visit_time || '-')}</div></div>
-            <div class="item"><div class="label">المشعر</div><div class="value">${escapeHtml(row.mashaer || '-')}</div></div>
-            <div class="item"><div class="label">رقم الشاخص</div><div class="value">${escapeHtml(row.marker || '-')}</div></div>
-            <div class="item"><div class="label">رقم مركز الضيافة</div><div class="value">${escapeHtml(row.center || '-')}</div></div>
-            <div class="item"><div class="label">اسم المراقب</div><div class="value">${escapeHtml(row.observer || '-')}</div></div>
-            <div class="item"><div class="label">الحالة</div><div class="value">${escapeHtml(row.status || '-')}</div></div>
-          </div>
-
-          <div class="item">
-            <div class="label">الملاحظات</div>
-            <div class="notes">${escapeHtml(row.notes || '-')}</div>
-          </div>
-
-          <div class="item" style="margin-top:10px;">
-            <div class="label">الإجراءات</div>
-            <div class="notes">${escapeHtml(row.actions || '-')}</div>
-          </div>
-
-          <div class="footer">تم إنشاء هذا التقرير من نظام تقارير الزيارات الميدانية.</div>
-        </div>
-      </body>
-      </html>
-    `;
-
-    win.document.open();
-    win.document.write(html);
-    win.document.close();
   }
 
   return (
@@ -386,7 +344,7 @@ export default function ReportsPage() {
           direction: rtl;
           font-family: Arial, sans-serif;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1280px; margin: 0 auto; }
         .hero {
           background: linear-gradient(135deg, #0f3d74 0%, #1d4f91 65%, #2563eb 100%);
           color: #fff;
@@ -404,26 +362,30 @@ export default function ReportsPage() {
           align-items: center;
           gap: 14px;
         }
-        .hero-logo {
+        .hero-logo, .hero-logo-fallback {
           width: 70px;
           height: 70px;
-          object-fit: contain;
-          background: rgba(255,255,255,0.12);
           border-radius: 16px;
+          background: rgba(255,255,255,0.12);
+          object-fit: contain;
           padding: 8px;
         }
         .hero-logo-fallback {
-          width: 70px;
-          height: 70px;
-          background: rgba(255,255,255,0.14);
-          border-radius: 16px;
           display: flex;
           align-items: center;
           justify-content: center;
           font-weight: 800;
-          font-size: 15px;
           color: #fff;
-          padding: 8px;
+        }
+        .hero h1 {
+          margin: 0;
+          font-size: 34px;
+          font-weight: 800;
+        }
+        .hero p {
+          margin: 8px 0 0;
+          opacity: 0.95;
+          line-height: 1.8;
         }
         .badge {
           display: inline-block;
@@ -432,52 +394,31 @@ export default function ReportsPage() {
           background: rgba(255,255,255,0.15);
           border: 1px solid rgba(255,255,255,0.2);
           font-size: 13px;
-          margin-bottom: 12px;
+          margin-bottom: 10px;
         }
-        .hero h1 { margin: 0; font-size: 38px; font-weight: 800; }
-        .hero p { margin: 10px 0 0; font-size: 17px; line-height: 1.8; opacity: 0.95; }
         .hero-icon {
-          width: 84px; height: 84px; border-radius: 20px; background: rgba(255,255,255,0.14);
-          display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0;
+          width: 84px;
+          height: 84px;
+          border-radius: 20px;
+          background: rgba(255,255,255,0.14);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 36px;
         }
-        .stats {
-          display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 14px;
-          margin-bottom: 18px;
-        }
-        .stat-card, .card {
+        .card {
           background: #fff;
           border-radius: 22px;
           padding: 20px;
           border: 1px solid #e5e7eb;
           box-shadow: 0 10px 24px rgba(15,23,42,0.06);
-        }
-        .stat-title { color: #64748b; font-size: 14px; margin-bottom: 8px; }
-        .stat-value { color: #111827; font-size: 34px; font-weight: 800; }
-        .stat-value.small { font-size: 20px; line-height: 1.5; }
-        .content {
-          display: grid;
-          grid-template-columns: 1.2fr 0.8fr;
-          gap: 18px;
-          align-items: start;
           margin-bottom: 18px;
         }
-        .section-title { margin: 0; font-size: 26px; font-weight: 800; color: #0f172a; }
-        .section-text { margin: 8px 0 0; font-size: 15px; color: #64748b; line-height: 1.7; }
-        .filter-box {
-          margin-top: 16px;
-          border: 1px solid #e5e7eb;
-          border-radius: 14px;
-          padding: 14px;
-          background: #f8fafc;
-        }
-        .field-grid {
+        .grid-4 {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 14px;
         }
-        .field { margin-bottom: 14px; }
         .field label {
           display: block;
           margin-bottom: 8px;
@@ -485,69 +426,64 @@ export default function ReportsPage() {
           font-weight: 700;
           font-size: 14px;
         }
-        .input, .textarea {
+        .input, .select, .textarea {
           width: 100%;
           border-radius: 12px;
           border: 1px solid #d1d5db;
           font-size: 14px;
           background: #fff;
+          font-family: inherit;
         }
-        .mashaer-buttons {
+        .input, .select {
+          height: 48px;
+          padding: 0 12px;
+        }
+        .textarea {
+          min-height: 90px;
+          padding: 12px;
+          resize: vertical;
+        }
+        .centers-box {
+          border: 1px solid #e5e7eb;
+          border-radius: 16px;
+          padding: 14px;
+          background: #f8fafc;
+          margin-top: 14px;
+        }
+        .centers-grid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 10px;
+          margin-top: 12px;
         }
-        .mashaer-btn {
-          height: 48px;
-          border-radius: 12px;
-          border: 1px solid #d1d5db;
+        .center-item {
           background: #fff;
-          color: #0f172a;
-          font-size: 14px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: 0.2s ease;
+          border: 1px solid #dbe3ee;
+          border-radius: 12px;
+          padding: 10px 12px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
         }
-        .mashaer-btn.active {
-          background: #1d4ed8;
-          color: #fff;
-          border-color: #1d4ed8;
-          box-shadow: 0 8px 20px rgba(29,78,216,0.18);
-        }
-        .input { height: 48px; padding: 0 12px; }
-        .textarea { min-height: 130px; padding: 12px; resize: vertical; }
-        .primary-btn, .excel-btn, .pdf-btn, .pdf-mobile-btn {
+        .add-btn, .save-btn {
           border: none;
           border-radius: 12px;
           color: #fff;
           cursor: pointer;
           font-weight: 800;
+          font-family: inherit;
         }
-        .primary-btn {
+        .add-btn {
+          background: #0f766e;
+          padding: 12px 16px;
+        }
+        .save-btn {
           width: 100%;
           background: #1d4ed8;
           padding: 14px;
           font-size: 16px;
-          margin-top: 8px;
-        }
-        .excel-btn {
-          width: 100%;
-          margin-top: 16px;
-          background: #059669;
-          padding: 14px;
-          font-size: 16px;
-        }
-        .pdf-btn, .pdf-mobile-btn {
-          background: #7c3aed;
-          padding: 8px 12px;
-          font-size: 13px;
-          white-space: nowrap;
-        }
-        .pdf-mobile-btn {
-          display: none;
-          width: 100%;
           margin-top: 10px;
-          padding: 12px;
         }
         .message {
           margin-top: 14px;
@@ -556,68 +492,112 @@ export default function ReportsPage() {
           border: 1px solid;
           text-align: center;
         }
-        .summary-list { display: grid; gap: 10px; }
-        .summary-row {
-          background: #f8fafc;
-          border: 1px solid #e5e7eb;
-          border-radius: 14px;
-          padding: 14px 16px;
+        .section-head {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 10px;
+          margin-bottom: 14px;
         }
-        .summary-label { color: #475569; font-size: 15px; }
-        .summary-value { color: #111827; font-weight: 800; font-size: 18px; }
-        .note-box {
-          margin-top: 16px;
-          background: #eff6ff;
-          border: 1px solid #bfdbfe;
-          border-radius: 14px;
-          padding: 14px;
-          color: #1e3a8a;
-          line-height: 1.8;
-          font-size: 14px;
+        .remove-btn {
+          border: none;
+          background: #fee2e2;
+          color: #991b1b;
+          border-radius: 10px;
+          padding: 10px 12px;
+          cursor: pointer;
+          font-weight: 700;
+          font-family: inherit;
         }
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th {
+        .table-wrap {
+          overflow-x: auto;
+          border: 1px solid #e5e7eb;
+          border-radius: 16px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          background: #fff;
+        }
+        th, td {
+          border-bottom: 1px solid #eef2f7;
+          padding: 12px;
           text-align: right;
-          padding: 14px;
-          border-bottom: 1px solid #e5e7eb;
+          vertical-align: top;
+          font-size: 14px;
+          white-space: nowrap;
+        }
+        th {
           background: #f8fafc;
           color: #475569;
-          font-size: 14px;
-          white-space: nowrap;
+          font-weight: 800;
         }
-        td {
-          text-align: right;
-          padding: 14px;
-          border-bottom: 1px solid #eef2f7;
-          color: #111827;
-          font-size: 14px;
-          white-space: nowrap;
-          vertical-align: top;
+        .answer-box {
+          display: flex;
+          gap: 8px;
         }
-        td.notes {
-          white-space: normal;
-          min-width: 260px;
-          line-height: 1.7;
-        }
-        .status-pill {
-          display: inline-block;
-          padding: 6px 12px;
+        .pill-btn {
+          border: 1px solid #d1d5db;
+          background: #fff;
+          color: #0f172a;
           border-radius: 999px;
-          font-size: 13px;
+          padding: 8px 14px;
+          cursor: pointer;
+          font-weight: 700;
+          font-family: inherit;
+        }
+        .pill-btn.active-yes {
+          background: #dcfce7;
+          border-color: #86efac;
+          color: #166534;
+        }
+        .pill-btn.active-no {
+          background: #fee2e2;
+          border-color: #fca5a5;
+          color: #991b1b;
+        }
+        .subfields {
+          display: grid;
+          gap: 10px;
+          min-width: 260px;
+        }
+        .mini-label {
+          font-size: 12px;
+          color: #64748b;
+          margin-bottom: 4px;
+          display: block;
           font-weight: 700;
         }
-        .empty { text-align: center; padding: 36px; color: #64748b; font-size: 16px; }
-        .actions-cell { min-width: 110px; }
-
-        @media (max-width: 900px) {
-          .stats { grid-template-columns: 1fr 1fr; }
-          .content { grid-template-columns: 1fr; }
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 14px;
         }
-
+        .stat {
+          background: #fff;
+          border-radius: 18px;
+          border: 1px solid #e5e7eb;
+          padding: 18px;
+          box-shadow: 0 10px 24px rgba(15,23,42,0.06);
+        }
+        .stat-title {
+          color: #64748b;
+          font-size: 14px;
+          margin-bottom: 8px;
+        }
+        .stat-value {
+          color: #111827;
+          font-size: 28px;
+          font-weight: 800;
+        }
+        @media (max-width: 1000px) {
+          .grid-4, .stats-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+          .centers-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
         @media (max-width: 640px) {
           .page { padding: 14px; }
           .hero {
@@ -625,27 +605,14 @@ export default function ReportsPage() {
             border-radius: 18px;
             align-items: flex-start;
           }
-          .hero-left { align-items: flex-start; }
           .hero h1 { font-size: 28px; }
-          .hero p { font-size: 14px; }
-          .hero-logo, .hero-logo-fallback {
-            width: 52px;
-            height: 52px;
-            border-radius: 12px;
+          .hero-left { align-items: flex-start; }
+          .hero-icon { width: 60px; height: 60px; font-size: 28px; }
+          .hero-logo, .hero-logo-fallback { width: 52px; height: 52px; }
+          .grid-4, .stats-grid, .centers-grid {
+            grid-template-columns: 1fr;
           }
-          .hero-icon {
-            width: 60px; height: 60px; font-size: 28px; border-radius: 16px;
-          }
-          .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
-          .stat-card, .card { padding: 16px; border-radius: 18px; }
-          .stat-value { font-size: 28px; }
-          .stat-value.small { font-size: 16px; }
-          .section-title { font-size: 22px; }
-          .field-grid { grid-template-columns: 1fr; }
-          .mashaer-buttons { grid-template-columns: 1fr; }
-          th, td { padding: 10px; font-size: 13px; }
-          .desktop-pdf { display: none; }
-          .pdf-mobile-btn { display: block; }
+          th, td { font-size: 13px; }
         }
       `}</style>
 
@@ -663,376 +630,275 @@ export default function ReportsPage() {
               <div className="hero-logo-fallback">الراجحي</div>
             )}
             <div>
-              <div className="badge">لوحة المتابعة</div>
-              <h1>تقارير الزيارات الميدانية</h1>
-              <p>سجّل الزيارات، راقب الحالة العامة، وصدّر السجلات إلى Excel من نفس الصفحة.</p>
+              <div className="badge">تقرير يومي</div>
+              <h1>نظام التقرير اليومي</h1>
+              <p>اختر الموقع ثم المشرف والمراكز، وبعدها أضف الأقسام وسجّل التقييم اليومي.</p>
             </div>
           </div>
-          <div className="hero-icon">📋</div>
+          <div className="hero-icon">🗂️</div>
         </div>
 
-        <div className="stats">
-          <StatCard title="زيارات التاريخ المختار" value={String(stats.total)} />
-          <StatCard title="ممتاز" value={String(stats.excellent)} />
-          <MashaerCountCard counts={stats.mashaerCounts} />
-          <StatCard title="آخر زيارة" value={stats.latestVisit} small />
-        </div>
-
-        <div className="content">
-          <div className="card">
-            <div style={{ marginBottom: 18 }}>
-              <h2 className="section-title">إضافة زيارة جديدة</h2>
-              <p className="section-text">الوقت يُسجل تلقائيًا وقت الحفظ، وكل الحقول مطلوبة.</p>
-            </div>
-
-            <form onSubmit={handleSubmit}>
-              <div className="field-grid">
-                <Field label="المشعر">
-                  <div className="mashaer-buttons">
-                    {MASHAER_OPTIONS.map((m) => (
-                      <button
-                        key={m}
-                        type="button"
-                        className={`mashaer-btn ${form.mashaer === m ? 'active' : ''}`}
-                        onClick={() => setForm({ ...form, mashaer: m })}
-                      >
-                        {m}
-                      </button>
-                    ))}
-                  </div>
-                </Field>
-
-                <Field label="التاريخ">
-                  <input
-                    className="input"
-                    type="date"
-                    value={form.date}
-                    onChange={(e) => setForm({ ...form, date: e.target.value })}
-                    required
-                  />
-                </Field>
-
-                <Field label="رقم الشاخص">
-                  <input
-                    className="input"
-                    value={form.marker}
-                    onChange={(e) => setForm({ ...form, marker: e.target.value })}
-                    placeholder="مثال: 54-1\\533"
-                    required
-                  />
-                </Field>
-
-                <Field label="رقم مركز الضيافة">
-                  <input
-                    className="input"
-                    value={form.center}
-                    onChange={(e) => setForm({ ...form, center: e.target.value })}
-                    placeholder="مثال: 151-152"
-                    required
-                  />
-                </Field>
-
-                <Field label="اسم المراقب">
-                  <input
-                    className="input"
-                    value={form.observer}
-                    onChange={(e) => setForm({ ...form, observer: e.target.value })}
-                    placeholder="اسم المراقب"
-                    required
-                  />
-                </Field>
-
-                <Field label="الحالة">
-                  <select
-                    className="input"
-                    value={form.status}
-                    onChange={(e) => setForm({ ...form, status: e.target.value })}
-                    required
-                  >
-                    <option>ممتاز</option>
-                    <option>جيد</option>
-                    <option>سيئ</option>
-                  </select>
-                </Field>
-              </div>
-
-              <Field label="الملاحظات">
-                <textarea
-                  className="textarea"
-                  value={form.notes}
-                  onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                  placeholder="اكتب الملاحظات هنا"
-                  required
-                />
-              </Field>
-
-              <Field label="الإجراءات">
-                <textarea
-                  className="textarea"
-                  value={form.actions}
-                  onChange={(e) => setForm({ ...form, actions: e.target.value })}
-                  placeholder="اكتب الإجراءات المتخذة"
-                  required
-                />
-              </Field>
-
-              <button className="primary-btn" type="submit" disabled={loading || !isFormValid}>
-                {loading ? 'جاري الحفظ...' : 'حفظ الزيارة'}
-              </button>
-
-              {message ? (
-                <div
-                  className="message"
-                  style={{
-                    background: message.includes('❌') ? '#fef2f2' : '#eff6ff',
-                    color: message.includes('❌') ? '#b91c1c' : '#1d4ed8',
-                    borderColor: message.includes('❌') ? '#fecaca' : '#bfdbfe',
-                  }}
-                >
-                  {message}
-                </div>
-              ) : null}
-            </form>
+        <div className="stats-grid">
+          <div className="stat">
+            <div className="stat-title">عدد المراكز المختارة</div>
+            <div className="stat-value">{selectedCenters.length}</div>
           </div>
-
-          <div className="card">
-            <div style={{ marginBottom: 18 }}>
-              <h2 className="section-title">ملخص سريع</h2>
-              <p className="section-text">الملخص والجدول يعرضان بيانات التاريخ المختار فقط.</p>
-            </div>
-
-            <div className="filter-box">
-              <Field label="اختر التاريخ">
-                <input
-                  className="input"
-                  type="date"
-                  value={filterDate}
-                  onChange={(e) => setFilterDate(e.target.value)}
-                />
-              </Field>
-            </div>
-
-            <div className="summary-list">
-              <SummaryRow label="إجمالي السجلات" value={String(stats.total)} />
-              <SummaryRow label="ممتاز" value={String(stats.excellent)} />
-              <SummaryRow label="جيد" value={String(stats.good)} />
-              <SummaryRow label="سيئ" value={String(stats.bad)} />
-              <MashaerSummary counts={stats.mashaerCounts} />
-            </div>
-
-            <button className="excel-btn" type="button" onClick={exportExcelFriendly}>
-              تصدير Excel
-            </button>
-
-            <div className="note-box">
-              التصدير يعرض أيضًا رقم التقرير داخل الملف.
-            </div>
+          <div className="stat">
+            <div className="stat-title">عدد الأقسام المضافة</div>
+            <div className="stat-value">{sections.length}</div>
+          </div>
+          <div className="stat">
+            <div className="stat-title">الموقع</div>
+            <div className="stat-value" style={{ fontSize: '18px' }}>{location || '-'}</div>
+          </div>
+          <div className="stat">
+            <div className="stat-title">المشرف</div>
+            <div className="stat-value" style={{ fontSize: '18px' }}>{supervisor || '-'}</div>
           </div>
         </div>
 
         <div className="card">
-          <div style={{ marginBottom: 18 }}>
-            <h2 className="section-title">زيارات التاريخ المختار</h2>
-            <p className="section-text">عرض مباشر لبيانات: {filterDate}</p>
+          <h2 style={{ marginTop: 0 }}>البيانات الأساسية</h2>
+          <div className="grid-4">
+            <div className="field">
+              <label>موقع التقييم</label>
+              <select className="select" value={location} onChange={(e) => onChangeLocation(e.target.value)}>
+                <option value="">اختر الموقع</option>
+                {LOCATIONS.map((loc) => (
+                  <option key={loc} value={loc}>{loc}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="field">
+              <label>اسم المشرف</label>
+              <select
+                className="select"
+                value={supervisor}
+                onChange={(e) => onChangeSupervisor(e.target.value)}
+                disabled={!location}
+              >
+                <option value="">اختر المشرف</option>
+                {supervisorOptions.map((s) => (
+                  <option key={s.name} value={s.name}>{s.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="field">
+              <label>الفترة</label>
+              <input className="input" value={period} readOnly placeholder="تظهر تلقائيًا" />
+            </div>
+
+            <div className="field">
+              <label>تاريخ التقرير</label>
+              <input
+                className="input"
+                type="date"
+                value={reportDate}
+                onChange={(e) => setReportDate(e.target.value)}
+              />
+            </div>
           </div>
 
-          {loadingRows ? (
-            <div className="empty">جاري تحميل البيانات...</div>
-          ) : filteredRows.length === 0 ? (
-            <div className="empty">لا توجد بيانات لهذا التاريخ.</div>
-          ) : (
+          <div className="centers-box">
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+              <strong>مراكز الضيافة</strong>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14 }}>
+                <input
+                  type="checkbox"
+                  checked={selectAllCenters}
+                  onChange={toggleAllCenters}
+                  disabled={!location}
+                />
+                اختيار الكل
+              </label>
+            </div>
+
+            <div className="centers-grid">
+              {centerOptions.map((center) => (
+                <label key={center} className="center-item">
+                  <input
+                    type="checkbox"
+                    checked={selectedCenters.includes(center)}
+                    onChange={() => toggleCenter(center)}
+                    disabled={!location}
+                  />
+                  <span>{center}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ marginTop: 16 }}>
+            <button className="add-btn" type="button" onClick={addSection}>
+              إضافة قسم
+            </button>
+          </div>
+
+          {message ? (
+            <div
+              className="message"
+              style={{
+                background: message.includes('❌') ? '#fef2f2' : '#eff6ff',
+                color: message.includes('❌') ? '#b91c1c' : '#1d4ed8',
+                borderColor: message.includes('❌') ? '#fecaca' : '#bfdbfe',
+              }}
+            >
+              {message}
+            </div>
+          ) : null}
+        </div>
+
+        {sections.map((section, idx) => (
+          <div className="card" key={section.id}>
+            <div className="section-head">
+              <div style={{ flex: 1 }}>
+                <h3 style={{ margin: 0 }}>القسم {idx + 1}</h3>
+              </div>
+              <div style={{ flex: 1, minWidth: 240 }}>
+                <select
+                  className="select"
+                  value={section.sectionName}
+                  onChange={(e) => updateSectionName(section.id, e.target.value)}
+                >
+                  <option value="">اختر القسم</option>
+                  {SECTION_OPTIONS.map((opt) => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+              </div>
+              <button className="remove-btn" type="button" onClick={() => removeSection(section.id)}>
+                حذف القسم
+              </button>
+            </div>
+
             <div className="table-wrap">
               <table>
                 <thead>
                   <tr>
-                    <Th>رقم التقرير</Th>
-                    <Th>التاريخ</Th>
-                    <Th>الوقت</Th>
-                    <Th>المشعر</Th>
-                    <Th>الشاخص</Th>
-                    <Th>الضيافة</Th>
-                    <Th>المراقب</Th>
-                    <Th>الحالة</Th>
-                    <Th>الملاحظات</Th>
-                    <Th>الإجراءات</Th>
-                    <Th className="desktop-pdf">PDF</Th>
+                    <th>مركز الضيافة</th>
+                    <th>التقييم</th>
+                    <th>الملاحظات</th>
+                    <th>الإجراءات</th>
+                    <th>النتيجة</th>
+                    <th>محضر داخل منصة مدار</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredRows.map((r, i) => (
-                    <tr key={r.id || i} style={{ background: i % 2 === 0 ? '#fff' : '#f8fafc' }}>
-                      <Td>{String(r.report_id ?? '-')}</Td>
-                      <Td>{r.date || '-'}</Td>
-                      <Td>{r.visit_time || '-'}</Td>
-                      <Td>{r.mashaer || '-'}</Td>
-                      <Td>{r.marker || '-'}</Td>
-                      <Td>{r.center || '-'}</Td>
-                      <Td>{r.observer || '-'}</Td>
-                      <Td>
-                        <span
-                          className="status-pill"
-                          style={{
-                            background:
-                              r.status === 'ممتاز'
-                                ? '#dcfce7'
-                                : r.status === 'سيئ'
-                                ? '#fee2e2'
-                                : '#dbeafe',
-                            color:
-                              r.status === 'ممتاز'
-                                ? '#166534'
-                                : r.status === 'سيئ'
-                                ? '#991b1b'
-                                : '#1d4ed8',
-                          }}
-                        >
-                          {r.status || '-'}
-                        </span>
-                      </Td>
-                      <Td notes>{r.notes || '-'}</Td>
-                      <Td notes>
-                        <div>{r.actions || '-'}</div>
-                        <button
-                          className="pdf-mobile-btn"
-                          type="button"
-                          onClick={() => downloadVisitPdf(r)}
-                        >
-                          تنزيل PDF
-                        </button>
-                      </Td>
-                      <Td className="actions-cell desktop-pdf">
-                        <button className="pdf-btn" type="button" onClick={() => downloadVisitPdf(r)}>
-                          تنزيل PDF
-                        </button>
-                      </Td>
+                  {section.rows.map((row) => (
+                    <tr key={row.center}>
+                      <td>{row.center}</td>
+
+                      <td>
+                        <div className="answer-box">
+                          <button
+                            type="button"
+                            className={`pill-btn ${row.answer === 'نعم' ? 'active-yes' : ''}`}
+                            onClick={() => updateRow(section.id, row.center, { answer: 'نعم' })}
+                          >
+                            نعم
+                          </button>
+                          <button
+                            type="button"
+                            className={`pill-btn ${row.answer === 'لا' ? 'active-no' : ''}`}
+                            onClick={() => updateRow(section.id, row.center, { answer: 'لا' })}
+                          >
+                            لا
+                          </button>
+                        </div>
+                      </td>
+
+                      <td>
+                        {row.answer === 'نعم' ? (
+                          <div className="subfields">
+                            <div>
+                              <span className="mini-label">الملاحظات</span>
+                              <textarea
+                                className="textarea"
+                                value={row.notes}
+                                onChange={(e) =>
+                                  updateRow(section.id, row.center, { notes: e.target.value })
+                                }
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          '-'
+                        )}
+                      </td>
+
+                      <td>
+                        {row.answer === 'نعم' ? (
+                          <div className="subfields">
+                            <div>
+                              <span className="mini-label">الإجراءات</span>
+                              <textarea
+                                className="textarea"
+                                value={row.actions}
+                                onChange={(e) =>
+                                  updateRow(section.id, row.center, { actions: e.target.value })
+                                }
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          '-'
+                        )}
+                      </td>
+
+                      <td>
+                        {row.answer === 'نعم' ? (
+                          <div className="subfields">
+                            <div>
+                              <span className="mini-label">النتيجة</span>
+                              <textarea
+                                className="textarea"
+                                value={row.result}
+                                onChange={(e) =>
+                                  updateRow(section.id, row.center, { result: e.target.value })
+                                }
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          '-'
+                        )}
+                      </td>
+
+                      <td>
+                        {row.answer === 'نعم' ? (
+                          <select
+                            className="select"
+                            value={row.modarStatus}
+                            onChange={(e) =>
+                              updateRow(section.id, row.center, {
+                                modarStatus: e.target.value as 'نعم' | 'لا',
+                              })
+                            }
+                          >
+                            <option value="">اختر</option>
+                            <option value="نعم">نعم، تم إعداد محضر داخل منصة مدار</option>
+                            <option value="لا">لا، لم يتم إدخال محضر داخل منصة مدار</option>
+                          </select>
+                        ) : (
+                          '-'
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          )}
+          </div>
+        ))}
+
+        <div className="card">
+          <button className="save-btn" type="button" onClick={handleSave} disabled={saving}>
+            {saving ? 'جاري حفظ التقرير...' : 'حفظ التقرير اليومي'}
+          </button>
         </div>
       </div>
     </div>
   );
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="field">
-      <label>{label}</label>
-      {children}
-    </div>
-  );
-}
-
-function StatCard({ title, value, small = false }: { title: string; value: string; small?: boolean }) {
-  return (
-    <div className="stat-card">
-      <div className="stat-title">{title}</div>
-      <div className={`stat-value${small ? ' small' : ''}`}>{value}</div>
-    </div>
-  );
-}
-
-function MashaerCountCard({ counts }: { counts: Record<string, number> }) {
-  const entries = Object.entries(counts);
-
-  return (
-    <div className="stat-card">
-      <div className="stat-title">الزيارات حسب المشاعر</div>
-      <div style={{ display: 'grid', gap: '8px', marginTop: '10px' }}>
-        {entries.length === 0 ? (
-          <div className="stat-value small">-</div>
-        ) : (
-          entries.map(([name, count]) => (
-            <div
-              key={name}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '15px',
-                color: '#111827',
-              }}
-            >
-              <span>{name}</span>
-              <strong>{count}</strong>
-            </div>
-          ))
-        )}
-      </div>
-    </div>
-  );
-}
-
-function SummaryRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="summary-row">
-      <span className="summary-label">{label}</span>
-      <span className="summary-value">{value}</span>
-    </div>
-  );
-}
-
-function MashaerSummary({ counts }: { counts: Record<string, number> }) {
-  const entries = Object.entries(counts);
-
-  return (
-    <div
-      className="summary-row"
-      style={{ display: 'block' }}
-    >
-      <div className="summary-label" style={{ marginBottom: '8px', fontWeight: 800 }}>
-        الزيارات حسب المشاعر
-      </div>
-
-      {entries.length === 0 ? (
-        <div className="summary-value">-</div>
-      ) : (
-        <div style={{ display: 'grid', gap: '8px' }}>
-          {entries.map(([name, count]) => (
-            <div
-              key={name}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                gap: '8px',
-              }}
-            >
-              <span className="summary-label">{name}</span>
-              <span className="summary-value">{count}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function Th({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <th className={className}>{children}</th>;
-}
-
-function Td({
-  children,
-  notes = false,
-  className = '',
-}: {
-  children: React.ReactNode;
-  notes?: boolean;
-  className?: string;
-}) {
-  return <td className={`${notes ? 'notes' : ''} ${className}`.trim()}>{children}</td>;
 }
