@@ -89,6 +89,22 @@ const SECTION_OPTIONS = [
   'الاستقبال',
   'المغادرة',
   'المحاضر أو الملاحظات',
+  'الإدارات',
+];
+
+const ADMIN_OPTIONS = [
+  'اداره الخدمات العامه',
+  'اداره المشاعر المقدسة',
+  'ادارة الاسكان',
+  'ادارة نسك',
+  'ادارة عمليات الحج المالية',
+  'ادارة الموارد البشرية و الشؤون الادارية',
+  'ادارة تقنية المعلومات',
+  'ادارة الاستقبال',
+  'ادارة النقل والتفويج',
+  'ادارة خدمة العملاء',
+  'ادارة الجوازات',
+  'ادارة الاستعداد المسبق',
 ];
 
 type SectionAnswer = '' | 'نعم' | 'لا';
@@ -101,6 +117,8 @@ type SectionRow = {
   actions: string;
   result: string;
   modarStatus: ModarStatus;
+  pilgrimsCount: string;
+  nationality: string;
 };
 
 type SectionBlock = {
@@ -116,11 +134,35 @@ function uid() {
   return Math.random().toString(36).slice(2, 10);
 }
 
+function nowLocalDateTimeValue() {
+  const now = new Date();
+  const tzAdjusted = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+  return tzAdjusted.toISOString().slice(0, 16);
+}
+
+function formatDateTimeArabic(value: string) {
+  if (!value) return '-';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return value;
+  return d.toLocaleString('ar-SA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 function getCentersByLocation(location: string) {
   if (location === 'المدينة المنورة') return MADINAH_CENTERS;
   if (location === 'عرفات' || location === 'منى' || location === 'مزدلفة') return MASHAER_CENTERS;
   if (location === 'مكة المكرمة') return MECCA_CENTERS;
   return [];
+}
+
+function getSelectableOptions(location: string, sectionName: string) {
+  if (sectionName === 'الإدارات') return ADMIN_OPTIONS;
+  return getCentersByLocation(location);
 }
 
 function syncRowsWithCenters(existingRows: SectionRow[], selectedCenters: string[]): SectionRow[] {
@@ -137,6 +179,8 @@ function syncRowsWithCenters(existingRows: SectionRow[], selectedCenters: string
       actions: '',
       result: '',
       modarStatus: '' as ModarStatus,
+      pilgrimsCount: '',
+      nationality: '',
     };
   });
 }
@@ -145,10 +189,21 @@ function isMemosSection(name: string) {
   return name === 'المحاضر أو الملاحظات';
 }
 
-export default function ReportsPage() {
-  const today = new Date().toISOString().slice(0, 10);
+function isReceptionOrDeparture(name: string) {
+  return name === 'الاستقبال' || name === 'المغادرة';
+}
 
-  const [reportDate, setReportDate] = useState(today);
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+export default function ReportsPage() {
+  const [reportDate, setReportDate] = useState(nowLocalDateTimeValue());
   const [location, setLocation] = useState('');
   const [supervisor, setSupervisor] = useState('');
   const [period, setPeriod] = useState('');
@@ -159,10 +214,6 @@ export default function ReportsPage() {
 
   const supervisorOptions = useMemo(() => {
     return location ? SUPERVISORS_BY_LOCATION[location] || [] : [];
-  }, [location]);
-
-  const centerOptions = useMemo(() => {
-    return getCentersByLocation(location);
   }, [location]);
 
   function onChangeLocation(value: string) {
@@ -202,12 +253,20 @@ export default function ReportsPage() {
     setSections((prev) => prev.filter((s) => s.id !== id));
   }
 
-  function updateSection(id: string, patch: Partial<SectionBlock>) {
-    setSections((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
-  }
-
   function updateSectionName(id: string, value: string) {
-    updateSection(id, { sectionName: value });
+    setSections((prev) =>
+      prev.map((section) => {
+        if (section.id !== id) return section;
+        return {
+          ...section,
+          sectionName: value,
+          selectedCenters: [],
+          selectAll: false,
+          rows: [],
+          dropdownOpen: false,
+        };
+      })
+    );
   }
 
   function toggleDropdown(id: string) {
@@ -223,6 +282,7 @@ export default function ReportsPage() {
       prev.map((section) => {
         if (section.id !== sectionId) return section;
 
+        const options = getSelectableOptions(location, section.sectionName);
         const exists = section.selectedCenters.includes(center);
         const nextCenters = exists
           ? section.selectedCenters.filter((c) => c !== center)
@@ -231,7 +291,7 @@ export default function ReportsPage() {
         return {
           ...section,
           selectedCenters: nextCenters,
-          selectAll: nextCenters.length === centerOptions.length && centerOptions.length > 0,
+          selectAll: nextCenters.length === options.length && options.length > 0,
           rows: syncRowsWithCenters(section.rows, nextCenters),
         };
       })
@@ -243,7 +303,8 @@ export default function ReportsPage() {
       prev.map((section) => {
         if (section.id !== sectionId) return section;
 
-        const nextCenters = section.selectAll ? [] : [...centerOptions];
+        const options = getSelectableOptions(location, section.sectionName);
+        const nextCenters = section.selectAll ? [] : [...options];
 
         return {
           ...section,
@@ -255,11 +316,7 @@ export default function ReportsPage() {
     );
   }
 
-  function updateRow(
-    sectionId: string,
-    center: string,
-    patch: Partial<SectionRow>
-  ) {
+  function updateRow(sectionId: string, center: string, patch: Partial<SectionRow>) {
     setSections((prev) =>
       prev.map((section) =>
         section.id !== sectionId
@@ -273,7 +330,12 @@ export default function ReportsPage() {
                       ...row,
                       ...patch,
                       ...(patch.answer === 'لا'
-                        ? { notes: '', actions: '', result: '', modarStatus: '' }
+                        ? {
+                            notes: '',
+                            actions: '',
+                            result: '',
+                            modarStatus: '',
+                          }
                         : {}),
                     }
               ),
@@ -308,27 +370,228 @@ export default function ReportsPage() {
       }
 
       if (section.selectedCenters.length === 0) {
-        return `اختر مركزًا واحدًا على الأقل في القسم: ${section.sectionName || 'بدون اسم'}`;
+        return `اختر عنصرًا واحدًا على الأقل في القسم: ${section.sectionName || 'بدون اسم'}`;
       }
 
       for (const row of section.rows) {
         if (!row.answer) {
-          return `حدد نعم أو لا للمركز: ${row.center}`;
+          return `حدد هل تم رصد ملاحظات أمام: ${row.center}`;
+        }
+
+        if (isReceptionOrDeparture(section.sectionName)) {
+          if (!row.pilgrimsCount.trim() || !row.nationality.trim()) {
+            return `أكمل عدد الحجاج والجنسية أمام: ${row.center}`;
+          }
         }
 
         if (row.answer === 'نعم') {
-          if (!row.notes.trim() || !row.actions.trim() || !row.result.trim()) {
-            return `أكمل الملاحظات والإجراءات والنتيجة للمركز: ${row.center}`;
+          if (!row.notes.trim()) {
+            return `أكمل الملاحظات أمام: ${row.center}`;
+          }
+
+          if (!isReceptionOrDeparture(section.sectionName)) {
+            if (!row.actions.trim() || !row.result.trim()) {
+              return `أكمل الإجراءات والنتيجة أمام: ${row.center}`;
+            }
           }
 
           if (isMemosSection(section.sectionName) && !row.modarStatus) {
-            return `حدد حالة المحضر في منصة مدار للمركز: ${row.center}`;
+            return `حدد حالة المحضر في منصة مدار أمام: ${row.center}`;
           }
         }
       }
     }
 
     return '';
+  }
+
+  function buildReportExportHtml(reportId?: number) {
+    const logoUrl = `${window.location.origin}/alrajhi.png`;
+
+    const sectionsHtml = sections
+      .map((section) => {
+        const rowsHtml = section.rows
+          .map((row) => {
+            const col4 = isReceptionOrDeparture(section.sectionName)
+              ? `<div><strong>عدد الحجاج:</strong> ${escapeHtml(row.pilgrimsCount || '-')}</div>`
+              : `<div><strong>الإجراءات:</strong> ${escapeHtml(row.answer === 'نعم' ? row.actions || '-' : '-')}</div>`;
+
+            const col5 = isReceptionOrDeparture(section.sectionName)
+              ? `<div><strong>الجنسية:</strong> ${escapeHtml(row.nationality || '-')}</div>`
+              : `<div><strong>النتيجة:</strong> ${escapeHtml(row.answer === 'نعم' ? row.result || '-' : '-')}</div>`;
+
+            const modar = isMemosSection(section.sectionName)
+              ? escapeHtml(row.answer === 'نعم' ? row.modarStatus || '-' : '-')
+              : '-';
+
+            return `
+              <tr>
+                <td>${escapeHtml(row.center)}</td>
+                <td>${escapeHtml(row.answer || '-')}</td>
+                <td>${escapeHtml(row.answer === 'نعم' ? row.notes || '-' : '-')}</td>
+                <td>${col4}</td>
+                <td>${col5}</td>
+                <td>${modar}</td>
+              </tr>
+            `;
+          })
+          .join('');
+
+        return `
+          <div class="section-card">
+            <h3>${escapeHtml(section.sectionName || 'قسم بدون اسم')}</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>${section.sectionName === 'الإدارات' ? 'الإدارة' : 'العنصر'}</th>
+                  <th>هل تم رصد ملاحظات؟</th>
+                  <th>الملاحظات</th>
+                  <th>${isReceptionOrDeparture(section.sectionName) ? 'عدد الحجاج' : 'الإجراءات'}</th>
+                  <th>${isReceptionOrDeparture(section.sectionName) ? 'الجنسية' : 'النتيجة'}</th>
+                  <th>حالة المحضر في مدار</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
+          </div>
+        `;
+      })
+      .join('');
+
+    return `
+      <html lang="ar" dir="rtl">
+      <head>
+        <meta charset="UTF-8" />
+        <title>تقرير يومي</title>
+        <style>
+          body { font-family: Arial, sans-serif; direction: rtl; color: #111827; padding: 24px; }
+          .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 14px;
+          }
+          .logo {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            border-radius: 12px;
+          }
+          .fallback {
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+          }
+          .meta {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin: 18px 0;
+          }
+          .meta-card, .section-card {
+            border: 1px solid #d1d5db;
+            border-radius: 14px;
+            padding: 14px;
+            background: #fff;
+          }
+          .meta-label {
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 6px;
+          }
+          .meta-value {
+            font-size: 18px;
+            font-weight: 800;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+          }
+          th, td {
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+            text-align: right;
+            vertical-align: top;
+            font-size: 13px;
+          }
+          th {
+            background: #f8fafc;
+          }
+          h3 {
+            margin: 0 0 10px;
+          }
+          .print-btn {
+            margin-bottom: 16px;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 10px;
+            background: #1d4ed8;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+          }
+          @media print {
+            .print-btn { display: none; }
+            body { padding: 0; }
+          }
+        </style>
+      </head>
+      <body>
+        <button class="print-btn" onclick="window.print()">تنزيل / طباعة PDF</button>
+
+        <div class="header">
+          <img src="${logoUrl}" class="logo" onerror="this.style.display='none';document.getElementById('fallback').style.display='flex';" />
+          <div id="fallback" class="fallback">الراجحي</div>
+          <div>
+            <h1 style="margin:0;">التقرير اليومي</h1>
+            <div style="color:#64748b;margin-top:6px;">تقرير متابعة يومي مفصل</div>
+          </div>
+        </div>
+
+        <div class="meta">
+          <div class="meta-card"><div class="meta-label">رقم التقرير</div><div class="meta-value">${escapeHtml(String(reportId ?? '-'))}</div></div>
+          <div class="meta-card"><div class="meta-label">التاريخ</div><div class="meta-value">${escapeHtml(formatDateTimeArabic(reportDate))}</div></div>
+          <div class="meta-card"><div class="meta-label">الموقع</div><div class="meta-value">${escapeHtml(location || '-')}</div></div>
+          <div class="meta-card"><div class="meta-label">المشرف</div><div class="meta-value">${escapeHtml(supervisor || '-')}</div></div>
+          <div class="meta-card"><div class="meta-label">الفترة</div><div class="meta-value">${escapeHtml(period || '-')}</div></div>
+          <div class="meta-card"><div class="meta-label">عدد الأقسام</div><div class="meta-value">${escapeHtml(String(sections.length))}</div></div>
+        </div>
+
+        ${sectionsHtml}
+      </body>
+      </html>
+    `;
+  }
+
+  function exportExcelReport() {
+    const html = buildReportExportHtml();
+    const blob = new Blob(['\uFEFF' + html], {
+      type: 'application/vnd.ms-excel;charset=utf-8;',
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `daily-report-${reportDate.replace(/[:T]/g, '-')}.xls`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportPdfReport() {
+    const win = window.open('', '_blank', 'width=1200,height=900');
+    if (!win) return;
+    win.document.open();
+    win.document.write(buildReportExportHtml());
+    win.document.close();
   }
 
   async function handleSave() {
@@ -354,8 +617,12 @@ export default function ReportsPage() {
           section_name: section.sectionName,
           answer: row.answer,
           notes: row.answer === 'نعم' ? row.notes.trim() : null,
-          actions: row.answer === 'نعم' ? row.actions.trim() : null,
-          result: row.answer === 'نعم' ? row.result.trim() : null,
+          actions: isReceptionOrDeparture(section.sectionName)
+            ? `عدد الحجاج: ${row.pilgrimsCount.trim()} | الجنسية: ${row.nationality.trim()}`
+            : row.answer === 'نعم'
+              ? row.actions.trim()
+              : null,
+          result: !isReceptionOrDeparture(section.sectionName) && row.answer === 'نعم' ? row.result.trim() : null,
           modar_status:
             row.answer === 'نعم' && isMemosSection(section.sectionName)
               ? row.modarStatus
@@ -367,7 +634,6 @@ export default function ReportsPage() {
       if (error) throw error;
 
       setMessage(`✅ تم حفظ التقرير اليومي رقم ${reportId}`);
-      setSections([]);
     } catch (e: any) {
       setMessage(`❌ ${e.message || 'حدث خطأ أثناء الحفظ'}`);
     } finally {
@@ -481,7 +747,7 @@ export default function ReportsPage() {
         }
         .stat-value {
           color: #111827;
-          font-size: 28px;
+          font-size: 24px;
           font-weight: 800;
         }
         .field label {
@@ -508,7 +774,7 @@ export default function ReportsPage() {
           padding: 12px;
           resize: vertical;
         }
-        .add-btn, .save-btn {
+        .add-btn, .save-btn, .sticky-add-btn, .export-btn {
           border: none;
           border-radius: 12px;
           color: #fff;
@@ -516,7 +782,7 @@ export default function ReportsPage() {
           font-weight: 800;
           font-family: inherit;
         }
-        .add-btn {
+        .add-btn, .sticky-add-btn {
           background: #0f766e;
           padding: 12px 16px;
         }
@@ -526,6 +792,24 @@ export default function ReportsPage() {
           padding: 14px;
           font-size: 16px;
           margin-top: 10px;
+        }
+        .export-row {
+          display: flex;
+          gap: 10px;
+          margin-top: 10px;
+          flex-wrap: wrap;
+        }
+        .export-btn {
+          background: #059669;
+          padding: 12px 16px;
+        }
+        .export-btn.pdf {
+          background: #7c3aed;
+        }
+        .sticky-add-wrap {
+          display: flex;
+          justify-content: center;
+          margin-top: 14px;
         }
         .message {
           margin-top: 14px;
@@ -602,7 +886,7 @@ export default function ReportsPage() {
         .subfields {
           display: grid;
           gap: 10px;
-          min-width: 240px;
+          min-width: 220px;
         }
         .mini-label {
           font-size: 12px;
@@ -669,6 +953,11 @@ export default function ReportsPage() {
         .dropdown-item:hover {
           background: #f8fafc;
         }
+        .mobile-note {
+          color: #64748b;
+          font-size: 13px;
+          margin-top: 8px;
+        }
         @media (max-width: 1000px) {
           .grid-4, .stats-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -692,6 +981,21 @@ export default function ReportsPage() {
           .section-head {
             align-items: stretch;
           }
+          .answer-box {
+            flex-direction: column;
+          }
+          .export-row {
+            flex-direction: column;
+          }
+          .sticky-add-wrap {
+            position: sticky;
+            bottom: 10px;
+            z-index: 15;
+          }
+          .sticky-add-btn {
+            width: 100%;
+            box-shadow: 0 10px 24px rgba(15,23,42,0.18);
+          }
         }
       `}</style>
 
@@ -711,7 +1015,7 @@ export default function ReportsPage() {
             <div>
               <div className="badge">تقرير يومي</div>
               <h1>نظام التقرير اليومي</h1>
-              <p>اختر الموقع ثم المشرف، وبعدها أضف الأقسام وحدد مراكز كل قسم بشكل مستقل.</p>
+              <p>اختر الموقع ثم المشرف، وبعدها أضف الأقسام وحدد عناصر كل قسم بشكل مستقل.</p>
             </div>
           </div>
           <div className="hero-icon">🗂️</div>
@@ -720,11 +1024,11 @@ export default function ReportsPage() {
         <div className="stats-grid">
           <div className="stat">
             <div className="stat-title">الموقع</div>
-            <div className="stat-value" style={{ fontSize: '20px' }}>{location || '-'}</div>
+            <div className="stat-value">{location || '-'}</div>
           </div>
           <div className="stat">
             <div className="stat-title">المشرف</div>
-            <div className="stat-value" style={{ fontSize: '20px' }}>{supervisor || '-'}</div>
+            <div className="stat-value">{supervisor || '-'}</div>
           </div>
           <div className="stat">
             <div className="stat-title">عدد الأقسام</div>
@@ -732,7 +1036,7 @@ export default function ReportsPage() {
           </div>
           <div className="stat">
             <div className="stat-title">تاريخ التقرير</div>
-            <div className="stat-value" style={{ fontSize: '20px' }}>{reportDate}</div>
+            <div className="stat-value">{formatDateTimeArabic(reportDate)}</div>
           </div>
         </div>
 
@@ -770,10 +1074,10 @@ export default function ReportsPage() {
             </div>
 
             <div className="field">
-              <label>تاريخ التقرير</label>
+              <label>تاريخ ووقت التقرير</label>
               <input
                 className="input"
-                type="date"
+                type="datetime-local"
                 value={reportDate}
                 onChange={(e) => setReportDate(e.target.value)}
               />
@@ -783,6 +1087,16 @@ export default function ReportsPage() {
           <div style={{ marginTop: 16 }}>
             <button className="add-btn" type="button" onClick={addSection}>
               إضافة قسم
+            </button>
+            <div className="mobile-note">يمكنك إضافة أكثر من قسم، ويوجد زر إضافة أيضًا أسفل الصفحة.</div>
+          </div>
+
+          <div className="export-row">
+            <button className="export-btn" type="button" onClick={exportExcelReport}>
+              تصدير Excel
+            </button>
+            <button className="export-btn pdf" type="button" onClick={exportPdfReport}>
+              تصدير PDF
             </button>
           </div>
 
@@ -800,200 +1114,240 @@ export default function ReportsPage() {
           ) : null}
         </div>
 
-        {sections.map((section, idx) => (
-          <div className="card" key={section.id}>
-            <div className="section-head">
-              <div style={{ flex: '1 1 220px' }}>
-                <h3 style={{ margin: 0 }}>القسم {idx + 1}</h3>
-              </div>
+        {sections.map((section, idx) => {
+          const options = getSelectableOptions(location, section.sectionName);
 
-              <div style={{ flex: '1 1 260px' }}>
-                <select
-                  className="select"
-                  value={section.sectionName}
-                  onChange={(e) => updateSectionName(section.id, e.target.value)}
-                >
-                  <option value="">اختر القسم</option>
-                  {SECTION_OPTIONS.map((opt) => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div style={{ flex: '1 1 320px' }} className="multi-box">
-                <div className="multi-trigger" onClick={() => toggleDropdown(section.id)}>
-                  <div className="multi-tags">
-                    {section.selectedCenters.length === 0 ? (
-                      <span className="multi-placeholder">اختر مراكز هذا القسم</span>
-                    ) : (
-                      section.selectedCenters.slice(0, 2).map((c) => (
-                        <span key={c} className="tag">{c}</span>
-                      ))
-                    )}
-                    {section.selectedCenters.length > 2 ? (
-                      <span className="tag">+{section.selectedCenters.length - 2}</span>
-                    ) : null}
-                  </div>
-                  <span>▾</span>
+          return (
+            <div className="card" key={section.id}>
+              <div className="section-head">
+                <div style={{ flex: '1 1 220px' }}>
+                  <h3 style={{ margin: 0 }}>القسم {idx + 1}</h3>
                 </div>
 
-                {section.dropdownOpen ? (
-                  <div className="dropdown">
-                    <label className="dropdown-item">
-                      <input
-                        type="checkbox"
-                        checked={section.selectAll}
-                        onChange={() => toggleAllCenters(section.id)}
-                      />
-                      <strong>اختيار الكل</strong>
-                    </label>
+                <div style={{ flex: '1 1 260px' }}>
+                  <select
+                    className="select"
+                    value={section.sectionName}
+                    onChange={(e) => updateSectionName(section.id, e.target.value)}
+                  >
+                    <option value="">اختر القسم</option>
+                    {SECTION_OPTIONS.map((opt) => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                  </select>
+                </div>
 
-                    {centerOptions.map((center) => (
-                      <label key={center} className="dropdown-item">
+                <div style={{ flex: '1 1 340px' }} className="multi-box">
+                  <div className="multi-trigger" onClick={() => toggleDropdown(section.id)}>
+                    <div className="multi-tags">
+                      {section.selectedCenters.length === 0 ? (
+                        <span className="multi-placeholder">
+                          {section.sectionName === 'الإدارات' ? 'اختر الإدارات' : 'اختر عناصر هذا القسم'}
+                        </span>
+                      ) : (
+                        section.selectedCenters.slice(0, 2).map((c) => (
+                          <span key={c} className="tag">{c}</span>
+                        ))
+                      )}
+                      {section.selectedCenters.length > 2 ? (
+                        <span className="tag">+{section.selectedCenters.length - 2}</span>
+                      ) : null}
+                    </div>
+                    <span>▾</span>
+                  </div>
+
+                  {section.dropdownOpen ? (
+                    <div className="dropdown">
+                      <label className="dropdown-item">
                         <input
                           type="checkbox"
-                          checked={section.selectedCenters.includes(center)}
-                          onChange={() => toggleCenter(section.id, center)}
+                          checked={section.selectAll}
+                          onChange={() => toggleAllCenters(section.id)}
                         />
-                        <span>{center}</span>
+                        <strong>اختيار الكل</strong>
                       </label>
-                    ))}
-                  </div>
-                ) : null}
+
+                      {options.map((center) => (
+                        <label key={center} className="dropdown-item">
+                          <input
+                            type="checkbox"
+                            checked={section.selectedCenters.includes(center)}
+                            onChange={() => toggleCenter(section.id, center)}
+                          />
+                          <span>{center}</span>
+                        </label>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+
+                <button className="remove-btn" type="button" onClick={() => removeSection(section.id)}>
+                  حذف القسم
+                </button>
               </div>
 
-              <button className="remove-btn" type="button" onClick={() => removeSection(section.id)}>
-                حذف القسم
-              </button>
-            </div>
-
-            <div className="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>مركز الضيافة</th>
-                    <th>نعم / لا</th>
-                    <th>الملاحظات</th>
-                    <th>الإجراءات</th>
-                    <th>النتيجة</th>
-                    <th>حالة المحضر في مدار</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {section.rows.length === 0 ? (
+              <div className="table-wrap">
+                <table>
+                  <thead>
                     <tr>
-                      <td colSpan={6} style={{ textAlign: 'center', color: '#64748b' }}>
-                        اختر مراكز هذا القسم من القائمة المنسدلة
-                      </td>
+                      <th>{section.sectionName === 'الإدارات' ? 'الإدارة' : 'العنصر'}</th>
+                      <th>هل تم رصد ملاحظات؟</th>
+                      <th>الملاحظات</th>
+                      <th>{isReceptionOrDeparture(section.sectionName) ? 'عدد الحجاج' : 'الإجراءات'}</th>
+                      <th>{isReceptionOrDeparture(section.sectionName) ? 'الجنسية' : 'النتيجة'}</th>
+                      <th>حالة المحضر في مدار</th>
                     </tr>
-                  ) : (
-                    section.rows.map((row) => (
-                      <tr key={row.center}>
-                        <td>{row.center}</td>
-
-                        <td>
-                          <div className="answer-box">
-                            <button
-                              type="button"
-                              className={`pill-btn ${row.answer === 'نعم' ? 'active-yes' : ''}`}
-                              onClick={() => updateRow(section.id, row.center, { answer: 'نعم' })}
-                            >
-                              نعم
-                            </button>
-                            <button
-                              type="button"
-                              className={`pill-btn ${row.answer === 'لا' ? 'active-no' : ''}`}
-                              onClick={() => updateRow(section.id, row.center, { answer: 'لا' })}
-                            >
-                              لا
-                            </button>
-                          </div>
-                        </td>
-
-                        <td>
-                          {row.answer === 'نعم' ? (
-                            <div className="subfields">
-                              <div>
-                                <span className="mini-label">الملاحظات</span>
-                                <textarea
-                                  className="textarea"
-                                  value={row.notes}
-                                  onChange={(e) =>
-                                    updateRow(section.id, row.center, { notes: e.target.value })
-                                  }
-                                />
-                              </div>
-                            </div>
-                          ) : (
-                            '-'
-                          )}
-                        </td>
-
-                        <td>
-                          {row.answer === 'نعم' ? (
-                            <div className="subfields">
-                              <div>
-                                <span className="mini-label">الإجراءات</span>
-                                <textarea
-                                  className="textarea"
-                                  value={row.actions}
-                                  onChange={(e) =>
-                                    updateRow(section.id, row.center, { actions: e.target.value })
-                                  }
-                                />
-                              </div>
-                            </div>
-                          ) : (
-                            '-'
-                          )}
-                        </td>
-
-                        <td>
-                          {row.answer === 'نعم' ? (
-                            <div className="subfields">
-                              <div>
-                                <span className="mini-label">النتيجة</span>
-                                <textarea
-                                  className="textarea"
-                                  value={row.result}
-                                  onChange={(e) =>
-                                    updateRow(section.id, row.center, { result: e.target.value })
-                                  }
-                                />
-                              </div>
-                            </div>
-                          ) : (
-                            '-'
-                          )}
-                        </td>
-
-                        <td>
-                          {row.answer === 'نعم' && isMemosSection(section.sectionName) ? (
-                            <select
-                              className="select"
-                              value={row.modarStatus}
-                              onChange={(e) =>
-                                updateRow(section.id, row.center, {
-                                  modarStatus: e.target.value as ModarStatus,
-                                })
-                              }
-                            >
-                              <option value="">اختر</option>
-                              <option value="نعم">نعم، تم إعداد محضر داخل منصة مدار</option>
-                              <option value="لا">لا، لم يتم إدخال محضر داخل منصة مدار</option>
-                            </select>
-                          ) : (
-                            '-'
-                          )}
+                  </thead>
+                  <tbody>
+                    {section.rows.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} style={{ textAlign: 'center', color: '#64748b' }}>
+                          {section.sectionName === 'الإدارات'
+                            ? 'اختر الإدارات من القائمة المنسدلة'
+                            : 'اختر عناصر هذا القسم من القائمة المنسدلة'}
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : (
+                      section.rows.map((row) => (
+                        <tr key={row.center}>
+                          <td>{row.center}</td>
+
+                          <td>
+                            <div className="answer-box">
+                              <button
+                                type="button"
+                                className={`pill-btn ${row.answer === 'نعم' ? 'active-yes' : ''}`}
+                                onClick={() => updateRow(section.id, row.center, { answer: 'نعم' })}
+                              >
+                                نعم
+                              </button>
+                              <button
+                                type="button"
+                                className={`pill-btn ${row.answer === 'لا' ? 'active-no' : ''}`}
+                                onClick={() => updateRow(section.id, row.center, { answer: 'لا' })}
+                              >
+                                لا
+                              </button>
+                            </div>
+                          </td>
+
+                          <td>
+                            {row.answer === 'نعم' ? (
+                              <div className="subfields">
+                                <div>
+                                  <span className="mini-label">الملاحظات</span>
+                                  <textarea
+                                    className="textarea"
+                                    value={row.notes}
+                                    onChange={(e) =>
+                                      updateRow(section.id, row.center, { notes: e.target.value })
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              '-'
+                            )}
+                          </td>
+
+                          <td>
+                            {isReceptionOrDeparture(section.sectionName) ? (
+                              <div className="subfields">
+                                <div>
+                                  <span className="mini-label">عدد الحجاج</span>
+                                  <input
+                                    className="input"
+                                    value={row.pilgrimsCount}
+                                    onChange={(e) =>
+                                      updateRow(section.id, row.center, { pilgrimsCount: e.target.value })
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            ) : row.answer === 'نعم' ? (
+                              <div className="subfields">
+                                <div>
+                                  <span className="mini-label">الإجراءات</span>
+                                  <textarea
+                                    className="textarea"
+                                    value={row.actions}
+                                    onChange={(e) =>
+                                      updateRow(section.id, row.center, { actions: e.target.value })
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              '-'
+                            )}
+                          </td>
+
+                          <td>
+                            {isReceptionOrDeparture(section.sectionName) ? (
+                              <div className="subfields">
+                                <div>
+                                  <span className="mini-label">الجنسية</span>
+                                  <input
+                                    className="input"
+                                    value={row.nationality}
+                                    onChange={(e) =>
+                                      updateRow(section.id, row.center, { nationality: e.target.value })
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            ) : row.answer === 'نعم' ? (
+                              <div className="subfields">
+                                <div>
+                                  <span className="mini-label">النتيجة</span>
+                                  <textarea
+                                    className="textarea"
+                                    value={row.result}
+                                    onChange={(e) =>
+                                      updateRow(section.id, row.center, { result: e.target.value })
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              '-'
+                            )}
+                          </td>
+
+                          <td>
+                            {row.answer === 'نعم' && isMemosSection(section.sectionName) ? (
+                              <select
+                                className="select"
+                                value={row.modarStatus}
+                                onChange={(e) =>
+                                  updateRow(section.id, row.center, {
+                                    modarStatus: e.target.value as ModarStatus,
+                                  })
+                                }
+                              >
+                                <option value="">اختر</option>
+                                <option value="نعم">نعم، تم إعداد محضر داخل منصة مدار</option>
+                                <option value="لا">لا، لم يتم إدخال محضر داخل منصة مدار</option>
+                              </select>
+                            ) : (
+                              '-'
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="sticky-add-wrap">
+                <button className="sticky-add-btn" type="button" onClick={addSection}>
+                  إضافة قسم جديد
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         <div className="card">
           <button className="save-btn" type="button" onClick={handleSave} disabled={saving}>

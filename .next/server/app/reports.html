@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--Nb6OjENIYj9ai1ZeVFbXh--><html lang="ar" dir="rtl"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="image" href="/alrajhi.png"/><link rel="stylesheet" href="/_next/static/css/0030e12f56c3664b.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-4a462cecab786e93.js"/><script src="/_next/static/chunks/4bd1b696-c023c6e3521b1417.js" async=""></script><script src="/_next/static/chunks/255-38b49df12a94ee57.js" async=""></script><script src="/_next/static/chunks/main-app-38e4d3b5349960b8.js" async=""></script><script src="/_next/static/chunks/44530001-06db68a5a9898251.js" async=""></script><script src="/_next/static/chunks/297-c8838cd3824be299.js" async=""></script><script src="/_next/static/chunks/app/reports/page-57226ad8d5123f65.js" async=""></script><title>نظام تقارير الزيارات الميدانية</title><meta name="description" content="نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel"/><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body><div hidden=""><!--$--><!--/$--></div><div class="page"><style>
+<!DOCTYPE html><!--PRISG0qeXlk2uEvn1gknm--><html lang="ar" dir="rtl"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="image" href="/alrajhi.png"/><link rel="stylesheet" href="/_next/static/css/0030e12f56c3664b.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-4a462cecab786e93.js"/><script src="/_next/static/chunks/4bd1b696-c023c6e3521b1417.js" async=""></script><script src="/_next/static/chunks/255-38b49df12a94ee57.js" async=""></script><script src="/_next/static/chunks/main-app-38e4d3b5349960b8.js" async=""></script><script src="/_next/static/chunks/44530001-06db68a5a9898251.js" async=""></script><script src="/_next/static/chunks/297-c8838cd3824be299.js" async=""></script><script src="/_next/static/chunks/app/reports/page-ac53c407db445fb8.js" async=""></script><title>نظام تقارير الزيارات الميدانية</title><meta name="description" content="نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel"/><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body><div hidden=""><!--$--><!--/$--></div><div class="page"><style>
         * { box-sizing: border-box; }
         .page {
           min-height: 100vh;
@@ -102,7 +102,7 @@
         }
         .stat-value {
           color: #111827;
-          font-size: 28px;
+          font-size: 24px;
           font-weight: 800;
         }
         .field label {
@@ -129,7 +129,7 @@
           padding: 12px;
           resize: vertical;
         }
-        .add-btn, .save-btn {
+        .add-btn, .save-btn, .sticky-add-btn, .export-btn {
           border: none;
           border-radius: 12px;
           color: #fff;
@@ -137,7 +137,7 @@
           font-weight: 800;
           font-family: inherit;
         }
-        .add-btn {
+        .add-btn, .sticky-add-btn {
           background: #0f766e;
           padding: 12px 16px;
         }
@@ -147,6 +147,24 @@
           padding: 14px;
           font-size: 16px;
           margin-top: 10px;
+        }
+        .export-row {
+          display: flex;
+          gap: 10px;
+          margin-top: 10px;
+          flex-wrap: wrap;
+        }
+        .export-btn {
+          background: #059669;
+          padding: 12px 16px;
+        }
+        .export-btn.pdf {
+          background: #7c3aed;
+        }
+        .sticky-add-wrap {
+          display: flex;
+          justify-content: center;
+          margin-top: 14px;
         }
         .message {
           margin-top: 14px;
@@ -223,7 +241,7 @@
         .subfields {
           display: grid;
           gap: 10px;
-          min-width: 240px;
+          min-width: 220px;
         }
         .mini-label {
           font-size: 12px;
@@ -290,6 +308,11 @@
         .dropdown-item:hover {
           background: #f8fafc;
         }
+        .mobile-note {
+          color: #64748b;
+          font-size: 13px;
+          margin-top: 8px;
+        }
         @media (max-width: 1000px) {
           .grid-4, .stats-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -313,5 +336,20 @@
           .section-head {
             align-items: stretch;
           }
+          .answer-box {
+            flex-direction: column;
+          }
+          .export-row {
+            flex-direction: column;
+          }
+          .sticky-add-wrap {
+            position: sticky;
+            bottom: 10px;
+            z-index: 15;
+          }
+          .sticky-add-btn {
+            width: 100%;
+            box-shadow: 0 10px 24px rgba(15,23,42,0.18);
+          }
         }
-      </style><div class="container"><div class="hero"><div class="hero-left"><img src="/alrajhi.png" alt="شعار الراجحي" class="hero-logo"/><div><div class="badge">تقرير يومي</div><h1>نظام التقرير اليومي</h1><p>اختر الموقع ثم المشرف، وبعدها أضف الأقسام وحدد مراكز كل قسم بشكل مستقل.</p></div></div><div class="hero-icon">🗂️</div></div><div class="stats-grid"><div class="stat"><div class="stat-title">الموقع</div><div class="stat-value" style="font-size:20px">-</div></div><div class="stat"><div class="stat-title">المشرف</div><div class="stat-value" style="font-size:20px">-</div></div><div class="stat"><div class="stat-title">عدد الأقسام</div><div class="stat-value">0</div></div><div class="stat"><div class="stat-title">تاريخ التقرير</div><div class="stat-value" style="font-size:20px">2026-04-18</div></div></div><div class="card"><h2 style="margin-top:0">البيانات الأساسية</h2><div class="grid-4"><div class="field"><label>موقع التقييم</label><select class="select"><option value="" selected="">اختر الموقع</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="عرفات">عرفات</option><option value="منى">منى</option><option value="مزدلفة">مزدلفة</option></select></div><div class="field"><label>اسم المشرف</label><select class="select" disabled=""><option value="" selected="">اختر المشرف</option></select></div><div class="field"><label>الفترة</label><input class="input" readOnly="" placeholder="تظهر تلقائيًا" value=""/></div><div class="field"><label>تاريخ التقرير</label><input class="input" type="date" value="2026-04-18"/></div></div><div style="margin-top:16px"><button class="add-btn" type="button">إضافة قسم</button></div></div><div class="card"><button class="save-btn" type="button">حفظ التقرير اليومي</button></div></div></div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-4a462cecab786e93.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[1959,[],\"ClientPageRoot\"]\n5:I[4334,[\"730\",\"static/chunks/44530001-06db68a5a9898251.js\",\"297\",\"static/chunks/297-c8838cd3824be299.js\",\"22\",\"static/chunks/app/reports/page-57226ad8d5123f65.js\"],\"default\"]\n8:I[4431,[],\"OutletBoundary\"]\na:I[5278,[],\"AsyncMetadataOutlet\"]\nc:I[4431,[],\"ViewportBoundary\"]\ne:I[4431,[],\"MetadataBoundary\"]\nf:\"$Sreact.suspense\"\n11:I[7150,[],\"\"]\n:HL[\"/_next/static/css/0030e12f56c3664b.css\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"Nb6OjENIYj9ai1ZeVFbXh\",\"p\":\"\",\"c\":[\"\",\"reports\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"reports\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/0030e12f56c3664b.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"ar\",\"dir\":\"rtl\",\"children\":[\"$\",\"body\",null,{\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]}]]}],{\"children\":[\"reports\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"searchParams\":{},\"params\":{},\"promises\":[\"$@6\",\"$@7\"]}],null,[\"$\",\"$L8\",null,{\"children\":[\"$L9\",[\"$\",\"$La\",null,{\"promise\":\"$@b\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[[\"$\",\"$Lc\",null,{\"children\":\"$Ld\"}],null],[\"$\",\"$Le\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$f\",null,{\"fallback\":null,\"children\":\"$L10\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$11\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"6:{}\n7:\"$0:f:0:1:2:children:2:children:1:props:children:0:props:params\"\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n9:null\n"])</script><script>self.__next_f.push([1,"b:{\"metadata\":[[\"$\",\"title\",\"0\",{\"children\":\"نظام تقارير الزيارات الميدانية\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel\"}]],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"10:\"$b:metadata\"\n"])</script></body></html>
+      </style><div class="container"><div class="hero"><div class="hero-left"><img src="/alrajhi.png" alt="شعار الراجحي" class="hero-logo"/><div><div class="badge">تقرير يومي</div><h1>نظام التقرير اليومي</h1><p>اختر الموقع ثم المشرف، وبعدها أضف الأقسام وحدد عناصر كل قسم بشكل مستقل.</p></div></div><div class="hero-icon">🗂️</div></div><div class="stats-grid"><div class="stat"><div class="stat-title">الموقع</div><div class="stat-value">-</div></div><div class="stat"><div class="stat-title">المشرف</div><div class="stat-value">-</div></div><div class="stat"><div class="stat-title">عدد الأقسام</div><div class="stat-value">0</div></div><div class="stat"><div class="stat-title">تاريخ التقرير</div><div class="stat-value">١٩‏/٠٤‏/٢٠٢٦، ٠١:٢٧ ص</div></div></div><div class="card"><h2 style="margin-top:0">البيانات الأساسية</h2><div class="grid-4"><div class="field"><label>موقع التقييم</label><select class="select"><option value="" selected="">اختر الموقع</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="عرفات">عرفات</option><option value="منى">منى</option><option value="مزدلفة">مزدلفة</option></select></div><div class="field"><label>اسم المشرف</label><select class="select" disabled=""><option value="" selected="">اختر المشرف</option></select></div><div class="field"><label>الفترة</label><input class="input" readOnly="" placeholder="تظهر تلقائيًا" value=""/></div><div class="field"><label>تاريخ ووقت التقرير</label><input class="input" type="datetime-local" value="2026-04-19T01:27"/></div></div><div style="margin-top:16px"><button class="add-btn" type="button">إضافة قسم</button><div class="mobile-note">يمكنك إضافة أكثر من قسم، ويوجد زر إضافة أيضًا أسفل الصفحة.</div></div><div class="export-row"><button class="export-btn" type="button">تصدير Excel</button><button class="export-btn pdf" type="button">تصدير PDF</button></div></div><div class="card"><button class="save-btn" type="button">حفظ التقرير اليومي</button></div></div></div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-4a462cecab786e93.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[1959,[],\"ClientPageRoot\"]\n5:I[4334,[\"730\",\"static/chunks/44530001-06db68a5a9898251.js\",\"297\",\"static/chunks/297-c8838cd3824be299.js\",\"22\",\"static/chunks/app/reports/page-ac53c407db445fb8.js\"],\"default\"]\n8:I[4431,[],\"OutletBoundary\"]\na:I[5278,[],\"AsyncMetadataOutlet\"]\nc:I[4431,[],\"ViewportBoundary\"]\ne:I[4431,[],\"MetadataBoundary\"]\nf:\"$Sreact.suspense\"\n11:I[7150,[],\"\"]\n:HL[\"/_next/static/css/0030e12f56c3664b.css\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"PRISG0qeXlk2uEvn1gknm\",\"p\":\"\",\"c\":[\"\",\"reports\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"reports\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/0030e12f56c3664b.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"ar\",\"dir\":\"rtl\",\"children\":[\"$\",\"body\",null,{\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]}]]}],{\"children\":[\"reports\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"searchParams\":{},\"params\":{},\"promises\":[\"$@6\",\"$@7\"]}],null,[\"$\",\"$L8\",null,{\"children\":[\"$L9\",[\"$\",\"$La\",null,{\"promise\":\"$@b\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[[\"$\",\"$Lc\",null,{\"children\":\"$Ld\"}],null],[\"$\",\"$Le\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$f\",null,{\"fallback\":null,\"children\":\"$L10\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$11\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"6:{}\n7:\"$0:f:0:1:2:children:2:children:1:props:children:0:props:params\"\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n9:null\n"])</script><script>self.__next_f.push([1,"b:{\"metadata\":[[\"$\",\"title\",\"0\",{\"children\":\"نظام تقارير الزيارات الميدانية\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"نظام مجاني لتسجيل زيارات المخيمات وإصدار التقارير وتصدير Excel\"}]],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"10:\"$b:metadata\"\n"])</script></body></html>
